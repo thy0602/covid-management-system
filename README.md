@@ -1,1 +1,1 @@
-# covid-management-system
+# basic-payment-system

@@ -11,11 +11,10 @@ require("./middlewares/handlebars")(app);
 app.use(express.static(__dirname + "/public"));
 
 // app.use('/account', require('./controllers/accountController'));
-// app.use('/transaction', require('./controllers/transactionRecordController'));
+app.use('/dashboard', require('./controllers/dashboardController'));
 
 app.get("/", (req, res) => {
-  res.render("dashboard", {
-  });
+  res.redirect("/dashboard");
 });
 
 app.listen(port, () => {

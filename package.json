@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thy0602/basic-payment-system.git"
+    "url": "git+https://github.com/thy0602/covid-management-system.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thy0602/basic-payment-system/issues"
+    "url": "https://github.com/thy0602/covid-management-system/issues"
   },
-  "homepage": "https://github.com/thy0602/basic-payment-system#readme",
+  "homepage": "https://github.com/thy0602/covid-management-system#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
