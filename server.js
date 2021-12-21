@@ -10,8 +10,14 @@ app.use(express.urlencoded({ extended: true }));
 require("./middlewares/handlebars")(app);
 app.use(express.static(__dirname + "/public"));
 
+//session
+require('./middlewares/session')(app);
+//passport
+require('./middlewares/passport')(app);
+
 // app.use('/account', require('./controllers/accountController'));
 app.use('/dashboard', require('./controllers/dashboardController'));
+app.use('/login', require('./controllers/LoginController'));
 
 app.get("/", (req, res) => {
   res.redirect("/dashboard");
