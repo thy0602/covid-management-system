@@ -14,8 +14,8 @@
         aria-expanded="false"
         aria-controls="ui-basic"
       >
-        <i class="icon-layout menu-icon"></i>
-        <span class="menu-title">UI Elements</span>
+        <i class="icon-head menu-icon"></i>
+        <span class="menu-title">Users</span>
         <i class="menu-arrow"></i>
       </a>
       <div class="collapse" id="ui-basic">
@@ -23,18 +23,18 @@
           <li class="nav-item">
             <a
               class="nav-link"
-              href="pages/ui-features/buttons.html"
-            >Buttons</a></li>
+              href="/users"
+            >List</a></li>
           <li class="nav-item">
             <a
               class="nav-link"
-              href="pages/ui-features/dropdowns.html"
-            >Dropdowns</a></li>
+              href="/users/detail?id={{#if user}}{{userId}}{{/if}}"
+            >Detail</a></li>
           <li class="nav-item">
             <a
               class="nav-link"
-              href="pages/ui-features/typography.html"
-            >Typography</a></li>
+              href="users/new"
+            >Add New</a></li>
         </ul>
       </div>
     </li>
