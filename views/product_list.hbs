@@ -1,0 +1,197 @@
+<div class="content-wrapper">
+    {{!-- welcome --}}
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                    <div class="row ml-2">
+                        {{#if isNecessities}}
+                        <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
+                        <button type="button" class="btn btn-2side right-side non-active-btn" onclick="location.href='';">Package</button>
+                        {{else if isPackage}}
+                        <button type="button" class="btn btn-2side left-side non-active-btn" onclick="location.href='';">Necessities</button>
+                        <button type="button" class="btn btn-2side right-side active-btn">Package</button>
+                        {{else}}
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <div class="justify-content-end d-flex">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="content-search-input" placeholder="Search"
+                                aria-label="search" aria-describedby="search">
+                            <div class="input-group-prepend hover-cursor" id="content-search-icon">
+                                <span class="input-group-text" id="userlist-search">
+                                    <i class="icon-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                    <div class="row">
+                        <h3 class="font-weight-bold mr-5"
+                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Necessities</h3>
+                        <button class="btn btn-primary mr-2"> Add new</button>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <div class="justify-content-end d-flex">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">Filter</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                                {{!-- <h6 class="dropdown-header">Header</h6> --}}
+                                <a class="dropdown-item" href="#">A-Z</a>
+                                <a class="dropdown-item" href="#">Z-A</a>
+                                <a class="dropdown-item" href="#">New</a>
+                                {{!-- <div class="dropdown-divider"></div> --}}
+                                <a class="dropdown-item" href="#">Hot</a>
+                                <a class="dropdown-item" href="#">Price</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-0">Product List</p>
+                    <div class="table-responsive table-hover">
+                        <table class="table table-borderless">
+                            <thead style="border-bottom: 2px solid black">
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Price (VND)</th>
+                                    <th>Unit</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section "js"}}
+<!-- Custom js for this page-->
+<script type="text/javascript" src="js/dashboard.js"></script>
+<script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
+<!-- End custom js for this page-->
+{{/section}}

@@ -30585,6 +30585,57 @@ div.tagsinput span.tag a {
   left: 30px;
 }
 
+#userlist-search {
+  background-color: #ffffff;
+  border-left: none;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+#content-search-input {
+  background-color: #ffffff;
+  border-right: none;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.btn-2side{
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+  width: 120px;
+  margin-right: 0;
+  text-align: center;
+}
+
+.left-side{
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.right-side{
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.active-btn{
+  color: white;
+  background-color: #4B49AC;
+  font-weight: 600;
+  line-height: 20px;
+}
+.active-btn:hover{
+  color: white;
+  background-color: #4B49AC;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.non-active-btn{
+  background-color: white;
+}
+.non-active-btn:hover{
+  color: #4B49AC;
+}
+
 @media (max-width: 991px) {
   #settings-trigger {
     display: none;
