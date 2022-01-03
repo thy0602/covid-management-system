@@ -1,0 +1,67 @@
+<form class="col-10 mx-auto my-5" action="" method="post" style="border-radius: 40px; background-color: #d3e6ff;">
+    <div class="form-row mt-5">
+        <div class="form-group col-md-6 row mx-auto">
+            <label for="inputFullname" class="col-sm-2 col-form-label">Full Name</label>
+            <div class="col-sm-8 was-validated">
+                <input type="text" class="form-control" id="name" required>
+                <div class="invalid-feedback">
+                    Please enter a message in the textarea.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-md-6 row mx-auto">
+            <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-8 was-validated">
+                <!-- kiểm tra username có tồn tại chưa bằng ajax nếu tồn tại
+                                     thì thêm class vào input là is-invalid else is-valid-->
+                <input type="text" class="form-control is-{{in}}valid" id="username" required>
+                <div class="invalid-feedback">
+                    {{Please enter a message in the textarea.}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6 row mx-auto">
+            <label for="inputYob" class="col-sm-2 col-form-label">Year Of Birth</label>
+            <div class="col-sm-8 was-validated">
+                <input type="date" class="form-control" id="yob" required>
+                <div class="invalid-feedback">
+                    Please enter a message in the textarea.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-md-6 row mx-auto">
+            <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
+            <div class="col-sm-8 was-validated">
+                <input type="text" class="form-control" id="address" required>
+                <div class="invalid-feedback">
+                    Please enter a message in the textarea.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6 row mx-auto">
+            <label for="inputmaxbasket" class="col-sm-2 col-form-label">Max Basket</label>
+            <div class="col-sm-8 was-validated">
+                <input type="number" min="0" class="form-control" id="maxbasket" value="5" required>
+            </div>
+        </div>
+
+        <div class="form-group col-md-6 row mx-auto">
+            <label for="inputBasketTimeltd" class="col-sm-2 col-form-label">Basket Time Limit</label>
+            <div class="col-sm-8 was-validated">
+                <input type="number" min='0' class="form-control" id="baskettimeltd" value="1" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn col-2 btn-primary">Create User</button>
+    </div>
+</form>
