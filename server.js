@@ -16,6 +16,7 @@ app.use(express.static(path.resolve('./public')));
 app.use('/dashboard', require('./controllers/dashboardController'));
 app.use('/userlist', require('./controllers/user_listController'));
 app.use('/productlist', require('./controllers/product_listController'));
+app.use('/packlist', require('./controllers/pack_listController'));
 // app.use('/users', require('./controllers/userController'));
 
 app.get("/", (req, res) => {

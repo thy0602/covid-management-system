@@ -4,7 +4,7 @@
         <div class="col-md-12 grid-margin">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                    <div class="row ml-2">
+                    <div class="row ml-0">
                         {{#if isNecessities}}
                         <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
                         <button type="button" class="btn btn-2side right-side non-active-btn"
@@ -39,7 +39,7 @@
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                     <div class="row">
                         <h3 class="font-weight-bold mr-5"
-                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Necessities</h3>
+                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Package</h3>
                         <button class="btn btn-primary mr-2"> Add new</button>
                     </div>
                 </div>
@@ -68,10 +68,75 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 grid-margin stretch-card">
+        <div class="col-md-3 stretch-card grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <p class="card-title mb-0">Product List</p>
+                    <p class="card-title mb-0">Package List</p>
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th class="pl-0 pb-2 border-bottom ">ID</th>
+                                    <th class="border-bottom pb-2"><span class="ml-4">Name</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 stretch-card grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-4">Package Detail</p>
+                    <div class="row ml-0">
+                        <div class="mb-4 stretch-card transparent">
+                            <div class="card card-light-blue">
+                                <div class="card-body">
+                                    <p class="mb-0" style="font-size: 1rem;">Gói vệ sinh</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4 ml-2 stretch-card transparent">
+                            <div class="card card-light-blue">
+                                <div class="card-body">
+                                    <p class="mb-0" style="font-size: 1rem;">2 lần/tuần</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive table-hover">
                         <table class="table table-borderless">
                             <thead style="border-bottom: 2px solid black">
@@ -80,107 +145,56 @@
                                     <th>Name</th>
                                     <th>Price (VND)</th>
                                     <th>Unit</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td class="py-1">
-                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
                                     </td>
                                     <td>Kem đánh răng</td>
                                     <td>20 000</td>
                                     <td>Tube</td>
-                                    <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">
-                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
                                     </td>
                                     <td>Kem đánh răng</td>
                                     <td>20 000</td>
                                     <td>Tube</td>
-                                    <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">
-                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
                                     </td>
                                     <td>Kem đánh răng</td>
                                     <td>20 000</td>
                                     <td>Tube</td>
-                                    <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">
-                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
                                     </td>
                                     <td>Kem đánh răng</td>
                                     <td>20 000</td>
                                     <td>Tube</td>
-                                    <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">
-                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
                                     </td>
                                     <td>Kem đánh răng</td>
                                     <td>20 000</td>
                                     <td>Tube</td>
-                                    <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">
-                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
+                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
                                     </td>
                                     <td>Kem đánh răng</td>
                                     <td>20 000</td>
                                     <td>Tube</td>
-                                    <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/img/image 7.png"  style="width:180px; height:180px" alt="image"/>
-                                    </td>
-                                    <td>Kem đánh răng</td>
-                                    <td>20 000</td>
-                                    <td>Tube</td>
-                                    <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -190,10 +204,3 @@
         </div>
     </div>
 </div>
-
-{{#section "js"}}
-<!-- Custom js for this page-->
-<script type="text/javascript" src="js/dashboard.js"></script>
-<script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
-<!-- End custom js for this page-->
-{{/section}}
