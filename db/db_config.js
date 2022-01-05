@@ -1,4 +1,8 @@
-exports.connection = {
+const pgp = require('pg-promise')({
+    capSQL: true,
+});
+
+const connection = {
     user: 'postgres',
     host: 'localhost',
     database: 'covid_management_system',
@@ -6,3 +10,5 @@ exports.connection = {
     port: 5432,
     max: 30,
 }
+
+exports.db = pgp(connection);
