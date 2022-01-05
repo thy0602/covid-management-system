@@ -9,7 +9,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("./middlewares/handlebars")(app);
-// app.use(express.static(__dirname + "/public"));
 app.use(express.static(path.resolve('./public')));
 
 //session
