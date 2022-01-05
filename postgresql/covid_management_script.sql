@@ -1,5 +1,5 @@
 -- ======================================
--- Database name: covid_management
+-- Database name: covid_management_system
 -- ======================================
 
 -- ======================================
@@ -41,7 +41,7 @@ CREATE TABLE "user" (
 	"name" varchar(50) NOT NULL,
 	"year_of_birth" int NOT NULL,
 	"address" varchar NOT NULL,
-	"max_baskets" int NOT NULL,
+	"max_basket" int NOT NULL,
 	"basket_timelimit" int NOT NULL,
 	"username" varchar(50) NOT NULL,
 	"current_status" varchar(10),
@@ -196,9 +196,8 @@ VALUES
 -- -----------------------------
 -- Table user
 -- -----------------------------
-INSERT INTO "user"("id", "name", "year_of_birth", "address", "max_baskets", "basket_timelimit", "username")
+INSERT INTO "user"("id", "name", "year_of_birth", "address", "max_basket", "basket_timelimit", "username")
 VALUES 
-	(DEFAULT, 'thin', 2000, 'Vietnam', 5, 1, 'ID_001'),
 	(DEFAULT, 'thin', 2000, 'Vietnam', 5, 1, 'ID_001'),
 	(DEFAULT, 'duy', 1999, 'Vietnam', 5, 1, 'ID_002'),
 	(DEFAULT, 'thy', 2001, 'Vietnam', 5, 1, 'ID_003'),
@@ -224,67 +223,67 @@ VALUES
 -- -----------------------------
 -- Table product
 -- -----------------------------
-BEGIN;
-INSERT INTO "product"("id", "name", "unit", "price")
-VALUES 
-    (DEFAULT, 'Bắp cải', 'gam', 500),
-	(DEFAULT, 'Xà lách', 'gam', 500),
-	(DEFAULT, 'Khoai tây', 'gam', 500),
-	(DEFAULT, 'Cà rốt', 'gam', 500),
-	(DEFAULT, 'Cam', 'gam', 500),
-	(DEFAULT, 'Táo', 'gam', 500),
-ROLLBACK;
+-- BEGIN;
+-- INSERT INTO "product"("id", "name", "unit", "price")
+-- VALUES 
+--     (DEFAULT, 'Bắp cải', 'gam', 500),
+-- 	(DEFAULT, 'Xà lách', 'gam', 500),
+-- 	(DEFAULT, 'Khoai tây', 'gam', 500),
+-- 	(DEFAULT, 'Cà rốt', 'gam', 500),
+-- 	(DEFAULT, 'Cam', 'gam', 500),
+-- 	(DEFAULT, 'Táo', 'gam', 500),
+-- ROLLBACK;
 
-INSERT INTO "product"("id", "name", "unit", "price")
-VALUES 
-	(DEFAULT, 'Thịt heo', 'gam', 1000),
-	(DEFAULT, 'Thịt bò', 'gam', 1000),
-	(DEFAULT, 'Thịt gà', 'gam', 1000),
-	(DEFAULT, 'Trứng gà', 'gam', 1000),
-	(DEFAULT, 'Cá', 'gam', 1000),
-	(DEFAULT, 'Tôm', 'gam', 1000),
-ROLLBACK;
+-- INSERT INTO "product"("id", "name", "unit", "price")
+-- VALUES 
+-- 	(DEFAULT, 'Thịt heo', 'gam', 1000),
+-- 	(DEFAULT, 'Thịt bò', 'gam', 1000),
+-- 	(DEFAULT, 'Thịt gà', 'gam', 1000),
+-- 	(DEFAULT, 'Trứng gà', 'gam', 1000),
+-- 	(DEFAULT, 'Cá', 'gam', 1000),
+-- 	(DEFAULT, 'Tôm', 'gam', 1000),
+-- ROLLBACK;
 
-INSERT INTO "product"("id", "name", "unit", "price")
-VALUES 
-	(DEFAULT, 'Cơm cháy', 'gói', 30000),
-	(DEFAULT, 'Rong biển', 'gói', 25000),
-	(DEFAULT, 'Mì gói', 'gói', 7000),
-	(DEFAULT, 'Xúc xích', 'gói', 32000),
-ROLLBACK;
+-- INSERT INTO "product"("id", "name", "unit", "price")
+-- VALUES 
+-- 	(DEFAULT, 'Cơm cháy', 'gói', 30000),
+-- 	(DEFAULT, 'Rong biển', 'gói', 25000),
+-- 	(DEFAULT, 'Mì gói', 'gói', 7000),
+-- 	(DEFAULT, 'Xúc xích', 'gói', 32000),
+-- ROLLBACK;
 
-INSERT INTO "product"("id", "name", "unit", "price")
-VALUES 
-	(DEFAULT, 'Nước khoáng', 'chai', 6000),
-	(DEFAULT, 'Nước trái cây', 'chai', 12000),
-	(DEFAULT, 'Mật ong', 'chai', 50000),
-ROLLBACK;
+-- INSERT INTO "product"("id", "name", "unit", "price")
+-- VALUES 
+-- 	(DEFAULT, 'Nước khoáng', 'chai', 6000),
+-- 	(DEFAULT, 'Nước trái cây', 'chai', 12000),
+-- 	(DEFAULT, 'Mật ong', 'chai', 50000),
+-- ROLLBACK;
 
-INSERT INTO "product"("id", "name", "unit", "price")
-VALUES 
-	(DEFAULT, 'Sữa tươi', 'hộp', 10000),
-	(DEFAULT, 'Sữa chua', 'hộp', 7000),
-	(DEFAULT, 'Sữa lúa mạch', 'hộp', 12000),
-	(DEFAULT, 'Sữa hạt', 'hộp', 20000),
-ROLLBACK;
+-- INSERT INTO "product"("id", "name", "unit", "price")
+-- VALUES 
+-- 	(DEFAULT, 'Sữa tươi', 'hộp', 10000),
+-- 	(DEFAULT, 'Sữa chua', 'hộp', 7000),
+-- 	(DEFAULT, 'Sữa lúa mạch', 'hộp', 12000),
+-- 	(DEFAULT, 'Sữa hạt', 'hộp', 20000),
+-- ROLLBACK;
 
-INSERT INTO "product"("id", "name", "unit", "price")
-VALUES 
-    (DEFAULT, 'Khẩu trang', 'hộp', 30000),
-	(DEFAULT, 'Nước rửa tay', 'chai', 40000),
-    (DEFAULT, 'Kem đánh răng', 'tuýp', 35000),
-    (DEFAULT, 'Bàn chải đánh răng', 'cái', 38000),
-    (DEFAULT, 'Dầu gội đầu', 'gói', 5000);
-ROLLBACK;
+-- INSERT INTO "product"("id", "name", "unit", "price")
+-- VALUES 
+--     (DEFAULT, 'Khẩu trang', 'hộp', 30000),
+-- 	(DEFAULT, 'Nước rửa tay', 'chai', 40000),
+--     (DEFAULT, 'Kem đánh răng', 'tuýp', 35000),
+--     (DEFAULT, 'Bàn chải đánh răng', 'cái', 38000),
+--     (DEFAULT, 'Dầu gội đầu', 'gói', 5000);
+-- ROLLBACK;
 
-INSERT INTO "product"("id", "name", "unit", "price")
-VALUES 
-	(DEFAULT, 'Nước rửa chén', 'chai', 32000),
-	(DEFAULT, 'Bột giặt', 'gói', 35000),
-	(DEFAULT, 'Nước xả quần áo', 'gói', 35000),
-	(DEFAULT, 'Xà phòng', 'chai', 50000)
-ROLLBACK;
-COMMIT;
+-- INSERT INTO "product"("id", "name", "unit", "price")
+-- VALUES 
+-- 	(DEFAULT, 'Nước rửa chén', 'chai', 32000),
+-- 	(DEFAULT, 'Bột giặt', 'gói', 35000),
+-- 	(DEFAULT, 'Nước xả quần áo', 'gói', 35000),
+-- 	(DEFAULT, 'Xà phòng', 'chai', 50000)
+-- ROLLBACK;
+-- COMMIT;
 
 
 -- -----------------------------
