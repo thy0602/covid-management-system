@@ -14,7 +14,6 @@ app.use(express.static(path.resolve('./public')));
 
 // app.use('/account', require('./controllers/accountController'));
 app.use('/dashboard', require('./controllers/dashboardController'));
-app.use('/users', require('./controllers/userController'));
 
 app.get("/", (req, res) => {
   res.redirect("/dashboard");
