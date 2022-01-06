@@ -12,6 +12,13 @@ require("./middlewares/handlebars")(app);
 // app.use(express.static(__dirname + "/public"));
 app.use(express.static(path.resolve('./public')));
 
+app.use('/account', require('./controllers/accountController'));
+app.use('/users', require('./controllers/usersController'));
+app.use('/products', require('./controllers/productsController'));
+app.use('/packs', require('./controllers/packsController'));
+app.use('/order', require('./controllers/orderController'));
+app.use('/quarantine-locations', require('./controllers/quarantineLocationsController'));
+
 app.use('/dashboard', require('./controllers/dashboardController'));
 app.use('/userlist', require('./controllers/user_listController'));
 app.use('/productlist', require('./controllers/product_listController'));
