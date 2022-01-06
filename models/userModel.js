@@ -59,6 +59,7 @@ exports.getById = async (id) => {
         console.log("Error db/load", e);
     }
 }
+
 exports.getByStatus = async (status) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.current_status} = '${status}'`, table);

@@ -81,36 +81,21 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {{#each packs}}
                                 <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold">{{this.name}}</span></p>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                                {{!-- <tr>
                                     <td class="pl-0"><span class="font-weight-bold">#1</span></td>
                                     <td>
                                         <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
-                                    </td>
-                                </tr>
+                                </tr> --}}
+
                             </tbody>
                         </table>
                     </div>
@@ -125,7 +110,7 @@
                         <div class="mb-4 stretch-card transparent">
                             <div class="card card-light-blue">
                                 <div class="card-body">
-                                    <p class="mb-0" style="font-size: 1rem;">Gói vệ sinh</p>
+                                    <p class="mb-0" style="font-size: 1rem;">{{packDetail.name}}</p>
                                 </div>
                             </div>
                         </div>
@@ -148,54 +133,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{#each productsInPack}}
+                                    <td class="py-1">
+                                        <img src="{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
+                                    </td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.price}}</td>
+                                    <td>{{this.unit}}</td>
+                                {{/each}}
+                                {{!-- <tr>
                                     <td class="py-1">
                                         <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
                                     </td>
                                     <td>Kem đánh răng</td>
                                     <td>20 000</td>
                                     <td>Tube</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
-                                    </td>
-                                    <td>Kem đánh răng</td>
-                                    <td>20 000</td>
-                                    <td>Tube</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
-                                    </td>
-                                    <td>Kem đánh răng</td>
-                                    <td>20 000</td>
-                                    <td>Tube</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
-                                    </td>
-                                    <td>Kem đánh răng</td>
-                                    <td>20 000</td>
-                                    <td>Tube</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
-                                    </td>
-                                    <td>Kem đánh răng</td>
-                                    <td>20 000</td>
-                                    <td>Tube</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
-                                    </td>
-                                    <td>Kem đánh răng</td>
-                                    <td>20 000</td>
-                                    <td>Tube</td>
-                                </tr>
+                                </tr> --}}
+                                
                             </tbody>
                         </table>
                     </div>
