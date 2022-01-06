@@ -103,7 +103,8 @@ CREATE TABLE "product" (
 	"id" serial PRIMARY KEY,
 	"name" varchar(100) NOT NULL,
 	"unit" varchar(10) NOT NULL,
-	"price" numeric(19, 4) NOT NULL
+	"price" numeric(19, 4) NOT NULL,
+	"is_deleted" boolean NOT NULL DEFAULT false
 );
 
 -- -----------------------------
@@ -123,7 +124,8 @@ CREATE TABLE "product_image" (
 CREATE TABLE "pack" (
 	"id" serial PRIMARY KEY,
 	"name" varchar(100) NOT NULL,
-	"limit" int NOT NULL
+	"limit" int NOT NULL,
+	"is_deleted" boolean NOT NULL DEFAULT false
 );
 
 -- -----------------------------

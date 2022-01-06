@@ -53,13 +53,14 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
-                                {{!-- <h6 class="dropdown-header">Header</h6> --}}
-                                <a class="dropdown-item" href="#">A-Z</a>
-                                <a class="dropdown-item" href="#">Z-A</a>
-                                <a class="dropdown-item" href="#">New</a>
-                                {{!-- <div class="dropdown-divider"></div> --}}
-                                <a class="dropdown-item" href="#">Hot</a>
-                                <a class="dropdown-item" href="#">Price</a>
+                                <a class="dropdown-item"
+                                    href="/products?order-by=name-ascending">A-Z</a>
+                                <a class="dropdown-item"
+                                    href="/products?order-by=name-descending">Z-A</a>
+                                <a class="dropdown-item"
+                                    href="/products?order-by=price-ascending">Price ascending</a>
+                                <a class="dropdown-item"
+                                    href="/products?order-by=price-descending">Price descending</a>
                             </div>
                         </div>
                     </div>
@@ -94,8 +95,8 @@
                                     <td>{{this.unit}}</td>
                                     <td class="font-weight-medium">
                                         <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                            <div class="badge badge-primary hover-cursor"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger hover-cursor"><i class="icon-trash mx-2"></i></div>
                                         </div>
                                     </td>
                                 </tr>
@@ -113,5 +114,25 @@
 <!-- Custom js for this page-->
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
+
+<script>
+    async function onclickDelete(id) {
+        console.log("DELETED");
+        /*await $.ajax({
+            url: `/products/${id}`,
+            type: 'PUT',
+            data: {
+                is_deleted: true
+            },
+            success: async function (response, status) {
+                const res = await response;
+                console.log(res);
+                window.location.href = '/products';
+            }
+        });*/
+    }
+
+</script>
+
 <!-- End custom js for this page-->
 {{/section}}
