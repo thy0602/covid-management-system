@@ -1,5 +1,5 @@
 -- ======================================
--- Database name: covid_management_system
+-- Database name: covid_management
 -- ======================================
 
 -- ======================================
@@ -223,72 +223,54 @@ VALUES
 -- -----------------------------
 -- Table product
 -- -----------------------------
--- BEGIN;
--- INSERT INTO "product"("id", "name", "unit", "price")
--- VALUES 
---     (DEFAULT, 'Bắp cải', 'gam', 500),
--- 	(DEFAULT, 'Xà lách', 'gam', 500),
--- 	(DEFAULT, 'Khoai tây', 'gam', 500),
--- 	(DEFAULT, 'Cà rốt', 'gam', 500),
--- 	(DEFAULT, 'Cam', 'gam', 500),
--- 	(DEFAULT, 'Táo', 'gam', 500),
--- ROLLBACK;
-
--- INSERT INTO "product"("id", "name", "unit", "price")
--- VALUES 
--- 	(DEFAULT, 'Thịt heo', 'gam', 1000),
--- 	(DEFAULT, 'Thịt bò', 'gam', 1000),
--- 	(DEFAULT, 'Thịt gà', 'gam', 1000),
--- 	(DEFAULT, 'Trứng gà', 'gam', 1000),
--- 	(DEFAULT, 'Cá', 'gam', 1000),
--- 	(DEFAULT, 'Tôm', 'gam', 1000),
--- ROLLBACK;
-
--- INSERT INTO "product"("id", "name", "unit", "price")
--- VALUES 
--- 	(DEFAULT, 'Cơm cháy', 'gói', 30000),
--- 	(DEFAULT, 'Rong biển', 'gói', 25000),
--- 	(DEFAULT, 'Mì gói', 'gói', 7000),
--- 	(DEFAULT, 'Xúc xích', 'gói', 32000),
--- ROLLBACK;
-
--- INSERT INTO "product"("id", "name", "unit", "price")
--- VALUES 
--- 	(DEFAULT, 'Nước khoáng', 'chai', 6000),
--- 	(DEFAULT, 'Nước trái cây', 'chai', 12000),
--- 	(DEFAULT, 'Mật ong', 'chai', 50000),
--- ROLLBACK;
-
--- INSERT INTO "product"("id", "name", "unit", "price")
--- VALUES 
--- 	(DEFAULT, 'Sữa tươi', 'hộp', 10000),
--- 	(DEFAULT, 'Sữa chua', 'hộp', 7000),
--- 	(DEFAULT, 'Sữa lúa mạch', 'hộp', 12000),
--- 	(DEFAULT, 'Sữa hạt', 'hộp', 20000),
--- ROLLBACK;
-
--- INSERT INTO "product"("id", "name", "unit", "price")
--- VALUES 
---     (DEFAULT, 'Khẩu trang', 'hộp', 30000),
--- 	(DEFAULT, 'Nước rửa tay', 'chai', 40000),
---     (DEFAULT, 'Kem đánh răng', 'tuýp', 35000),
---     (DEFAULT, 'Bàn chải đánh răng', 'cái', 38000),
---     (DEFAULT, 'Dầu gội đầu', 'gói', 5000);
--- ROLLBACK;
-
--- INSERT INTO "product"("id", "name", "unit", "price")
--- VALUES 
--- 	(DEFAULT, 'Nước rửa chén', 'chai', 32000),
--- 	(DEFAULT, 'Bột giặt', 'gói', 35000),
--- 	(DEFAULT, 'Nước xả quần áo', 'gói', 35000),
--- 	(DEFAULT, 'Xà phòng', 'chai', 50000)
--- ROLLBACK;
--- COMMIT;
+BEGIN;
+INSERT INTO "product"("id", "name", "unit", "price")
+VALUES 
+    (DEFAULT, 'Bắp cải', 'gam', 500),
+	(DEFAULT, 'Xà lách', 'gam', 500),
+	(DEFAULT, 'Khoai tây', 'gam', 500),
+	(DEFAULT, 'Cà rốt', 'gam', 500),
+	(DEFAULT, 'Cam', 'gam', 500),
+	(DEFAULT, 'Táo', 'gam', 500),
+	(DEFAULT, 'Thịt heo', 'gam', 1000),
+	(DEFAULT, 'Thịt bò', 'gam', 1000),
+	(DEFAULT, 'Thịt gà', 'gam', 1000),
+	(DEFAULT, 'Trứng gà', 'gam', 1000),
+	(DEFAULT, 'Cá', 'gam', 1000),
+	(DEFAULT, 'Tôm', 'gam', 1000),
+	(DEFAULT, 'Cơm cháy', 'gói', 30000),
+	(DEFAULT, 'Rong biển', 'gói', 25000),
+	(DEFAULT, 'Mì gói', 'gói', 7000),
+	(DEFAULT, 'Xúc xích', 'gói', 32000),
+	(DEFAULT, 'Nước khoáng', 'chai', 6000),
+	(DEFAULT, 'Nước trái cây', 'chai', 12000),
+	(DEFAULT, 'Mật ong', 'chai', 50000),
+	(DEFAULT, 'Sữa tươi', 'hộp', 10000),
+	(DEFAULT, 'Sữa chua', 'hộp', 7000),
+	(DEFAULT, 'Sữa lúa mạch', 'hộp', 12000),
+	(DEFAULT, 'Sữa hạt', 'hộp', 20000),
+    (DEFAULT, 'Khẩu trang', 'hộp', 30000),
+	(DEFAULT, 'Nước rửa tay', 'chai', 40000),
+    (DEFAULT, 'Kem đánh răng', 'tuýp', 35000),
+    (DEFAULT, 'Bàn chải đánh răng', 'cái', 38000),
+    (DEFAULT, 'Dầu gội đầu', 'gói', 5000),
+	(DEFAULT, 'Nước rửa chén', 'chai', 32000),
+	(DEFAULT, 'Bột giặt', 'gói', 35000),
+	(DEFAULT, 'Nước xả quần áo', 'gói', 35000),
+	(DEFAULT, 'Xà phòng', 'hộp', 50000);
+COMMIT;
 
 
 -- -----------------------------
 -- Table pack
 -- -----------------------------
+BEGIN;
+INSERT INTO "pack"("id", "name", "limit")
+VALUES
+	(DEFAULT, 'Gói thực phẩm 1', 6),
+	(DEFAULT, 'Gói đồ dùng 1', 6),
+	(DEFAULT, 'Gói tổng hợp 1', 5);
+COMMIT;
 -- INSERT INTO "pack"("id", "name", "limit")
 -- VALUES 
 --     (DEFAULT, 'Rau - củ - trái cây', 10),  -- Bắp cải, xà lách, nấm, khoai tây, cà rốt, cam, táo
@@ -299,22 +281,103 @@ VALUES
 --     (DEFAULT, 'Đồ dùng cá nhân', 10),  -- Khẩu trang, nước rửa tay, kem đánh răng, bản chải, dầu gội đầu
 --     (DEFAULT, 'Giặt rửa', 10);  -- nước rửa chén, bột giặt, nước xả quần áo, xà phòng
 	
+	
 -- -----------------------------
 -- Table pack_items
 -- -----------------------------
--- INSERT INTO "pack_items"("pack_id", "product_id", "quantity")
--- VALUES
--- 	('1', )
+BEGIN;
+INSERT INTO "pack_items"("pack_id", "product_id", "quantity")
+VALUES
+	('1', '1', 2),
+	('1', '2', 2),
+	('1', '3', 1),
+	('1', '4', 1),
+	('1', '5', 1),
+	('2', '24', 2),
+	('2', '25', 2),
+	('2', '26', 2),
+	('3', '2', 2),
+	('3', '3', 2),
+	('3', '24', 2),
+	('3', '25', 2);
+COMMIT;
 
 
 -- -----------------------------
 -- Table product_image
 -- -----------------------------
-INSERT INTO "product_image"
-VALUES
-	(1, 'img/products/product-1.jpg'),
-	(1, 'img/products/product-1-1.jpg'),
-	(2, 'img/products/product-2.jpg'),
-	(3, 'img/products/product-3.jpg'),
-	(4, 'img/products/product-4.jpg'),
-	(5, 'img/products/product-5.jpg')
+BEGIN;
+INSERT INTO "product_image"("product_id", "url")
+VALUES 
+    ('1', 'img/products/bap-cai-1.jpg'),
+    ('1', 'img/products/bap-cai-2.jpg'),
+	('2', 'img/products/xa-lach-1.jpg'),
+	('2', 'img/products/xa-lach-2.jpg'),
+	('3', 'img/products/khoai-tay-1.jpg'),
+	('3', 'img/products/khoai-tay-2.jpg'),
+	('4', 'img/products/ca-rot-1.jpg'),
+	('4', 'img/products/ca-rot-2.jpg'),
+	('5', 'img/products/cam-1.jpg'),
+	('5', 'img/products/cam-2.jpg'),
+	('6', 'img/products/tao-1.jpg'),
+	('6', 'img/products/tao-2.jpg'),
+	('7', 'img/products/thit-heo-1.jpg'),
+	('7', 'img/products/thit-heo-2.jpg'),
+	('8', 'img/products/thit-bo-1.jpg'),
+	('8', 'img/products/thit-bo-2.jpg'),
+	('9', 'img/products/thit-ga-1.jpg'),
+	('9', 'img/products/thit-ga-2.jpg'),
+	('10', 'img/products/trung-ga-1.jpg'),
+	('10', 'img/products/trung-ga-2.jpg'),
+	('11', 'img/products/ca-1.jpg'),
+	('11', 'img/products/ca-2.jpg'),
+	('12', 'img/products/tom-1.jpg'),
+	('12', 'img/products/tom-2.jpg'),
+    ('13', 'img/products/com-chay-1.jpg'),
+    ('13', 'img/products/com-chay-2.jpg'),
+	('14', 'img/products/rong-bien-1.jpg'),
+	('14', 'img/products/rong-bien-2.jpg'),
+	('15', 'img/products/mi-goi-1.jpg'),
+	('15', 'img/products/mi-goi-2.jpg'),
+	('16', 'img/products/xuc-xich-1.jpg'),
+	('16', 'img/products/xuc-xich-2.jpg'),
+	('17', 'img/products/nuoc-khoang-1.jpg'),
+	('17', 'img/products/nuoc-khoang-2.jpg'),
+	('18', 'img/products/nuoc-trai-cay-1.jpg'),
+	('18', 'img/products/nuoc-trai-cay-2.jpg'),
+	('19', 'img/products/mat-ong-1.jpg'),
+	('19', 'img/products/mat-ong-2.jpg'),
+	('20', 'img/products/sua-tuoi-1.jpg'),
+	('20', 'img/products/sua-tuoi-2.jpg'),
+	('21', 'img/products/sua-chua-1.jpg'),
+	('21', 'img/products/sua-chua-2.jpg'),
+	('22', 'img/products/sua-lua-mach-1.jpg'),
+	('22', 'img/products/sua-lua-mach-2.jpg'),
+	('23', 'img/products/sua-hat-1.jpg'),
+	('23', 'img/products/sua-hat-2.jpg'),
+    ('24', 'img/products/khau-trang-1.jpg'),
+    ('24', 'img/products/khau-trang-2.jpg'),
+	('25', 'img/products/nuoc-rua-tay-1.jpg'),
+	('25', 'img/products/nuoc-rua-tay-2.jpg'),
+    ('26', 'img/products/kem-danh-rang-1.jpg'),
+    ('26', 'img/products/kem-danh-rang-2.jpg'),
+    ('27', 'img/products/ban-chai-1.jpg'),
+    ('27', 'img/products/ban-chai-2.jpg'),
+    ('28', 'img/products/dau-goi-1.jpg'),
+    ('28', 'img/products/dau-goi-2.jpg'),
+	('29', 'img/products/nuoc-rua-chen-1.jpg'),
+	('29', 'img/products/nuoc-rua-chen-2.jpg'),
+	('30', 'img/products/bot-giat-1.jpg'),
+	('30', 'img/products/bot-giat-2.jpg'),
+	('31', 'img/products/nuoc-xa-1.jpg'),
+	('31', 'img/products/nuoc-xa-2.jpg'),
+	('32', 'img/products/xa-phong-1.jpg'),
+	('32', 'img/products/xa-phong-2.jpg');
+COMMIT;
+-- INSERT INTO "product_image"
+-- VALUES
+-- 	(1, 'img/products/product-1.jpg'),
+-- 	(2, 'img/products/product-2.jpg'),
+-- 	(3, 'img/products/product-3.jpg'),
+-- 	(4, 'img/products/product-4.jpg'),
+-- 	(5, 'img/products/product-5.jpg');

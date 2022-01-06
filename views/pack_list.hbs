@@ -6,13 +6,13 @@
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                     <div class="row ml-0">
                         {{#if isNecessities}}
-                        <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
-                        <button type="button" class="btn btn-2side right-side non-active-btn"
-                            onclick="location.href='/packlist';">Package</button>
+                            <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side non-active-btn"
+                                onclick="location.href='/packlist';">Package</button>
                         {{else if isPackage}}
-                        <button type="button" class="btn btn-2side left-side non-active-btn"
-                            onclick="location.href='/productlist';">Necessities</button>
-                        <button type="button" class="btn btn-2side right-side active-btn">Package</button>
+                            <button type="button" class="btn btn-2side left-side non-active-btn"
+                                onclick="location.href='/productlist';">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side active-btn">Package</button>
                         {{else}}
                         {{/if}}
                     </div>
@@ -54,12 +54,18 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
                                 {{!-- <h6 class="dropdown-header">Header</h6> --}}
-                                <a class="dropdown-item" href="#">A-Z</a>
-                                <a class="dropdown-item" href="#">Z-A</a>
-                                <a class="dropdown-item" href="#">New</a>
+                                <a class="dropdown-item"
+                                    href="/packlist/{{packDetail.id}}?order-by=name-ascending">A-Z</a>
+                                <a class="dropdown-item"
+                                    href="/packlist/{{packDetail.id}}?order-by=name-descending">Z-A</a>
+                                <a class="dropdown-item"
+                                    href="/packlist/{{packDetail.id}}?order-by=price-ascending">Price ascending</a>
+                                <a class="dropdown-item"
+                                    href="/packlist/{{packDetail.id}}?order-by=price-descending">Price descending</a>
+                                {{!-- <a class="dropdown-item" href="#">New</a> --}}
                                 {{!-- <div class="dropdown-divider"></div> --}}
-                                <a class="dropdown-item" href="#">Hot</a>
-                                <a class="dropdown-item" href="#">Price</a>
+                                {{!-- <a class="dropdown-item" href="#">Hot</a> --}}
+                                {{!-- <a class="dropdown-item" href="#">Price</a> --}}
                             </div>
                         </div>
                     </div>
@@ -78,16 +84,26 @@
                                 <tr>
                                     <th class="pl-0 pb-2 border-bottom ">ID</th>
                                     <th class="border-bottom pb-2"><span class="ml-4">Name</span></th>
+                                    {{!-- <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each packs}}
-                                <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold">{{this.name}}</span></p>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
+                                        <td>
+                                            <p class="ml-4 mb-0"><span class="font-weight-bold"></span><a href="/packlist/{{this.id}}" class="font-weight-bold" style="text-decoration: none; color: #000;">
+                                                {{this.name}}
+                                            </a></span></p>
+                                        </td>
+                                        {{!-- <td class="font-weight-medium">
+                                            <div class="row">
+                                                <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i>
+                                                </div>
+                                                <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                            </div>
+                                        </td> --}}
+                                    </tr>
                                 {{/each}}
                                 {{!-- <tr>
                                     <td class="pl-0"><span class="font-weight-bold">#1</span></td>
@@ -117,7 +133,14 @@
                         <div class="mb-4 ml-2 stretch-card transparent">
                             <div class="card card-light-blue">
                                 <div class="card-body">
-                                    <p class="mb-0" style="font-size: 1rem;">2 lần/tuần</p>
+                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: 2 lần/tuần</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4 ml-2 stretch-card transparent">
+                            <div class="card card-light-blue">
+                                <div class="card-body">
+                                    <p class="mb-0" style="font-size: 1rem;">Số lượng tối đa mỗi sản phẩm: {{packDetail.limit}}</p>
                                 </div>
                             </div>
                         </div>
@@ -134,12 +157,16 @@
                             </thead>
                             <tbody>
                                 {{#each productsInPack}}
-                                    <td class="py-1">
-                                        <img src="{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
-                                    </td>
-                                    <td>{{this.name}}</td>
-                                    <td>{{this.price}}</td>
-                                    <td>{{this.unit}}</td>
+                                    <tr>
+                                        <td class="py-1">
+                                            <img src="/{{this.images.[0]}}" style="width:180px; height:180px"
+                                                alt="image" />
+                                            {{!-- <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" /> --}}
+                                        </td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.price}}</td>
+                                        <td>{{this.unit}}</td>
+                                    </tr>
                                 {{/each}}
                                 {{!-- <tr>
                                     <td class="py-1">
@@ -149,7 +176,7 @@
                                     <td>20 000</td>
                                     <td>Tube</td>
                                 </tr> --}}
-                                
+
                             </tbody>
                         </table>
                     </div>

@@ -12,7 +12,7 @@ const tableFields = {
 
 exports.getAll = async () => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const queryStr = pgp.as.format(`SELECT * FROM $1 ORDER BY ${tableFields.product_id} ASC`, table);
+    const queryStr = pgp.as.format(`SELECT * FROM $1 ORDER BY ${tableFields.product_id} ASC;`, table);
     try {
         const res = await db.any(queryStr);
         return res;
@@ -24,7 +24,7 @@ exports.getAll = async () => {
 
 exports.getImagesByProductId = async (productId) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.product_id}='${productId}'`, table);
+    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.product_id}='${productId}';`, table);
     try {
         const res = await db.any(queryStr);
         return res;
