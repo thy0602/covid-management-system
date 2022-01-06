@@ -307,5 +307,14 @@ VALUES
 -- 	('1', )
 
 
-
-
+-- -----------------------------
+-- Table product_image
+-- -----------------------------
+INSERT INTO "product_image"
+VALUES
+	(1, 'img/products/product-1.jpg'),
+	(1, 'img/products/product-1-1.jpg'),
+	(2, 'img/products/product-2.jpg'),
+	(3, 'img/products/product-3.jpg'),
+	(4, 'img/products/product-4.jpg'),
+	(5, 'img/products/product-5.jpg')

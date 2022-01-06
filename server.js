@@ -12,14 +12,7 @@ require("./middlewares/handlebars")(app);
 // app.use(express.static(__dirname + "/public"));
 app.use(express.static(path.resolve('./public')));
 
-//session
-require('./middlewares/session')(app);
-//passport
-require('./middlewares/passport')(app);
-
 app.use('/dashboard', require('./controllers/dashboardController'));
-app.use('/login', require('./controllers/LoginController'));
-app.use('/users', require('./controllers/userController'));
 app.use('/userlist', require('./controllers/user_listController'));
 app.use('/productlist', require('./controllers/product_listController'));
 app.use('/packlist', require('./controllers/pack_listController'));
