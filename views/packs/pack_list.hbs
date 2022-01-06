@@ -8,10 +8,10 @@
                         {{#if isNecessities}}
                             <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
                             <button type="button" class="btn btn-2side right-side non-active-btn"
-                                onclick="location.href='/packlist';">Package</button>
+                                onclick="location.href='/packs';">Package</button>
                         {{else if isPackage}}
                             <button type="button" class="btn btn-2side left-side non-active-btn"
-                                onclick="location.href='/productlist';">Necessities</button>
+                                onclick="location.href='/products';">Necessities</button>
                             <button type="button" class="btn btn-2side right-side active-btn">Package</button>
                         {{else}}
                         {{/if}}
@@ -55,13 +55,13 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
                                 {{!-- <h6 class="dropdown-header">Header</h6> --}}
                                 <a class="dropdown-item"
-                                    href="/packlist/{{packDetail.id}}?order-by=name-ascending">A-Z</a>
+                                    href="/packs/{{packDetail.id}}?order-by=name-ascending">A-Z</a>
                                 <a class="dropdown-item"
-                                    href="/packlist/{{packDetail.id}}?order-by=name-descending">Z-A</a>
+                                    href="/packs/{{packDetail.id}}?order-by=name-descending">Z-A</a>
                                 <a class="dropdown-item"
-                                    href="/packlist/{{packDetail.id}}?order-by=price-ascending">Price ascending</a>
+                                    href="/packs/{{packDetail.id}}?order-by=price-ascending">Price ascending</a>
                                 <a class="dropdown-item"
-                                    href="/packlist/{{packDetail.id}}?order-by=price-descending">Price descending</a>
+                                    href="/packs/{{packDetail.id}}?order-by=price-descending">Price descending</a>
                                 {{!-- <a class="dropdown-item" href="#">New</a> --}}
                                 {{!-- <div class="dropdown-divider"></div> --}}
                                 {{!-- <a class="dropdown-item" href="#">Hot</a> --}}
@@ -92,7 +92,7 @@
                                     <tr>
                                         <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
                                         <td>
-                                            <p class="ml-4 mb-0"><span class="font-weight-bold"></span><a href="/packlist/{{this.id}}" class="font-weight-bold" style="text-decoration: none; color: #000;">
+                                            <p class="ml-4 mb-0"><span class="font-weight-bold"></span><a href="/packs/{{this.id}}" class="font-weight-bold" style="text-decoration: none; color: #000;">
                                                 {{this.name}}
                                             </a></span></p>
                                         </td>
