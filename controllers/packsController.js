@@ -90,7 +90,50 @@ router.post('/store', async (req, res) => {
 
 // UI for editing a pack
 router.get('/:packId/edit', async (req, res) => {
+    const packId = req.params.packId;
+    const orderBy = req.query['order-by'];
 
+    let allPack = await packModel.getAll();
+    let packDetail = await packModel.getByPackId(packId);
+    let productsInPack;
+
+    switch (orderBy) {
+        case 'name-ascending':
+            productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, 'name', true);
+            break;
+
+        case 'name-descending':
+            productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, 'name', false);
+            break;
+
+        case 'price-ascending':
+            productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, 'price', true);
+            break
+
+        case 'price-descending':
+            productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, 'price', false);
+            break
+    
+        default:
+            productsInPack = await pack_itemsModel.getAllProductByPackId(packId);
+            break;
+    }
+
+    for (const product of productsInPack) {
+        let productImages = await productImageModel.getImagesByProductId(product.id);
+        // console.log('get /packlist productImages:', productImages);
+        product['images'] = productImages.reduce((allUrls, productImage) => {
+            allUrls.push(productImage.url);
+            return allUrls;
+        }, []);
+    }
+
+    res.render("packs/pack_edit", {
+        name: "Gói thực phẩm",
+        packs: allPack,
+        packDetail,
+        productsInPack
+    });
 });
 
 // update a pack
