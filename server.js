@@ -20,7 +20,6 @@ app.use('/order', require('./controllers/orderController'));
 app.use('/quarantine-locations', require('./controllers/quarantineLocationsController'));
 
 app.use('/dashboard', require('./controllers/dashboardController'));
-app.use('/userlist', require('./controllers/user_listController'));
 
 app.get("/", (req, res) => {
   res.redirect("/dashboard");

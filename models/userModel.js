@@ -70,3 +70,16 @@ exports.getByStatus = async (status) => {
         console.log("Error db/load", e);
     }
 }
+
+exports.getAllUserOrderBy = async (orderBy, ascending=true) => {
+    const sortOption = ascending ? 'ASC' : 'DESC';
+    const queryStr = pgp.as.format(`SELECT * FROM "user" p ORDER BY ${orderBy} ${sortOption};`)
+  
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error getAllUserOrderBy: ", e);
+        // throw e;
+    }
+  }
