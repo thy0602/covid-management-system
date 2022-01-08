@@ -13,7 +13,7 @@ require("./middlewares/handlebars")(app);
 app.use(express.static(path.resolve('./public')));
 
 app.use('/account', require('./controllers/accountController'));
-app.use('/users', require('./controllers/usersController'));
+app.use('/users', require('./controllers/userController/usersController'));
 app.use('/products', require('./controllers/productsController'));
 app.use('/packs', require('./controllers/packsController'));
 app.use('/order', require('./controllers/orderController'));

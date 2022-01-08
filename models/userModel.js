@@ -13,7 +13,8 @@ const tableFields = {
     max_basket: 'max_basket',
     basket_limit: 'basket_limit',
     username: 'username',
-    current_status: 'current_status'
+    current_status: 'current_status',
+    current_location: "current_location"
 }
 
 exports.countAll = async () => {
@@ -56,7 +57,7 @@ exports.getById = async (id) => {
         const res = await db.one(queryStr);
         return res;
     } catch (e) {
-        console.log("Error db/load", e);
+        console.log("Error db/load user:", e);
     }
 }
 
@@ -70,7 +71,6 @@ exports.getByStatus = async (status) => {
         console.log("Error db/load", e);
     }
 }
-
 exports.getAllUserOrderBy = async (orderBy, ascending=true) => {
     const sortOption = ascending ? 'ASC' : 'DESC';
     const queryStr = pgp.as.format(`SELECT * FROM "user" p ORDER BY ${orderBy} ${sortOption};`)
