@@ -5,8 +5,8 @@ const pgp = require('pg-promise')({
 const connection = {
     user: 'postgres',
     host: 'localhost',
-    database: 'covid_management_system',
-    password: 'thanhtri2009',
+    database: 'covid_management',
+    password: 'postgres',
     port: 5432,
     max: 30,
 }
