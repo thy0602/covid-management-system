@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userModel = require('../models/userModel');
+const userModel = require('../../models/userModel');
 
 router.get('/', async function(req, res) {
     const orderBy = req.query['order-by'];
@@ -39,15 +39,6 @@ router.post('/store', async (req, res) => {
     
 });
 
-// UI for editing a user
-router.get('/:userId/edit', async (req, res) => {
-
-});
-
-// update a pack
-router.post('/:userId/update', async (req, res) => {
-    
-});
-
+router.use('/', require('./userController'))
 
 module.exports = router;
