@@ -1,0 +1,112 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-title">Account</p>
+          <div class="row">
+            <div class="col-md-4" style="min-height: 100px;">
+              <img style="max-width: 100px;" src="/img/user.png"/>
+            </div>
+            <div>
+              <h3>Name: {{user.name}}</h4>
+              <h3>ID: {{user.username}}</h4>
+              <label class="badge badge-danger px-4">{{user.current_status}}</label>
+            </div>
+          </div>
+          <div  style="margin-top: 20px;" class="row d-sm-flex justify-content-center justify-content-sm-between">
+            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Year of birth</h3>
+            <h3 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.year_of_birth}}</h2>
+          </div>
+          <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Address</h3>
+            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.address}}</h2>
+          </div>
+          <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Personal ID</h3>
+            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">079202267123</h2>
+          </div>
+          <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Quarantine Place</h3>
+            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.current_location}}</h2>
+          </div>
+            <button style="width: 40%; display: flex; margin: auto; text-align: center;" type="button" class="btn btn-primary">
+                <h4 style="margin: 0; text-align: center; width: 100%;">Edit</h4>
+            </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Related People</h4>
+            <div class="table-responsive">
+                
+                    {{#if relatedUsers}}
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                        {{#each relatedUsers}} 
+                        <tr style="max-height: 50px;">
+                            <td>{{username}}</td>
+                            <td>{{name}}</td>
+                            <td><label class="badge badge-danger px-4">{{current_status}}</label></td>
+                            <td>
+                            <div>
+                            <button type="button" class="btn btn-danger btn-icon">
+                                <i class="ti-trash"></i>
+                            </button>
+                            </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+
+                </tbody>
+              </table>
+            {{else}}
+                <div style="display: flex; margin: auto;">
+                    <p class="text-danger">No related people!</p>
+                </div>
+            {{/if}}
+          </div>
+          <button style="display: flex; margin: auto;" type="button" class="btn btn-primary">
+                Add new
+            </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5 stretch-card grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-title">Latest Changes</p>
+          <ul class="icon-data-list">
+            {{#if currentChanges}}
+                {{#each currentChanges}}
+                    <li>
+                        <div class="d-flex">
+                            <img style="width: 30px; height: 30px;" src="/img/user.png"/>
+                            <div>
+                                <p class="text-info mb-1">Status: {{covid_status}}</p>
+                                <p class="mb-0">Record Time: {{record_time}}</p>
+                            </div>
+                        </div>
+                    </li>  
+                {{/each}}
+            {{else}}
+            <div class="d-flex">
+                <p class="text-danger">No latest changes!</p>
+            </div>
+            {{/if}}
+           </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

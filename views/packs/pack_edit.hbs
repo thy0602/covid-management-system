@@ -1,0 +1,104 @@
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="row">
+                <div class="col-12 col-xl-3 mb-4 mb-xl-0">
+                    <div class="row">
+                        <input type="text" value="{{packDetail.name}}"
+                            style="font-size: 1.25rem;font-weight: 500; text-align: center; padding: 2rem 0.5rem; margin-top: auto; margin-bottom: auto; margin-left: 1rem"/>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-9 mt-3">
+                    <div class="justify-content-end d-flex">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">Filter</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=name-ascending">A-Z</a>
+                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=name-descending">Z-A</a>
+                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=price-ascending">Price ascending</a>
+                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=price-descending">Price descending</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-0">Product List</p>
+                    <div class="table-responsive table-hover">
+                        <table class="table table-borderless">
+                            <thead style="border-bottom: 2px solid black">
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Price (VND)</th>
+                                    <th>Unit</th>
+                                    <th>Quantity Limit</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each productsInPack}}
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
+                                        {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
+                                            alt="image" /> --}}
+                                    </td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.price}}</td>
+                                    <td>{{this.unit}}</td>
+                                    <td><input type="text" value="{{this.quantity}}"
+                                            style="text-align: center; max-width: 4rem; margin-left: 0.75rem" /></td>
+                                    <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-danger hover-cursor ml-3"><i
+                                                    class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section "js"}}
+<!-- Custom js for this page-->
+<script type="text/javascript" src="js/dashboard.js"></script>
+<script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
+
+<script>
+    async function onclickDelete(id) {
+        console.log("DELETED");
+        /*await $.ajax({
+            url: `/products/${id}`,
+            type: 'PUT',
+            data: {
+                is_deleted: true
+            },
+            success: async function (response, status) {
+                const res = await response;
+                console.log(res);
+                window.location.href = '/products';
+            }
+        });*/
+    }
+
+</script>
+
+<!-- End custom js for this page-->
+{{/section}}

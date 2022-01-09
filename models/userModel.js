@@ -13,7 +13,8 @@ const tableFields = {
     max_basket: 'max_basket',
     basket_limit: 'basket_limit',
     username: 'username',
-    current_status: 'current_status'
+    current_status: 'current_status',
+    current_location: "current_location"
 }
 
 exports.countAll = async () => {
@@ -56,9 +57,10 @@ exports.getById = async (id) => {
         const res = await db.one(queryStr);
         return res;
     } catch (e) {
-        console.log("Error db/load", e);
+        console.log("Error db/load user:", e);
     }
 }
+
 exports.getByStatus = async (status) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.current_status} = '${status}'`, table);
@@ -69,3 +71,31 @@ exports.getByStatus = async (status) => {
         console.log("Error db/load", e);
     }
 }
+exports.getAllUserOrderBy = async (orderBy, ascending=true) => {
+    const sortOption = ascending ? 'ASC' : 'DESC';
+    const queryStr = pgp.as.format(`SELECT * FROM "user" p ORDER BY ${orderBy} ${sortOption};`)
+  
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error getAllUserOrderBy: ", e);
+        // throw e;
+    }
+  }
+
+  exports.update = async (data) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const condition = pgp.as.format(` WHERE "${tableFields.id}"='${data.id}'`);
+  
+    const queryStr =
+      pgp.helpers.update(data, null, table) + condition + " RETURNING *";
+  
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error update user: ", e);
+        // throw e;
+    }
+  }

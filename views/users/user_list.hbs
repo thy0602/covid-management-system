@@ -5,14 +5,14 @@
             <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                     <div class="row ml-2">
-                        {{#if isNecessities}}
-                        <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
+                        {{#if isPatient}}
+                        <button type="button" class="btn btn-2side left-side active-btn">Patient</button>
                         <button type="button" class="btn btn-2side right-side non-active-btn"
-                            onclick="location.href='/packlist';">Package</button>
-                        {{else if isPackage}}
+                            onclick="location.href='';">Supervisor</button>
+                        {{else if isSupervisor}}
                         <button type="button" class="btn btn-2side left-side non-active-btn"
-                            onclick="location.href='/productlist';">Necessities</button>
-                        <button type="button" class="btn btn-2side right-side active-btn">Package</button>
+                            onclick="location.href='';">Patient</button>
+                        <button type="button" class="btn btn-2side right-side active-btn">Supervisor</button>
                         {{else}}
                         {{/if}}
                     </div>
@@ -39,7 +39,7 @@
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                     <div class="row">
                         <h3 class="font-weight-bold mr-5"
-                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Necessities</h3>
+                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Patient</h3>
                         <button class="btn btn-primary mr-2"> Add new</button>
                     </div>
                 </div>
@@ -54,12 +54,11 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
                                 {{!-- <h6 class="dropdown-header">Header</h6> --}}
-                                <a class="dropdown-item" href="#">A-Z</a>
-                                <a class="dropdown-item" href="#">Z-A</a>
-                                <a class="dropdown-item" href="#">New</a>
+                                <a class="dropdown-item" href="/users?order-by=name-ascending">A-Z</a>
+                                <a class="dropdown-item" href="/users?order-by=name-descending">Z-A</a>
+                                <a class="dropdown-item" href="/users?order-by=serious-status">Serious Status</a>
                                 {{!-- <div class="dropdown-divider"></div> --}}
-                                <a class="dropdown-item" href="#">Hot</a>
-                                <a class="dropdown-item" href="#">Price</a>
+                                {{!-- <a class="dropdown-item" href="/users?order-by=price-descending">Serious Status</a> --}}
                             </div>
                         </div>
                     </div>
@@ -71,27 +70,31 @@
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <p class="card-title mb-0">Product List</p>
+                    <p class="card-title mb-0">User List</p>
                     <div class="table-responsive table-hover">
                         <table class="table table-borderless">
                             <thead style="border-bottom: 2px solid black">
                                 <tr>
                                     <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>Price (VND)</th>
-                                    <th>Unit</th>
+                                    <th>Full Name</th>
+                                    <th>Address</th>
+                                    <th>Warrantly Place</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each productList}}
+                                {{#each userList}}
                                 <tr>
                                     <td class="py-1">
-                                        <img src="{{this.url}}"  style="width:100px; height:100px" alt="image"/>
+                                        <img src="./img/faces/face1.jpg" alt="image" />
                                     </td>
-                                    <td>{{this.name}}</td>
-                                    <td>{{this.price}}</td>
-                                    <td>{{this.unit}}</td>
+                                    <td>{{name}}</td>
+                                    <td>{{address}}</td>
+                                    <td>{{current_location}}</td>
+                                    <td class="font-weight-medium">
+                                        <div class="badge badge-{{#ifStr current_status "F0"}}danger{{else}}{{#ifStr current_status "F1"}}warning{{else}}primary{{/ifStr}}{{/ifStr}}" style="width: 100%;">{{current_status}}</div>
+                                    </td>
                                     <td class="font-weight-medium">
                                         <div class="row">
                                             <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
