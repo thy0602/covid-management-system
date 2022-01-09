@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name='viewport' content="width=device-width, initial-scale=1.0">
+    <title>User Database </title>
+    <link rel="stylesheet" href="/css/login/scss/login.css">
+    <link rel="shortcut icon" href="#">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="welcome">
+            Change your Passcode
+        </div>
+        <form class='inputtag' action="/login/rspassword" method="post"
+            oninput='confirm_password.setCustomValidity(create_password.value != confirm_password.value ? "Passcode không trùng khớp." : "")'>
+            <div>Current Passcode</div>
+            <input class='input' type="password" name='current_password' required>
+            <div class="line_bottom_id"></div>
+            <div>New Passcode</div>
+            <input class='input' type="password" name='create_password' required>
+            <div class="line_bottom_id"></div>
+            <div>Confirm Passcode</div>
+            <input class='input' type="password" name='confirm_password' required>
+            <div class="line_bottom_id"></div>
+            <button class='submit hover-cursor' type="submit">CHANGE PASSCODE</button>
+            {{>(msg)}}
+        </form>
+
+    </div>
+
+</body>
+
+</html>

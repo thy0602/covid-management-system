@@ -23,9 +23,11 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
     "express-handlebars": "^6.0.2",
+    "express-handlebars-sections": "^1.0.1",
     "express-session": "^1.17.2",
-    "pg-promise": "^10.11.1",
-    "express-handlebars-sections": "^1.0.1"
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "pg-promise": "^10.11.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
