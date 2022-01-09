@@ -26,7 +26,6 @@ app.use('/login', require('./controllers/loginController'));
 
 app.use('/dashboard', require('./controllers/dashboardController'));
 
-
 app.get("/", (req, res) => {
   res.redirect("/dashboard");
 });
