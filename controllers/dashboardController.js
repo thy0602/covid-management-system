@@ -35,7 +35,7 @@ router.get("/", async function (req, res) {
   }))
 
   let totalProduct = 0;
-  productSold.forEach(product => {totalProduct+=product.quantity});
+  productSold.forEach(product => { totalProduct += product.quantity });
   let products = [];
   for (let i = 0; i < productSold.length; i++) {
     const newRecord = {
@@ -46,7 +46,7 @@ router.get("/", async function (req, res) {
   }
 
   let totalPack = 0;
-  packSold.forEach(pack => {totalPack+=pack.quantity});
+  packSold.forEach(pack => { totalPack += pack.quantity });
   let packs = [];
   for (let i = 0; i < packSold.length; i++) {
     const newRecord = {
