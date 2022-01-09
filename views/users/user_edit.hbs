@@ -1,0 +1,173 @@
+<div style="padding-top: 10px; background-color: #F5F7FF">
+  <form class="col-10 mx-auto my-5" onsubmit="editSubmit(event)">
+    <input type="hidden" id='id' value={{user.id}} disabled/>
+    <div class="form-row mt-5">
+      <div class="form-group col-md-6 row mx-auto">
+        <div class="was-validated" style="width: 90%">
+          <label for="inputFullname">Full Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            value={{user.name}}
+            required
+          />
+          <div class="invalid-feedback">
+            Can not leave this field empty!
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-6 row mx-auto">
+        <div class="was-validated" style="width: 90%">
+          <label for="inputUsername">Username</label>
+          <!-- kiểm tra username có tồn tại chưa bằng ajax nếu tồn tại
+                                        thì thêm class vào input là is-invalid else is-valid-->
+          <input
+            type="text"
+            class="form-control is-{{in}}valid"
+            id="username"
+            value={{user.username}}
+            required
+          />
+          <div class="invalid-feedback">
+            Can not leave this field empty!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6 row mx-auto">
+        <div class="was-validated" style="width: 90%">
+          <label for="inputYob">Year Of Birth</label>
+          <input
+            type="number"
+            class="form-control"
+            id="year_of_birth"
+            value={{user.year_of_birth}}
+            min='1800'
+            max='2021'
+            required
+          />
+          <div class="invalid-feedback">
+            Can not leave this field empty!
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-6 row mx-auto">
+        <div class="was-validated" style="width: 90%">
+          <label for="inputAddress">Address</label>
+          <input
+            type="text"
+            class="form-control"
+            id="address"
+            value={{user.address}}
+            required
+          />
+          <div class="invalid-feedback">
+            Can not leave this field empty!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6 row mx-auto">
+        <div class="was-validated" style="width: 90%">
+          <label for="inputmaxbasket">Max Basket</label>
+          <input
+            type="number"
+            min="0"
+            class="form-control"
+            id="max_basket"
+            value={{user.max_basket}}
+            required
+          />
+          <div class="invalid-feedback">
+            Can not leave this field empty!
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-6 row mx-auto">
+        <div class="was-validated" style="width: 90%">
+          <label for="inputBasketTimeltd">Basket Time Limit</label>
+          <input
+            type="number"
+            min="0"
+            class="form-control"
+            id="basket_timelimit"
+            value={{user.basket_timelimit}}
+            required
+          />
+          <div class="invalid-feedback">
+            Can not leave this field empty!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6 row mx-auto">
+        <div style="width: 90%">
+          <label for="inputmaxbasket">Current Status</label>
+          <select class="form-control" id="current_status">
+            <option value="F0" {{#ifStr user.current_status "F0"}}selected{{/ifStr}}>F0</option>
+            <option value="F1" {{#ifStr user.current_status "F1"}}selected{{/ifStr}}>F1</option>
+            <option value="F2" {{#ifStr user.current_status "F2"}}selected{{/ifStr}}>F2</option>
+            <option value="cured" {{#ifStr user.current_status "cured"}}selected{{/ifStr}}>cured</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group col-md-6 row mx-auto">
+        <div class="was-validated" style="width: 90%">
+          <label for="cars">Current Quarantine Location:</label>
+          <input
+            type="text"
+            class="form-control is-valid"
+            id="current_location"
+            value="{{user.current_location}}"
+            required
+          />
+          <div class="invalid-feedback">
+            Can not leave this field empty!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn col-2 btn-success">Submit</button>
+    </div>
+  </form>
+</div>
+
+{{#section 'js'}}
+<script type="text/javascript">
+    function editSubmit(event) {
+        event.preventDefault();
+        const id=$("#id").val(), username = $('#username').val(), name = $('#name').val(), 
+            year_of_birth = $('#year_of_birth').val(), address = $('#address').val(),
+            max_basket = $('#max_basket').val(), basket_timelimit = $('#basket_timelimit').val(),
+            current_location = $('#current_location').val(), current_status = $('#current_status').val();
+
+       var jqxhr = $.post(`/users/${id}/edit`,{id: 10,username,name,year_of_birth,address,max_basket,basket_timelimit,current_status,current_location}, function() {
+
+        })
+          .done(function() {
+            alert( "Edit success" );
+          })
+          .fail(function(err) {
+            alert( "Error: Can not update with given ID");
+          })
+          // Set another completion function for the request above
+          jqxhr.always(function() {
+            $(location).attr("href",$(location).attr("href"));
+          });
+    }
+</script>
+
+{{/section}}
