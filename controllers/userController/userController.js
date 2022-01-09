@@ -24,8 +24,10 @@ router.get('/:id/view', async (req,res)=>{
 
 router.get('/:id/edit', async (req,res)=>{
     const user = await userModel.getById(req.params.id)
-    res.render('users/user_edit', {user}
-    );
+    if (user)
+        res.render('users/user_edit', {user});
+    else
+        res.redirect('/users')
 })
 
 router.post('/:id/edit', async (req,res)=>{
