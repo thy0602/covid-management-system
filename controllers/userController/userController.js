@@ -22,5 +22,20 @@ router.get('/:id/view', async (req,res)=>{
     );
 })
 
+router.get('/:id/edit', async (req,res)=>{
+    const user = await userModel.getById(req.params.id)
+    res.render('users/user_edit', {user}
+    );
+})
+
+router.post('/:id/edit', async (req,res)=>{
+    const result = await userModel.update(req.body);
+    if (result[0]){
+        res.status(200).send();
+    } else {
+        res.status(401).send();
+    }
+})
+
 
 module.exports = router;

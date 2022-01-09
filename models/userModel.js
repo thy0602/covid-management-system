@@ -83,3 +83,19 @@ exports.getAllUserOrderBy = async (orderBy, ascending=true) => {
         // throw e;
     }
   }
+
+  exports.update = async (data) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const condition = pgp.as.format(` WHERE "${tableFields.id}"='${data.id}'`);
+  
+    const queryStr =
+      pgp.helpers.update(data, null, table) + condition + " RETURNING *";
+  
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error update user: ", e);
+        // throw e;
+    }
+  }
