@@ -16,11 +16,16 @@ require('./middlewares/session')(app);
 //passport
 require('./middlewares/passport')(app);
 
-app.use('/dashboard', require('./controllers/dashboardController'));
-app.use('/userlist', require('./controllers/user_listController'));
-app.use('/productlist', require('./controllers/product_listController'));
-app.use('/packlist', require('./controllers/pack_listController'));
+app.use('/account', require('./controllers/accountController'));
+app.use('/users', require('./controllers/userController/usersController'));
+app.use('/products', require('./controllers/productsController'));
+app.use('/packs', require('./controllers/packsController'));
+app.use('/order', require('./controllers/orderController'));
+app.use('/quarantine-locations', require('./controllers/quarantineLocationsController'));
 app.use('/login', require('./controllers/loginController'));
+
+app.use('/dashboard', require('./controllers/dashboardController'));
+
 
 app.get("/", (req, res) => {
   res.redirect("/dashboard");

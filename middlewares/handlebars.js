@@ -12,6 +12,7 @@ module.exports = (app) => {
         }
         return options.inverse(this);
       },
+      sum: (a, b) => a + b
     },
   });
   express_handlebars_sections(hbs);
