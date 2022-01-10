@@ -30,7 +30,8 @@ CREATE TABLE "account" (
 	"username" varchar(50) PRIMARY KEY, -- PRIMARYKEY <=> UNIQUE, NOT NULL
 	"password" varchar(255),
 	"role" varchar(10) NOT NULL,  -- manager/admin/user
-	"is_deleted" boolean NOT NULL DEFAULT false
+	"is_deleted" boolean NOT NULL DEFAULT false,
+	"is_locked" boolean NOT NULL DEFAULT false
 );
 
 -- -----------------------------
@@ -41,8 +42,9 @@ CREATE TABLE "user" (
 	"name" varchar(50) NOT NULL,
 	"year_of_birth" int NOT NULL,
 	"address" varchar NOT NULL,
-	"max_basket" int NOT NULL,
-	"basket_timelimit" int NOT NULL,
+-- 	"max_basket" int NOT NULL,
+-- 	"basket_timelimit" int NOT NULL,
+	"identity_number" varchar(12) NOT NULL,
 	"username" varchar(50) NOT NULL,
 	"current_status" varchar(10),
 	"current_location" varchar(100),
@@ -124,7 +126,8 @@ CREATE TABLE "product_image" (
 CREATE TABLE "pack" (
 	"id" serial PRIMARY KEY,
 	"name" varchar(100) NOT NULL,
-	"limit" int NOT NULL,
+	"quantity_limit" int NOT NULL DEFAULT '2',
+	"time_limit_unit" varchar(10) NOT NULL DEFAULT 'tuần', -- ngay/tuan/thang
 	"is_deleted" boolean NOT NULL DEFAULT false
 );
 
@@ -134,7 +137,7 @@ CREATE TABLE "pack" (
 CREATE TABLE "pack_items" (
 	"pack_id" int NOT NULL,
 	"product_id" int NOT NULL,
-	"quantity" int NOT NULL,
+	"quantity_limit" int NOT NULL DEFAULT '6',
 	
 	PRIMARY KEY (pack_id, product_id),
 	FOREIGN KEY (pack_id) REFERENCES "pack"("id"),
@@ -198,13 +201,13 @@ VALUES
 -- -----------------------------
 -- Table user
 -- -----------------------------
-INSERT INTO "user"("id", "name", "year_of_birth", "address", "max_basket", "basket_timelimit", "username")
+INSERT INTO "user"("id", "name", "year_of_birth", "address", "identity_number", "username")
 VALUES 
-	(DEFAULT, 'thin', 2000, 'Vietnam', 5, 1, 'ID_001'),
-	(DEFAULT, 'duy', 1999, 'Vietnam', 5, 1, 'ID_002'),
-	(DEFAULT, 'thy', 2001, 'Vietnam', 5, 1, 'ID_003'),
-	(DEFAULT, 'nhan', 1998, 'Vietnam', 5, 1, 'ID_004'),
-	(DEFAULT, 'trung', 2002, 'Vietnam', 5, 1, 'ID_005');
+	(DEFAULT, 'thin', 2000, 'Vietnam', '000000000001', 'ID_001'),
+	(DEFAULT, 'duy', 1999, 'Vietnam', '000000000002', 'ID_002'),
+	(DEFAULT, 'thy', 2001, 'Vietnam', '000000000003', 'ID_003'),
+	(DEFAULT, 'nhan', 1998, 'Vietnam', '000000000004', 'ID_004'),
+	(DEFAULT, 'trung', 2002, 'Vietnam', '000000000005', 'ID_005');
 
 -- -----------------------------
 -- Table relate
@@ -225,21 +228,20 @@ VALUES
 -- -----------------------------
 -- Table product
 -- -----------------------------
-BEGIN;
 INSERT INTO "product"("id", "name", "unit", "price")
 VALUES 
-    (DEFAULT, 'Bắp cải', 'gam', 500),
-	(DEFAULT, 'Xà lách', 'gam', 500),
-	(DEFAULT, 'Khoai tây', 'gam', 500),
-	(DEFAULT, 'Cà rốt', 'gam', 500),
-	(DEFAULT, 'Cam', 'gam', 500),
-	(DEFAULT, 'Táo', 'gam', 500),
-	(DEFAULT, 'Thịt heo', 'gam', 1000),
-	(DEFAULT, 'Thịt bò', 'gam', 1000),
-	(DEFAULT, 'Thịt gà', 'gam', 1000),
-	(DEFAULT, 'Trứng gà', 'gam', 1000),
-	(DEFAULT, 'Cá', 'gam', 1000),
-	(DEFAULT, 'Tôm', 'gam', 1000),
+    (DEFAULT, 'Bắp cải', 'kg', 25000),
+	(DEFAULT, 'Xà lách', 'kg', 20000),
+	(DEFAULT, 'Khoai tây', 'kg', 25000),
+	(DEFAULT, 'Cà rốt', 'kg', 2500),
+	(DEFAULT, 'Cam', 'kg', 35000),
+	(DEFAULT, 'Táo', 'kg', 45000),
+	(DEFAULT, 'Thịt heo', 'kg', 120000),
+	(DEFAULT, 'Thịt bò', 'kg', 150000),
+	(DEFAULT, 'Thịt gà', 'kg', 100000),
+	(DEFAULT, 'Trứng gà', 'qủa', 6000),
+	(DEFAULT, 'Cá', 'kg', 90000),
+	(DEFAULT, 'Tôm', 'kg', 80000),
 	(DEFAULT, 'Cơm cháy', 'gói', 30000),
 	(DEFAULT, 'Rong biển', 'gói', 25000),
 	(DEFAULT, 'Mì gói', 'gói', 7000),
@@ -260,19 +262,17 @@ VALUES
 	(DEFAULT, 'Bột giặt', 'gói', 35000),
 	(DEFAULT, 'Nước xả quần áo', 'gói', 35000),
 	(DEFAULT, 'Xà phòng', 'hộp', 50000);
-COMMIT;
 
 
 -- -----------------------------
 -- Table pack
 -- -----------------------------
-BEGIN;
-INSERT INTO "pack"("id", "name", "limit")
+INSERT INTO "pack"("id", "name", "quantity_limit")
 VALUES
-	(DEFAULT, 'Gói thực phẩm 1', 6),
-	(DEFAULT, 'Gói đồ dùng 1', 6),
-	(DEFAULT, 'Gói tổng hợp 1', 5);
-COMMIT;
+	(DEFAULT, 'Gói thực phẩm 1', 4),
+	(DEFAULT, 'Gói đồ dùng 1', 3),
+	(DEFAULT, 'Gói tổng hợp 1', 2);
+	
 -- INSERT INTO "pack"("id", "name", "limit")
 -- VALUES 
 --     (DEFAULT, 'Rau - củ - trái cây', 10),  -- Bắp cải, xà lách, nấm, khoai tây, cà rốt, cam, táo
@@ -287,28 +287,25 @@ COMMIT;
 -- -----------------------------
 -- Table pack_items
 -- -----------------------------
-BEGIN;
-INSERT INTO "pack_items"("pack_id", "product_id", "quantity")
+INSERT INTO "pack_items"("pack_id", "product_id", "quantity_limit")
 VALUES
-	('1', '1', 2),
-	('1', '2', 2),
-	('1', '3', 1),
-	('1', '4', 1),
-	('1', '5', 1),
-	('2', '24', 2),
-	('2', '25', 2),
-	('2', '26', 2),
-	('3', '2', 2),
-	('3', '3', 2),
-	('3', '24', 2),
-	('3', '25', 2);
-COMMIT;
+	('1', '1', 5),
+	('1', '2', 6),
+	('1', '3', 4),
+	('1', '4', 5),
+	('1', '5', 3),
+	('2', '24', 6),
+	('2', '25', 5),
+	('2', '26', 5),
+	('3', '2', 4),
+	('3', '3', 6),
+	('3', '24', 4),
+	('3', '25', 3);
 
 
 -- -----------------------------
 -- Table product_image
 -- -----------------------------
-BEGIN;
 INSERT INTO "product_image"("product_id", "url")
 VALUES 
     ('1', 'img/products/bap-cai-1.jpg'),
@@ -375,7 +372,7 @@ VALUES
 	('31', 'img/products/nuoc-xa-2.jpg'),
 	('32', 'img/products/xa-phong-1.jpg'),
 	('32', 'img/products/xa-phong-2.jpg');
-COMMIT;
+
 -- INSERT INTO "product_image"
 -- VALUES
 -- 	(1, 'img/products/product-1.jpg'),

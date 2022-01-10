@@ -140,18 +140,18 @@
                         <div class="mb-4 ml-2 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
                                 <div class="card-body" style="padding: 0.5rem;">
-                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: 2 lần/tuần</p>
+                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: {{packDetail.quantity_limit}} lần/{{packDetail.time_limit_unit}}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-4 ml-2 stretch-card transparent">
+                        {{!-- <div class="mb-4 ml-2 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
                                 <div class="card-body" style="padding: 0.5rem;">
                                     <p class="mb-0" style="font-size: 1rem;">Số lượng tối đa mỗi sản phẩm:
                                         {{packDetail.limit}}</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="table-responsive table-hover" style="height: 430px; overflow: auto;">
                         <table class="table table-borderless">

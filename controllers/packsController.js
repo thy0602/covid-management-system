@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
             return allUrls;
         }, []);
     }
-    // console.log('get /packlist productsInPack:', productsInPack);
+    console.log('get /packlist productsInPack:', productsInPack);
 
     res.render("packs/pack_list", {
         isPackage: 1,
