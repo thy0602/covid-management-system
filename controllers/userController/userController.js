@@ -5,8 +5,18 @@ const userModel = require("../../models/userModel");
 const covidRecordModel = require("../../models/covidRecordModel");
 const relateModel = require("../../models/relateModel")
 
-router.get('/:id/view', async (req,res)=>{
+router.use('/:id',async function(req, res, next) {
     const user = await userModel.getById(req.params.id)
+    if (user){
+        req.user = user;
+        next();
+    } else {
+        res.redirect('/users');
+    }
+})
+
+router.get('/:id/view', async (req,res)=>{
+    const user = req.user;
     
     const relatedUserIds = await relateModel.getById(req.params.id);
     const relatedUsers = [];
@@ -23,11 +33,8 @@ router.get('/:id/view', async (req,res)=>{
 })
 
 router.get('/:id/edit', async (req,res)=>{
-    const user = await userModel.getById(req.params.id)
-    if (user)
-        res.render('users/user_edit', {user});
-    else
-        res.redirect('/users')
+    const user = req.user;
+    res.render('users/user_edit', {user});
 })
 
 router.post('/:id/edit', async (req,res)=>{
