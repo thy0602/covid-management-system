@@ -3,7 +3,6 @@ const router = express.Router();
 const packModel = require('../models/packModel');
 const pack_itemsModel = require('../models/pack_itemsModel');
 const productImageModel = require('../models/productImageModel');
-const userModel = require('../models/userModel');
 
 // get list of all packs
 router.get('/', async (req, res) => {

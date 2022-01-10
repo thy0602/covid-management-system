@@ -1,0 +1,162 @@
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="row">
+                <div class="col-12 col-xl-12 mb-4 mb-xl-0">
+                    <div class="row">
+                        <h3 class="font-weight-bold mr-5"
+                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Order</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 stretch-card grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-2">Package List</p>
+                    <div class="table-responsive mb-4" style="height: 38%; overflow: auto;">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th class="pl-0 pb-2 border-bottom ">ID</th>
+                                    <th class="border-bottom pb-2"><span class="ml-4">Name</span></th>
+                                    {{!-- <th>Action</th> --}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each packs}}
+                                <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold"></span><a
+                                                href="/order/{{this.id}}" class="font-weight-bold"
+                                                style="text-decoration: none; color: #000;">
+                                                {{this.name}}
+                                            </a></span></p>
+                                    </td>
+                                    {{!-- <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i>
+                                            </div>
+                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td> --}}
+                                </tr>
+                                {{/each}}
+                                {{!-- <tr>
+                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
+                                    <td>
+                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
+                                    </td>
+                                </tr> --}}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <i class="mdi mdi-cart ml-3"></i>
+                        <p class="card-title ml-2 mb-2">Your Cart</p>
+                    </div>
+                    <div class="table-responsive mb-4" style="height: 36%; overflow: auto;">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th class="pl-0 pb-2 border-bottom ">ID</th>
+                                    <th class="border-bottom pb-2"><span class="ml-4">Name</span></th>
+                                    <th class="border-bottom pb-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mb-2">
+                        <div style="width: 120px; margin-left: calc((100% - 120px)/2); margin-bottom: 20px">
+                        <button type="button" class="btn btn-success">Check out</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 stretch-card grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-4">Package Detail</p>
+                    <div class="row ml-0">
+                        <div class="col-12 col-xl-9 mb-4 mb-xl-0">
+                            <div class="row">
+                                <div class="mb-4 stretch-card transparent">
+                                    <div class="card card-light-blue" style="border-radius: 5px;">
+                                        <div class="card-body" style="padding: 0.5rem;">
+                                            <p class="mb-0" style="font-size: 1rem;">{{packDetail.name}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4 ml-2 stretch-card transparent">
+                                    <div class="card card-light-blue" style="border-radius: 5px;">
+                                        <div class="card-body" style="padding: 0.5rem;">
+                                            <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: 2 lần/tuần</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4 ml-2 stretch-card transparent">
+                                    <div class="card card-light-blue" style="border-radius: 5px;">
+                                        <div class="card-body" style="padding: 0.5rem;">
+                                            <p class="mb-0" style="font-size: 1rem;">Số lượng tối đa mỗi sản phẩm:
+                                                {{packDetail.limit}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-3" style="margin-top: -1rem;">
+                            <div class="justify-content-end d-flex">
+                                <button type="button" class="btn btn-success">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive table-hover" style="height: 430px; overflow: auto;">
+                        <table class="table table-borderless">
+                            <thead style="border-bottom: 2px solid black">
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Price (VND)</th>
+                                    <th>Unit</th>
+                                    <th><span style="margin-left: 0.75rem;">Quantity</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each productsInPack}}
+                                <tr>
+                                    <td class="py-1">
+                                        <img src="/{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
+                                        {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
+                                            alt="image" /> --}}
+                                    </td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.price}}</td>
+                                    <td>{{this.unit}}</td>
+                                    <td><input type="text" value="{{this.quantity}}"
+                                            style="text-align: center; max-width: 4rem; margin-left: 0.75rem" /></td>
+                                </tr>
+                                {{/each}}
+                                {{!-- <tr>
+                                    <td class="py-1">
+                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
+                                    </td>
+                                    <td>Kem đánh răng</td>
+                                    <td>20 000</td>
+                                    <td>Tube</td>
+                                </tr> --}}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
