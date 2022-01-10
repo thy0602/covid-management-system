@@ -71,10 +71,10 @@ exports.getByStatus = async (status) => {
         console.log("Error db/load", e);
     }
 }
-exports.getAllUserOrderBy = async (orderBy, ascending=true) => {
+exports.getAllUserOrderBy = async (orderBy, ascending = true) => {
     const sortOption = ascending ? 'ASC' : 'DESC';
     const queryStr = pgp.as.format(`SELECT * FROM "user" p ORDER BY ${orderBy} ${sortOption};`)
-  
+
     try {
         const res = await db.any(queryStr);
         return res;
@@ -82,15 +82,15 @@ exports.getAllUserOrderBy = async (orderBy, ascending=true) => {
         console.log("Error getAllUserOrderBy: ", e);
         // throw e;
     }
-  }
+}
 
-  exports.update = async (data) => {
+exports.update = async (data) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     const condition = pgp.as.format(` WHERE "${tableFields.id}"='${data.id}'`);
-  
+
     const queryStr =
-      pgp.helpers.update(data, null, table) + condition + " RETURNING *";
-  
+        pgp.helpers.update(data, null, table) + condition + " RETURNING *";
+
     try {
         const res = await db.any(queryStr);
         return res;
@@ -98,4 +98,15 @@ exports.getAllUserOrderBy = async (orderBy, ascending=true) => {
         console.log("Error update user: ", e);
         // throw e;
     }
-  }
+}
+
+exports.create = async (entity) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const qStr = pgp.helpers.insert(entity, null, table) + "RETURNING *";
+    try {
+        const res = await db.one(qStr);
+        return res;
+    } catch (error) {
+        console.log('error db/create:', error);
+    }
+};
