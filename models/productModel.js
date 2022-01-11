@@ -49,6 +49,17 @@ exports.getAllProductOrderBy = async (orderBy, ascending=true) => {
   }
 }
 
+exports.getById = async (id) => {
+  const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.id} = '${id}'`, table);
+    try {
+        const res = await db.one(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error db/load product/id:", e);
+    }
+}
+
 // generic way to skip NULL/undefined values for strings/boolean
 function isSkipCol(col) {
   return {
@@ -84,8 +95,8 @@ var csGeneric = new pgp.helpers.ColumnSet([
   isSkipCol(tableFields.is_deleted)
 ], {table: tableName});
 
-exports.update = async (PKvalue, entity) => {
-  const queryStr = pgp.helpers.update(entity, csGeneric) + ` WHERE ${tableFields.id} = ${PKvalue} RETURNING *`;
+exports.update = async (entity) => {
+  const queryStr = pgp.helpers.update(entity, csGeneric) + ` WHERE ${tableFields.id} = ${entity.id} RETURNING *`;
   const res = await db.one(queryStr);
   return res;
 }
