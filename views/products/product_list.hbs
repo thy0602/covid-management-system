@@ -87,15 +87,18 @@
                             <tbody>
                                 {{#each productList}}
                                 <tr>
-                                    <td class="py-1">
+                                    <td class="py-1 hover-cursor" onclick="location.href='/products/{{this.id}}/view';">
                                         <img src="{{this.url}}"  style="width:100px; height:100px" alt="image"/>
                                     </td>
-                                    <td>{{this.name}}</td>
-                                    <td>{{this.price}}</td>
-                                    <td>{{this.unit}}</td>
+                                    <td class="hover-cursor" onclick="location.href='/products/{{this.id}}/view';">
+                                        {{this.name}}</td>
+                                    <td class="hover-cursor" onclick="location.href='/products/{{this.id}}/view';">
+                                        {{this.price}}</td>
+                                    <td class="hover-cursor" onclick="location.href='/products/{{this.id}}/view';">
+                                        {{this.unit}}</td>
                                     <td class="font-weight-medium">
                                         <div class="row">
-                                            <div class="badge badge-primary hover-cursor"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-primary hover-cursor" onclick="location.href='/products/{{this.id}}/edit';"><i class="mdi mdi-pencil mx-2"></i></div>
                                             <div class="badge badge-danger hover-cursor"><i class="icon-trash mx-2"></i></div>
                                         </div>
                                     </td>

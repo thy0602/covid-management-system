@@ -74,7 +74,7 @@
 
       <div class="form-group col-md-6 row mx-auto">
         <div class="was-validated" style="width: 90%">
-          <label for="price">Giá</label>
+          <label for="price">Price</label>
           <!-- kiểm tra username có tồn tại chưa bằng ajax nếu tồn tại
                                         thì thêm class vào input là is-invalid else is-valid-->
           <input
@@ -94,7 +94,7 @@
     <div class="form-row">
       <div class="form-group col-md-6 row mx-auto">
         <div class="was-validated" style="width: 90%">
-          <label for="unit">Đơn vị tính</label>
+          <label for="unit">Unit</label>
           <input
             type="text"
             class="form-control"
@@ -145,14 +145,14 @@
 
   <script type="text/javascript">
     function editSubmit(event) { 
-      event.preventDefault(); 
+      //event.preventDefault(); 
       const id=$("#id").val(),name = $('#name').val(), 
       price = $('#price').val(), unit = $('#unit').val(); 
       let jqxhr = $.post(`/products/${id}/edit`,{id,name,price,unit}, function() { })
                     .done(function() { alert( "Edit success" ); }) 
                     .fail(function(err) { alert("Error: Can not update with given ID"); }) 
       // Set another completion function for the request above 
-      jqxhr.always(function() {$(location).attr("href",$(location).attr("href"));}); 
+      jqxhr.always(function() { window.location.href=`/products/${id}/view`;}); 
     }
 
     function deleteImage(path) { 

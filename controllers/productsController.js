@@ -27,7 +27,7 @@ router.get("/", async function (req, res) {
       break;
 
     default:
-      productList = await productModel.getProductList();
+      productList = await productModel.getAllProductOrderBy("name", true);
       break;
   }
 
