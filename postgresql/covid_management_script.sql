@@ -193,28 +193,28 @@ CREATE TABLE "order" (
 -- -----------------------------
 -- Table order_pack
 -- -----------------------------
--- CREATE TABLE "order_pack" (
--- 	"order_id" int NOT NULL,
--- 	"pack_id" int NOT NULL,
---  "quantity" int NOT NULL,
+CREATE TABLE "order_pack" (
+	"order_id" int NOT NULL,
+	"pack_id" int NOT NULL,
+	"quantity" int NOT NULL,
 	
--- 	PRIMARY KEY (order_id, pack_id, created_at),
--- 	FOREIGN KEY (order_id) REFERENCES "order"("id"),
--- 	FOREIGN KEY (pack_id) REFERENCES "pack"("id")
--- );
+	PRIMARY KEY (order_id, pack_id),
+	FOREIGN KEY (order_id) REFERENCES "order"("id"),
+	FOREIGN KEY (pack_id) REFERENCES "pack"("id")
+);
 
 -- -----------------------------
 -- Table order_product
 -- -----------------------------
--- CREATE TABLE "order_product" (
--- 	"order_id" int NOT NULL,
--- 	"product_id" int NOT NULL,
--- 	"quantity" int NOT NULL,
+CREATE TABLE "order_product" (
+	"order_id" int NOT NULL,
+	"product_id" int NOT NULL,
+	"quantity" int NOT NULL,
 	
--- 	PRIMARY KEY (order_id, product_id),
--- 	FOREIGN KEY (order_id) REFERENCES "order"("id"),
--- 	FOREIGN KEY (product_id) REFERENCES "product"("id")
--- );
+	PRIMARY KEY (order_id, product_id),
+	FOREIGN KEY (order_id) REFERENCES "order"("id"),
+	FOREIGN KEY (product_id) REFERENCES "product"("id")
+);
 
 -- -----------------------------
 -- Table order_detail
