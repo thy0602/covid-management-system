@@ -100,3 +100,16 @@ exports.update = async (entity) => {
   const res = await db.one(queryStr);
   return res;
 }
+
+exports.create = async (entity) => {
+  const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+
+  const queryStr = pgp.helpers.insert(entity, null, table) + " RETURNING *";
+
+  try {
+    const res = await db.one(queryStr);
+    return res;
+  } catch (e) {
+    console.log("Error db/create", e.message);
+  }
+}

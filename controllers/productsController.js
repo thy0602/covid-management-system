@@ -37,6 +37,24 @@ router.get("/", async function (req, res) {
   });
 });
 
+router.get("/new", async (req, res) => {
+  const id = req.query.id;
+  if (id) {
+    const product = await productModel.getById(id);
+    if (typeof product === "undefined")
+      return res.redirect('/products/new');
+    
+    return res.render("products/product_new", {
+      product,
+      isSubmitProduct: true
+    });
+  }
+
+  res.render("products/product_new", {
+    isSubmitProduct: false
+  });
+});
+
 router.use("/:id", async function (req, res, next) {
   const product = await productModel.getById(req.params.id);
   if (product) {
@@ -70,16 +88,21 @@ router.get("/:id/edit", async (req, res) => {
 
 const upload = multer.array("fileUp", 5);
 router.post("/:id/upload", async (req, res) => {
+  const id = req.params.id
   upload(req, res, async function (err) {
     if (err) res.status(400).send(err.message);
 
     // Everything went fine and save document in DB here.
     for (let i = 0; i < req.files.length; i++) {
       await productImageModel.insert({
-        product_id: req.params.id,
+        product_id: id,
         url: `img/products/${req.files[i].filename}`,
       });
     }
+
+    if (req.query.post)
+      return res.redirect(`/products/${id}/view`);
+
     //reload the page
     res.redirect(req.get("referer"));
   });
@@ -107,6 +130,13 @@ router.post("/:id/edit", async (req, res) => {
   } catch (e) {
     res.status(400).send(e.message);
   }
+});
+
+router.post("/", async (req, res) => {
+  const response = await productModel.create(req.body);
+  console.log(response);
+  const id = response.id;
+  res.redirect(`/products/new?id=${id}`);
 });
 
 module.exports = router;
