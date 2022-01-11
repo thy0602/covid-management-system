@@ -7,7 +7,7 @@ const { db } = require('../db/db_config.js');
 const tableName = "order_pack";
 const tableFields = {
     order_id: 'order_id',   // Primary Key
-    product_id: 'pack_id',
+    product_id: 'product_id',
     quantity: 'quantity',
 }
 
