@@ -8,7 +8,7 @@ const tableName = "order";
 const tableFields = {
     id: 'id',   // Primary Key
     user_id: 'user_id',
-    order_at: 'order_at',
+    ordered_at: 'ordered_at',
     paid_at: 'paid_at',
 }
 
@@ -25,7 +25,7 @@ exports.countAll = async () => {
 
 exports.getAll = async () => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const queryStr = pgp.as.format(`SELECT * FROM $1 ORDER BY ${tableFields.order_at} DESC`, table);
+    const queryStr = pgp.as.format(`SELECT * FROM $1 ORDER BY ${tableFields.ordered_at} DESC`, table);
     try {
         const res = await db.any(queryStr);
         return res;

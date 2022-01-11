@@ -7,6 +7,9 @@
 -- ======================================
 DROP TABLE IF EXISTS "user" CASCADE;
 DROP TABLE IF EXISTS "account" CASCADE;
+DROP TABLE IF EXISTS "province" CASCADE;
+DROP TABLE IF EXISTS "district" CASCADE;
+DROP TABLE IF EXISTS "ward" CASCADE;
 DROP TABLE IF EXISTS "relate" CASCADE;
 DROP TABLE IF EXISTS "covid_record" CASCADE;
 DROP TABLE IF EXISTS "quarantine_location" CASCADE;
@@ -16,8 +19,9 @@ DROP TABLE IF EXISTS "product_image" CASCADE;
 DROP TABLE IF EXISTS "pack" CASCADE;
 DROP TABLE IF EXISTS "pack_items" CASCADE;
 DROP TABLE IF EXISTS "order" CASCADE;
-DROP TABLE IF EXISTS "order_pack" CASCADE;
-DROP TABLE IF EXISTS "order_product" CASCADE;
+DROP TABLE IF EXISTS "order_detail" CASCADE;
+DROP TABLE IF EXISTS "order_pack" CASCADE;  -- deprecated
+DROP TABLE IF EXISTS "order_product" CASCADE;  -- deprecated
 
 
 -- ======================================
@@ -180,7 +184,7 @@ CREATE TABLE "pack_items" (
 CREATE TABLE "order" (
 	"id" serial PRIMARY KEY,
 	"user_id" int NOT NULL,
-	"order_at" timestamp DEFAULT NOW(),
+	"ordered_at" timestamp DEFAULT NOW(),
 	"paid_at" timestamp,
 	
 	FOREIGN KEY (user_id) REFERENCES "user"("id")
@@ -209,6 +213,22 @@ CREATE TABLE "order_product" (
 	
 	PRIMARY KEY (order_id, product_id),
 	FOREIGN KEY (order_id) REFERENCES "order"("id"),
+	FOREIGN KEY (product_id) REFERENCES "product"("id")
+);
+
+-- -----------------------------
+-- Table order_detail
+-- -----------------------------
+CREATE TABLE "order_detail" (
+	"order_id" int NOT NULL,
+	"pack_id" int NOT NULL,
+	"product_id" int NOT NULL,
+	"quantity" int NOT NULL,
+	"bought_price" numeric(19, 4) NOT NULL,
+	
+	PRIMARY KEY (order_id, pack_id, product_id),
+	FOREIGN KEY (order_id) REFERENCES "order"("id"),
+	FOREIGN KEY (pack_id) REFERENCES "pack"("id"),
 	FOREIGN KEY (product_id) REFERENCES "product"("id")
 );
 
