@@ -99,7 +99,6 @@ router.delete("/:id/edit", async (req, res) => {
 
 router.post("/:id/edit", async (req, res) => {
   try {
-    const id = req.params.id;
     const response = await productModel.update(req.body);
     if (typeof response === "undefined")
       res.status(500).send("Internal server error");
