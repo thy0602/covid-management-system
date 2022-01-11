@@ -7,7 +7,7 @@ const productImageModel = require('../models/productImageModel');
 // get list of all packs
 router.get('/', async (req, res) => {
     let allPack = await packModel.getAll();
-    console.log('get /packlist allPack:', allPack);
+    // console.log('get /packlist allPack:', allPack);
     let firstPack = allPack[0];
     let productsInPack = await pack_itemsModel.getAllProductByPackId(firstPack.id);
 
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
             return allUrls;
         }, []);
     }
-    console.log('get /packlist productsInPack:', productsInPack);
+    // console.log('get /packlist productsInPack:', productsInPack);
 
     res.render("packs/pack_list", {
         isPackage: 1,
@@ -78,12 +78,12 @@ router.get('/:packId', async (req, res) => {
 })
 
 // UI for creating new pack
-router.get('/create', async (req, res) => {
+router.get('/new', async (req, res) => {
 
 });
 
 // store new pack
-router.post('/store', async (req, res) => {
+router.post('/new', async (req, res) => {
     
 });
 
@@ -127,8 +127,10 @@ router.get('/:packId/edit', async (req, res) => {
         }, []);
     }
 
+    console.log('get /packs/:id/edit productsInPack: ', productsInPack);
+
     res.render("packs/pack_edit", {
-        name: "Gói thực phẩm",
+        // name: "Gói thực phẩm",
         packs: allPack,
         packDetail,
         productsInPack
@@ -136,7 +138,7 @@ router.get('/:packId/edit', async (req, res) => {
 });
 
 // update a pack
-router.post('/:packId/update', async (req, res) => {
+router.post('/:packId/edit', async (req, res) => {
     
 });
 

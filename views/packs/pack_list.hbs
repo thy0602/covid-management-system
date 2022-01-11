@@ -128,7 +128,7 @@
                             style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><a
                                 href="/packs/{{packDetail.id}}/edit" style="text-decoration: none; color: white;"><i class="mdi mdi-pencil mx-2"></i></a></div>
                         <div class="mb-4 ml-2 badge badge-danger hover-cursor"
-                            style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="icon-trash mx-2"></i>
+                            style="padding: 0.5rem; border-radius: 5px; font-size: 1rem" id="del-pack-btn"><i class="icon-trash mx-2"></i>
                         </div>
                         <div class="mb-4 ml-5 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
@@ -140,7 +140,7 @@
                         <div class="mb-4 ml-2 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
                                 <div class="card-body" style="padding: 0.5rem;">
-                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: {{packDetail.quantity_limit}} lần/{{packDetail.time_limit_unit}}</p>
+                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: {{packDetail.quantity_limit}} gói/{{packDetail.time_limit_unit}}</p>
                                 </div>
                             </div>
                         </div>
@@ -193,3 +193,31 @@
         </div>
     </div>
 </div>
+
+{{#section "js"}}
+<!-- Custom js for this page-->
+<script>
+    /*
+    async function onclickDelete(id) {
+        console.log("DELETED");
+        await $.ajax({
+            url: `/products/${id}`,
+            type: 'PUT',
+            data: {
+                is_deleted: true
+            },
+            success: async function (response, status) {
+                const res = await response;
+                console.log(res);
+                window.location.href = '/products';
+            }
+        });
+    }*/
+
+    $('#del-pack-btn').click(async function(e) {
+        console.log('btn clicked', e.currentTarget);
+    });
+
+</script>
+<!-- End custom js for this page-->
+{{/section}}

@@ -53,6 +53,36 @@ CREATE TABLE "user" (
 );
 
 -- -----------------------------
+-- Table province
+-- -----------------------------
+create table "province" (
+	"id" serial PRIMARY KEY,
+	"name" varchar(50) NOT NULL
+);
+
+-- -----------------------------
+-- Table district
+-- -----------------------------
+create table "district" (
+	"id" serial PRIMARY KEY,
+	"name" varchar(50) NOT NULL,
+	"province_id" int NOT NULL,
+	
+	FOREIGN KEY (province_id) REFERENCES "province"("id")
+);
+
+-- -----------------------------
+-- Table ward
+-- -----------------------------
+create table "ward" (
+	"id" serial PRIMARY KEY,
+	"name" varchar(50) NOT NULL,
+	"district_id" int NOT NULL,
+	
+	FOREIGN KEY (district_id) REFERENCES "district"("id")
+); 
+
+-- -----------------------------
 -- Table relate
 -- -----------------------------
 CREATE TABLE "relate" (
