@@ -3,8 +3,17 @@ const router = express.Router();
 const packModel = require('../models/packModel');
 const pack_itemsModel = require('../models/pack_itemsModel');
 const productImageModel = require('../models/productImageModel');
+const orderModel = require('../models/orderModel');
+const userModel = require('../models/userModel');
 
-router.get("/history", (req, res) => {
+router.get("/history", async (req, res) => {
+    if (!req.cookies.user)
+        res.redirect('/acount/login-id');
+
+    const user = await userModel.getByUsername(req.cookies.user);
+    const orders = await orderModel.getOrderHistory(user.id);
+    console.log(orders);
+
     res.render('order/order_history', {
         id: "001",
         time: "08/11/2000",

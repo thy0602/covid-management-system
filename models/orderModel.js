@@ -44,3 +44,18 @@ exports.getById = async (id) => {
         console.log("Error db/load", e);
     }
 }
+
+exports.getOrderHistory = async (user_id) => {
+    const queryStr = pgp.as.format(`
+        SELECT DISTINCT od."order_id", o."user_id", od."pack_id", p."name"
+        FROM (SELECT * FROM "order" WHERE "user_id" = ${user_id}) o
+        JOIN "order_detail" od ON o."id" = od."order_id"
+        JOIN "pack" p ON p."id" = od."pack_id"
+    `)
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error getUnpaidOrder", e);
+    }
+}

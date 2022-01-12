@@ -23,6 +23,7 @@ app.use('/packs', require('./controllers/packsController'));
 app.use('/order', require('./controllers/orderController'));
 app.use('/quarantine-locations', require('./controllers/quarantineLocationsController'));
 app.use('/login', require('./controllers/loginController'));
+app.use('/order-detail', require('./controllers/orderDetailController'));
 
 app.use('/dashboard', require('./controllers/dashboardController'));
 

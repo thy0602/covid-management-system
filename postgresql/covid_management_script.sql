@@ -423,10 +423,38 @@ VALUES
 	('32', 'img/products/xa-phong-1.jpg'),
 	('32', 'img/products/xa-phong-2.jpg');
 
--- INSERT INTO "product_image"
--- VALUES
--- 	(1, 'img/products/product-1.jpg'),
--- 	(2, 'img/products/product-2.jpg'),
--- 	(3, 'img/products/product-3.jpg'),
--- 	(4, 'img/products/product-4.jpg'),
--- 	(5, 'img/products/product-5.jpg');
+
+-- -----------------------------
+-- Table order
+-- -----------------------------
+INSERT INTO "order"("id", "user_id", "ordered_at", "paid_at")
+VALUES
+	(1, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00');
+INSERT INTO "order"("id", "user_id", "ordered_at")
+VALUES
+	(2, 1, '2021-12-06 10:30:00'),
+	(3, 1, '2021-12-06 12:30:00'),
+	(4, 2, '2021-12-06 9:30:00');
+
+
+-- -----------------------------
+-- Table order_detail
+-- -----------------------------
+INSERT INTO "order_detail"("order_id", "pack_id", "product_id", "quantity", "bought_price")
+VALUES
+	(1, 2, 24, 1, 30000),
+	(1, 2, 25, 2, 40000),
+	(1, 2, 26, 3, 35000),
+	(2, 2, 24, 3, 30000),
+	(2, 2, 25, 2, 40000),
+	(2, 2, 26, 1, 35000),
+	(3, 2, 24, 1, 30000),
+	(3, 2, 25, 1, 40000),
+	(3, 2, 26, 1, 35000),
+	(4, 2, 24, 2, 30000),
+	(4, 2, 25, 2, 40000),
+	(4, 2, 26, 2, 35000),
+	(1, 3, 2, 1, 20000),
+	(1, 3, 3, 2, 25000),
+	(1, 3, 24, 3, 30000),
+	(1, 3, 25, 3, 40000);

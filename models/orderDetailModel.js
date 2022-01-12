@@ -24,3 +24,17 @@ exports.countAll = async () => {
     }
 }
 
+exports.getPackItemsByOrderIdAndPackId = async (order_id, pack_id) => {
+    const queryStr = pgp.as.format(`
+        SELECT p."id", p."name", od."bought_price" as price, p."unit", od."quantity"
+        FROM "order_detail" od JOIN "product" p
+        ON od."product_id" = p.id
+        WHERE "order_id" = ${order_id} AND "pack_id" = ${pack_id};
+    `);
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error getPackItemsByOrderIdAndPackId: ", e);
+    }
+}

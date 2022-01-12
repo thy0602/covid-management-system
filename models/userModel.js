@@ -110,3 +110,18 @@ exports.create = async (entity) => {
         console.log('error db/create:', error);
     }
 };
+
+exports.getByUsername = async (username) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(
+        `SELECT * FROM $1 WHERE "username"='${username}'`,
+        table
+    );
+
+    try {
+        const res = await db.one(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error db/get", e);
+    }
+}
