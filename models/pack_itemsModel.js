@@ -27,7 +27,7 @@ exports.getAll = async () => {
 exports.getAllProductByPackId = async (packId, includeDeletedProduct=false) => {
     // const pack_items = new pgp.helpers.TableName({ table: tableName, schema: schema });
     // const product = new pgp.helpers.TableName({ table: 'product', schema: schema });
-    const pack_items = 'pack_items';
+    const pack_items = tableName;
     const product = 'product';
     let queryStr = '';
     if (!includeDeletedProduct) {
@@ -52,7 +52,7 @@ exports.getAllProductByPackId = async (packId, includeDeletedProduct=false) => {
 exports.getAllProductByPackIdOrderBy = async (packId, orderBy, ascending=true, includeDeletedProduct=false) => {
     // const pack_items = new pgp.helpers.TableName({ table: tableName, schema: schema });
     // const product = new pgp.helpers.TableName({ table: 'product', schema: schema });
-    const pack_items = 'pack_items';
+    const pack_items = tableName;
     const product = 'product';
     const sortOption = ascending ? 'ASC' : 'DESC';
     let queryStr = '';
@@ -75,5 +75,56 @@ exports.getAllProductByPackIdOrderBy = async (packId, orderBy, ascending=true, i
     } catch (e) {
         console.log("Error pack_itemsModel/getAllByPackId: ", e);
         // throw e;
+    }
+}
+
+exports.getAllProductNotInPack = async (packId, includeDeletedProduct=false) => {
+    const pack_items = tableName;
+    const product = 'product';
+    let queryStr = '';
+    if (!includeDeletedProduct) {
+        let queryStr1 = pgp.as.format(`SELECT "${product}"."id" FROM "${pack_items}"
+                JOIN "${product}" ON "${pack_items}"."${tableFields.product_id}"="${product}"."id" 
+                WHERE ${tableFields.pack_id}='${packId}' AND "${product}"."is_deleted"='False'`);
+        
+        queryStr = pgp.as.format(`SELECT * FROM "${product}" WHERE "id" NOT IN (${queryStr1}) AND "is_deleted"='False';`);
+    } else {
+        let queryStr1 = pgp.as.format(`SELECT "${product}"."id" FROM "${pack_items}"
+                JOIN "${product}" ON "${pack_items}"."${tableFields.product_id}"="${product}"."id" 
+                WHERE ${tableFields.pack_id}='${packId}' AND "${product}"."is_deleted"='False'`);
+
+        queryStr = pgp.as.format(`SELECT * FROM "${product}" WHERE "id" NOT IN (${queryStr1});`);
+    }
+
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error pack_itemsModel/getAllProductNotInPack: ", e);
+        // throw e;
+    }
+}
+
+exports.deleteAllByPackId = async (packId) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(`DELETE FROM $1 WHERE "${tableFields.pack_id}"='${packId}'`, table) + " RETURNING *";
+
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error pack_itemsModel/deleteAllByPackId: ", e);
+        // throw e;
+    }
+}
+
+exports.add = async (entity) => {
+    const table = new pgp.helpers.TableName({table: tableName, schema: schema});
+    const queryStr = pgp.helpers.insert(entity, Object.values(tableFields), table) + ' RETURNING *';
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (error) {
+        console.log('Error db/add: ', error);
     }
 }

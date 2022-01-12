@@ -4,28 +4,35 @@
             <div class="row">
                 <div class="col-12 col-xl-3 mb-4 mb-xl-0">
                     <div class="row">
-                        <textarea name="text" rows="1" cols="30" wrap="soft" maxlength="40"
-                        style="overflow:hidden; resize:none; text-align: center; padding: 2rem 0.5rem; font-size: 1.25rem;
+                        <textarea id="pack-name" name="text" rows="1" cols="30" wrap="soft" maxlength="40"
+                            style="overflow:hidden; resize:none; text-align: center; padding: 2rem 0.5rem; font-size: 1.25rem;
                          margin-left: 1rem; border-radius: 5px">{{packDetail.name}}</textarea>
                     </div>
                 </div>
-                <div class="col-12 col-xl-9 mt-3">
-                    <div class="justify-content-end d-flex">
-                         <button class="btn btn-primary mr-3 ml-3">Update</button>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary">Filter</button>
-                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                                id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
-                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=name-ascending">A-Z</a>
-                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=name-descending">Z-A</a>
-                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=price-ascending">Price ascending</a>
-                                <a class="dropdown-item" href="/packs/{{packDetail.id}}/edit?order-by=price-descending">Price descending</a>
-                            </div>
+                <div class="col-12 col-xl-3 mb-4 mb-xl-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input id="pack-quantity-limit" type="number" value="{{packDetail.quantity_limit}}" min="0" max="10"
+                            style="text-align: center; max-width: 4rem; margin-left: 0.75rem" />
                         </div>
+                        <div class="col-md-6">
+                            <select class="form-control" id="pack-time-limit">
+                                <option value="ngày" {{#ifStr packDetail.time_limit_unit "ngày"}}selected{{/ifStr}}>ngày</option>
+                                <option value="tuần" {{#ifStr packDetail.time_limit_unit "tuần"}}selected{{/ifStr}}>tuần</option>
+                                <option value="tháng" {{#ifStr packDetail.time_limit_unit "tháng"}}selected{{/ifStr}}>tháng</option>
+                            </select>
+                        </div>
+                        
+                        {{!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                            <p class="dropdown-item">tuần</p>
+                            <p class="dropdown-item">tháng</p>
+                            <p class="dropdown-item">năm</p>
+                        </div> --}}
+                    </div>
+                </div>
+                <div class="col-12 col-xl-6 mt-3">
+                    <div class="justify-content-end d-flex">
+                        <button class="btn btn-primary mr-3 ml-3" id="btn-update-pack">Update</button>
                     </div>
                 </div>
             </div>
@@ -35,9 +42,10 @@
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <p class="card-title mb-0">Product List</p>
+                    <p class="card-title mb-0">Products in pack</p>
                     <div class="table-responsive table-hover" style="height: 430px; overflow: auto;">
-                        <table class="table table-borderless">
+                        <table class="table table-borderless" id="products-in-pack-table"
+                            data-pack-id="{{packDetail.id}}">
                             <thead style="border-bottom: 2px solid black">
                                 <tr>
                                     <th>Photo</th>
@@ -45,31 +53,82 @@
                                     <th>Price (VND)</th>
                                     <th>Unit</th>
                                     <th>Quantity Limit</th>
-                                    <th>Action</th>
+                                    {{!-- <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each productsInPack}}
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
-                                        {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
+                                    <tr data-product-id="{{this.id}}">
+                                        <td class="py-1">
+                                            <img src="/{{this.images.[0]}}" style="width:180px; height:180px"
+                                                alt="image" />
+                                            {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
                                             alt="image" /> --}}
-                                    </td>
-                                    <td>{{this.name}}</td>
-                                    <td>{{this.price}}</td>
-                                    <td>{{this.unit}}</td>
-                                    <td>
-                                        <input type="number" value="{{this.quantity_limit}}"
-                                            style="text-align: center; max-width: 4rem; margin-left: 0.75rem" />
-                                    </td>
-                                    <td class="font-weight-medium">
+                                        </td>
+                                        {{!-- <td class="product-id" style="visibility: hidden;">{{this.id}}</td> --}}
+                                        <td class="product-name">{{this.name}}</td>
+                                        <td>{{this.price}}</td>
+                                        <td>{{this.unit}}</td>
+                                        <td class="product-quantity-limit">
+                                            <input type="number" value="{{this.quantity_limit}}" min="0" max="10"
+                                                style="text-align: center; max-width: 4rem; margin-left: 0.75rem" />
+                                        </td>
+                                        {{!-- <td class="font-weight-medium">
                                         <div class="row">
                                             <div class="badge badge-danger hover-cursor ml-3"><i
                                                     class="icon-trash mx-2"></i></div>
                                         </div>
-                                    </td>
+                                    </td> --}}
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-0">Add other products</p>
+                    <div class="table-responsive table-hover" style="height: 430px; overflow: auto;">
+                        <table class="table table-borderless" id="products-not-in-pack-table"
+                            data-pack-id="{{packDetail.id}}">
+                            <thead style="border-bottom: 2px solid black">
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Price (VND)</th>
+                                    <th>Unit</th>
+                                    <th>Quantity Limit</th>
+                                    {{!-- <th>Action</th> --}}
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {{#each productsNotInPack}}
+                                    <tr data-product-id="{{this.id}}">
+                                        <td class="py-1">
+                                            <img src="/{{this.images.[0]}}" style="width:180px; height:180px"
+                                                alt="image" />
+                                            {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
+                                            alt="image" /> --}}
+                                        </td>
+                                        <td class="product-name">{{this.name}}</td>
+                                        <td>{{this.price}}</td>
+                                        <td>{{this.unit}}</td>
+                                        <td class="product-quantity-limit">
+                                            <input type="number" value="0" min="0" max="10"
+                                                style="text-align: center; max-width: 4rem; margin-left: 0.75rem" />
+                                        </td>
+                                        {{!-- <td class="font-weight-medium">
+                                        <div class="row">
+                                            <div class="badge badge-danger hover-cursor ml-3"><i
+                                                    class="icon-trash mx-2"></i></div>
+                                        </div>
+                                    </td> --}}
+                                    </tr>
                                 {{/each}}
                             </tbody>
                         </table>
@@ -81,28 +140,77 @@
 </div>
 
 {{#section "js"}}
-<!-- Custom js for this page-->
-<script type="text/javascript" src="js/dashboard.js"></script>
-<script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
+    <!-- Custom js for this page-->
+    <script type="text/javascript" src="js/dashboard.js"></script>
+    <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
 
-<script>
-    async function onclickDelete(id) {
-        console.log("DELETED");
-        /*await $.ajax({
-            url: `/products/${id}`,
-            type: 'PUT',
-            data: {
-                is_deleted: true
-            },
-            success: async function (response, status) {
-                const res = await response;
-                console.log(res);
-                window.location.href = '/products';
+    <script>
+        async function onclickUpdate(id) {
+            console.log("UPDATE");
+
+            let updateProducts = [];   // products in pack table
+            let otherProducts = [];     // products not in pack table
+            let packId = $('#products-in-pack-table').data('pack-id');
+            let packDetail = {
+                name: $('#pack-name').val(),
+                quantity_limit: $('#pack-quantity-limit').val(),
+                time_limit_unit: $('#pack-time-limit').val()
             }
-        });*/
-    }
+            console.log('packDetail: ', packDetail);
 
-</script>
+            $('#products-in-pack-table tbody tr').each(function () {
+                let currentRow = $(this);
+                let productId = currentRow.data('product-id');
+                let productName = currentRow.find('.product-name').eq(0).text();
+                let quantityLimit = currentRow.find('.product-quantity-limit input').eq(0).val();
 
-<!-- End custom js for this page-->
+                if (quantityLimit > 0) {
+                    updateProducts.push({
+                        'pack_id': packId,
+                        'product_id': productId,
+                        //'product_name': productName,
+                        'quantity_limit': quantityLimit
+                    });
+                }
+            });
+
+            $('#products-not-in-pack-table tbody tr').each(function () {
+                let currentRow = $(this);
+                let productId = currentRow.data('product-id')
+                let productName = currentRow.find('.product-name').eq(0).text();
+                let quantityLimit = currentRow.find('.product-quantity-limit input').eq(0).val();
+
+                if (quantityLimit > 0) {
+                    updateProducts.push({
+                        'pack_id': packId,
+                        'product_id': productId,
+                        //'product_name': productName,
+                        'quantity_limit': quantityLimit,
+                    });
+                }
+            });
+
+            console.log('updateProducts: ', updateProducts);
+            $.ajax({
+                url: `/packs/${packId}/edit`,
+                type: 'POST',
+                data: {
+                    packDetail,
+                    products: updateProducts
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    window.location.href = `/packs/${packId}`;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
+        }
+
+        $('#btn-update-pack').click(onclickUpdate);
+
+    </script>
+
+    <!-- End custom js for this page-->
 {{/section}}

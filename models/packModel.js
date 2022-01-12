@@ -49,3 +49,16 @@ exports.getByPackId = async (packId, includeDeletedPack=false) => {
         // throw e;
     }
 }
+
+exports.updateByPackId = async (packId, entity) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const condition = pgp.as.format(` WHERE "${tableFields.id}"='${packId}'`);
+    const queryStr = pgp.helpers.update(entity, Object.keys(entity), table) + condition + ' RETURNING *';
+
+    try {
+        const res = await db.one(queryStr);
+        return res;
+    } catch (error) {
+        console.log("Error packModel/updateByPackId: ", error);
+    }
+}
