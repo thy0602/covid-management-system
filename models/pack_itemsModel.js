@@ -20,7 +20,7 @@ exports.getAll = async () => {
         return res;
     } catch (e) {
         console.log("Error pack_itemsModel/getAll: ", e);
-        // throw e;
+        throw e;
     }
 }
 
@@ -45,7 +45,7 @@ exports.getAllProductByPackId = async (packId, includeDeletedProduct=false) => {
         return res;
     } catch (e) {
         console.log("Error pack_itemsModel/getAllByPackId: ", e);
-        // throw e;
+        throw e;
     }
 }
 
@@ -74,7 +74,7 @@ exports.getAllProductByPackIdOrderBy = async (packId, orderBy, ascending=true, i
         return res;
     } catch (e) {
         console.log("Error pack_itemsModel/getAllByPackId: ", e);
-        // throw e;
+        throw e;
     }
 }
 
@@ -101,7 +101,7 @@ exports.getAllProductNotInPack = async (packId, includeDeletedProduct=false) => 
         return res;
     } catch (e) {
         console.log("Error pack_itemsModel/getAllProductNotInPack: ", e);
-        // throw e;
+        throw e;
     }
 }
 
@@ -114,7 +114,7 @@ exports.deleteAllByPackId = async (packId) => {
         return res;
     } catch (e) {
         console.log("Error pack_itemsModel/deleteAllByPackId: ", e);
-        // throw e;
+        throw e;
     }
 }
 
@@ -125,6 +125,7 @@ exports.add = async (entity) => {
         const res = await db.any(queryStr);
         return res;
     } catch (error) {
-        console.log('Error db/add: ', error);
+        console.log('Error pack_itemsModel/add: ', error);
+        throw error;
     }
 }

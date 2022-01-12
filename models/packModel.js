@@ -28,7 +28,7 @@ exports.getAll = async (includeDeletedPack=false) => {
         return res;
     } catch (e) {
         console.log("Error packModel/getAll: ", e);
-        // throw e;
+        throw e;
     }
 }
 
@@ -46,7 +46,7 @@ exports.getByPackId = async (packId, includeDeletedPack=false) => {
         return res;
     } catch (e) {
         console.log("Error packModel/getAll: ", e);
-        // throw e;
+        throw e;
     }
 }
 
@@ -60,5 +60,18 @@ exports.updateByPackId = async (packId, entity) => {
         return res;
     } catch (error) {
         console.log("Error packModel/updateByPackId: ", error);
+        throw error;
+    }
+}
+
+exports.add = async (entity) => {
+    const table = new pgp.helpers.TableName({table: tableName, schema: schema});
+    const queryStr = pgp.helpers.insert(entity, null, table) + ' RETURNING *';
+    try {
+        const res = await db.one(queryStr);
+        return res;
+    } catch (error) {
+        console.log('Error packModel/add: ', error);
+        throw error;
     }
 }

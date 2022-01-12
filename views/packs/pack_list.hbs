@@ -6,13 +6,14 @@
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                     <div class="row ml-0">
                         {{#if isNecessities}}
-                        <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
-                        <button type="button" class="btn btn-2side right-side non-active-btn"
-                            onclick="location.href='/packs';">Package</button>
+                            <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side non-active-btn"
+                                onclick="location.href='/packs';">Package</button>
                         {{else if isPackage}}
-                        <button type="button" class="btn btn-2side left-side non-active-btn"
-                            onclick="location.href='/products';">Necessities</button>
-                        <button type="button" class="btn btn-2side right-side active-btn">Package</button>
+                            <button type="button" class="btn btn-2side left-side non-active-btn"
+                                onclick="location.href='/products';">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side active-btn"
+                                onclick="location.href='/packs';">Package</button>
                         {{else}}
                         {{/if}}
                     </div>
@@ -40,7 +41,7 @@
                     <div class="row">
                         <h3 class="font-weight-bold mr-5"
                             style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Package</h3>
-                        <button class="btn btn-primary mr-2"> Add new</button>
+                        <a href="/packs/new" class="btn btn-primary mr-2"> Add new</a>
                     </div>
                 </div>
                 <div class="col-12 col-xl-4">
@@ -61,10 +62,6 @@
                                     ascending</a>
                                 <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-descending">Price
                                     descending</a>
-                                {{!-- <a class="dropdown-item" href="#">New</a> --}}
-                                {{!-- <div class="dropdown-divider"></div> --}}
-                                {{!-- <a class="dropdown-item" href="#">Hot</a> --}}
-                                {{!-- <a class="dropdown-item" href="#">Price</a> --}}
                             </div>
                         </div>
                     </div>
@@ -88,23 +85,23 @@
                             </thead>
                             <tbody>
                                 {{#each packs}}
-                                <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold"></span><a
-                                                href="/packs/{{this.id}}" class="font-weight-bold"
-                                                style="text-decoration: none; color: #000;">
-                                                {{this.name}}
-                                            </a></span></p>
-                                    </td>
-                                    {{!-- <td class="font-weight-medium">
+                                    <tr>
+                                        <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
+                                        <td>
+                                            <p class="ml-4 mb-0"><span class="font-weight-bold"></span>
+                                            <a href="/packs/{{this.id}}" class="font-weight-bold"
+                                                    style="text-decoration: none; color: #000;">
+                                                    {{this.name}}
+                                                </a></span></p>
+                                        </td>
+                                        {{!-- <td class="font-weight-medium">
                                         <div class="row">
                                             <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i>
                                             </div>
                                             <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
                                         </div>
                                     </td> --}}
-                                </tr>
+                                    </tr>
                                 {{/each}}
                                 {{!-- <tr>
                                     <td class="pl-0"><span class="font-weight-bold">#1</span></td>
@@ -124,11 +121,15 @@
                 <div class="card-body">
                     <p class="card-title mb-4">Package Detail</p>
                     <div class="row ml-0">
-                        <div class="mb-4 badge badge-primary hover-cursor"
+                        {{!-- <div class="mb-4 badge badge-primary hover-cursor"
                             style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><a
-                                href="/packs/{{packDetail.id}}/edit" style="text-decoration: none; color: white;"><i class="mdi mdi-pencil mx-2"></i></a></div>
-                        <div class="mb-4 ml-2 badge badge-danger hover-cursor"
-                            style="padding: 0.5rem; border-radius: 5px; font-size: 1rem" id="del-pack-btn"><i class="icon-trash mx-2"></i>
+                                href="/packs/{{packDetail.id}}/edit" style="text-decoration: none; color: white;"><i
+                                    class="mdi mdi-pencil mx-2"></i></a></div> --}}
+                        <div class="mb-4 badge badge-primary hover-cursor" onclick="window.location.href='/packs/{{packDetail.id}}/edit';"
+                            style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="mdi mdi-pencil mx-2"></i>
+                        </div>
+                        <div class="mb-4 ml-2 badge badge-danger hover-cursor" data-toggle="modal" data-target="#modal-del-pack"
+                            style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="icon-trash mx-2"></i>
                         </div>
                         <div class="mb-4 ml-5 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
@@ -140,19 +141,13 @@
                         <div class="mb-4 ml-2 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
                                 <div class="card-body" style="padding: 0.5rem;">
-                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: {{packDetail.quantity_limit}} gói/{{packDetail.time_limit_unit}}</p>
+                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: {{packDetail.quantity_limit}}
+                                        gói/{{packDetail.time_limit_unit}}</p>
                                 </div>
                             </div>
                         </div>
-                        {{!-- <div class="mb-4 ml-2 stretch-card transparent">
-                            <div class="card card-light-blue" style="border-radius: 5px;">
-                                <div class="card-body" style="padding: 0.5rem;">
-                                    <p class="mb-0" style="font-size: 1rem;">Số lượng tối đa mỗi sản phẩm:
-                                        {{packDetail.limit}}</p>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
+                    
                     <div class="table-responsive table-hover" style="height: 430px; overflow: auto;">
                         <table class="table table-borderless">
                             <thead style="border-bottom: 2px solid black">
@@ -166,17 +161,18 @@
                             </thead>
                             <tbody>
                                 {{#each productsInPack}}
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
-                                        {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
+                                    <tr>
+                                        <td class="py-1">
+                                            <img src="/{{this.images.[0]}}" style="width:180px; height:180px"
+                                                alt="image" />
+                                            {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
                                             alt="image" /> --}}
-                                    </td>
-                                    <td>{{this.name}}</td>
-                                    <td>{{this.price}}</td>
-                                    <td>{{this.unit}}</td>
-                                    <td>{{this.quantity_limit}}</td>
-                                </tr>
+                                        </td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.price}}</td>
+                                        <td>{{this.unit}}</td>
+                                        <td>{{this.quantity_limit}}</td>
+                                    </tr>
                                 {{/each}}
                                 {{!-- <tr>
                                     <td class="py-1">
@@ -196,30 +192,69 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-del-pack" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure to delete "{{packDetail.name}}" ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                {{!-- <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" onclick="onclickDelete(id)">Delete</button> --}}
+                <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" data-pack-id="{{packDetail.id}}">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{#section "js"}}
-<!-- Custom js for this page-->
-<script>
-    /*
-    async function onclickDelete(id) {
-        console.log("DELETED");
-        await $.ajax({
-            url: `/products/${id}`,
-            type: 'PUT',
-            data: {
-                is_deleted: true
-            },
-            success: async function (response, status) {
-                const res = await response;
-                console.log(res);
-                window.location.href = '/products';
-            }
+    <!-- Custom js for this page-->
+    <script>
+        /*
+        async function onclickDelete(id) {
+            console.log("DELETED");
+            await $.ajax({
+                url: `/products/${id}`,
+                type: 'PUT',
+                data: {
+                    is_deleted: true
+                },
+                success: async function (response, status) {
+                    const res = await response;
+                    console.log(res);
+                    window.location.href = '/products';
+                }
+            });
+        }*/
+
+        $('#btn-del-pack').click(async function (e) {
+            const btn = e.currentTarget;
+            const packId = $(btn).data('pack-id');
+            console.log('btn clicked', btn);
+            console.log('packId: ', packId);
+
+            $.ajax({
+                url: `/packs/${packId}/delete`,
+                type: 'POST',
+                data: {
+                    is_deleted: true
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    window.location.href = `/packs`;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
         });
-    }*/
 
-    $('#del-pack-btn').click(async function(e) {
-        console.log('btn clicked', e.currentTarget);
-    });
-
-</script>
-<!-- End custom js for this page-->
+    </script>
+    <!-- End custom js for this page-->
 {{/section}}

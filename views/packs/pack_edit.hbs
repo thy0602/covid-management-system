@@ -6,13 +6,13 @@
                     <div class="row">
                         <textarea id="pack-name" name="text" rows="1" cols="30" wrap="soft" maxlength="40"
                             style="overflow:hidden; resize:none; text-align: center; padding: 2rem 0.5rem; font-size: 1.25rem;
-                         margin-left: 1rem; border-radius: 5px">{{packDetail.name}}</textarea>
+                         margin-left: 1rem; border-radius: 5px" required>{{packDetail.name}}</textarea>
                     </div>
                 </div>
                 <div class="col-12 col-xl-3 mb-4 mb-xl-0">
                     <div class="row">
                         <div class="col-md-6">
-                            <input id="pack-quantity-limit" type="number" value="{{packDetail.quantity_limit}}" min="0" max="10"
+                            <input id="pack-quantity-limit" type="number" value="{{packDetail.quantity_limit}}" min="1" max="10"
                             style="text-align: center; max-width: 4rem; margin-left: 0.75rem" />
                         </div>
                         <div class="col-md-6">
@@ -32,8 +32,14 @@
                 </div>
                 <div class="col-12 col-xl-6 mt-3">
                     <div class="justify-content-end d-flex">
-                        <button class="btn btn-primary mr-3 ml-3" id="btn-update-pack">Update</button>
+                        <button class="btn btn-primary mr-3 ml-3" id="btn-update-pack" style="font-size: medium;">Update</button>
                     </div>
+                </div>
+            </div>
+
+            <div class="row" style="display: none;" id="update-error-msg">
+                <div class="col-12 mt-4 mb-2 mb-xl-0">
+                    <div class="alert alert-danger" role="alert">Error here</div>
                 </div>
             </div>
         </div>
@@ -53,7 +59,7 @@
                                     <th>Price (VND)</th>
                                     <th>Unit</th>
                                     <th>Quantity Limit</th>
-                                    {{!-- <th>Action</th> --}}
+                                    <th>Clear</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,12 +79,14 @@
                                             <input type="number" value="{{this.quantity_limit}}" min="0" max="10"
                                                 style="text-align: center; max-width: 4rem; margin-left: 0.75rem" />
                                         </td>
-                                        {{!-- <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-danger hover-cursor ml-3"><i
-                                                    class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td> --}}
+                                        <td class="font-weight-medium">
+                                            <div class="row">
+                                                <div class="badge badge-danger hover-cursor ml-3" 
+                                                    onclick="$(this).closest('tr').find('td.product-quantity-limit input').val(0);">
+                                                    <i class="icon-trash mx-2"></i>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 {{/each}}
                             </tbody>
@@ -103,7 +111,7 @@
                                     <th>Price (VND)</th>
                                     <th>Unit</th>
                                     <th>Quantity Limit</th>
-                                    {{!-- <th>Action</th> --}}
+                                    <th>Clear</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,12 +130,14 @@
                                             <input type="number" value="0" min="0" max="10"
                                                 style="text-align: center; max-width: 4rem; margin-left: 0.75rem" />
                                         </td>
-                                        {{!-- <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-danger hover-cursor ml-3"><i
-                                                    class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td> --}}
+                                        <td class="font-weight-medium">
+                                            <div class="row">
+                                                <div class="badge badge-danger hover-cursor ml-3" 
+                                                    onclick="$(this).closest('tr').find('td.product-quantity-limit input').val(0);">
+                                                    <i class="icon-trash mx-2"></i>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 {{/each}}
                             </tbody>
@@ -145,11 +155,11 @@
     <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
 
     <script>
-        async function onclickUpdate(id) {
+        async function onclickUpdate() {
             console.log("UPDATE");
 
             let updateProducts = [];   // products in pack table
-            let otherProducts = [];     // products not in pack table
+            //let otherProducts = [];     // products not in pack table
             let packId = $('#products-in-pack-table').data('pack-id');
             let packDetail = {
                 name: $('#pack-name').val(),
@@ -157,6 +167,13 @@
                 time_limit_unit: $('#pack-time-limit').val()
             }
             console.log('packDetail: ', packDetail);
+
+            // check condition: pack name not empty
+            if (packDetail.name === '') {
+                $('#update-error-msg').show();
+                $('#update-error-msg>div>div').text('Pack name empty!');
+                return;
+            }
 
             $('#products-in-pack-table tbody tr').each(function () {
                 let currentRow = $(this);
@@ -189,8 +206,15 @@
                     });
                 }
             });
-
             console.log('updateProducts: ', updateProducts);
+
+            // check condition: select at least 2 products
+            if (updateProducts.length < 2) {
+                $('#update-error-msg').show();
+                $('#update-error-msg>div>div').text('Pack must contain at least 2 products!');
+                return;
+            }
+
             $.ajax({
                 url: `/packs/${packId}/edit`,
                 type: 'POST',
