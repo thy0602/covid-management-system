@@ -186,6 +186,7 @@ CREATE TABLE "order" (
 	"user_id" int NOT NULL,
 	"ordered_at" timestamp DEFAULT NOW(),
 	"paid_at" timestamp,
+	"total_price" numeric(19, 4) NOT NULL,
 	
 	FOREIGN KEY (user_id) REFERENCES "user"("id")
 );
@@ -427,14 +428,14 @@ VALUES
 -- -----------------------------
 -- Table order
 -- -----------------------------
-INSERT INTO "order"("id", "user_id", "ordered_at", "paid_at")
+INSERT INTO "order"("id", "user_id", "ordered_at", "paid_at", "total_price")
 VALUES
-	(1, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00');
-INSERT INTO "order"("id", "user_id", "ordered_at")
+	(1, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00', 295000);
+INSERT INTO "order"("id", "user_id", "ordered_at", "total_price")
 VALUES
-	(2, 1, '2021-12-06 10:30:00'),
-	(3, 1, '2021-12-06 12:30:00'),
-	(4, 2, '2021-12-06 9:30:00');
+	(2, 1, '2021-12-06 10:30:00', 205000),
+	(3, 1, '2021-12-06 12:30:00', 105000),
+	(4, 2, '2021-12-06 9:30:00', 210000);
 
 
 -- -----------------------------
@@ -444,7 +445,7 @@ INSERT INTO "order_detail"("order_id", "pack_id", "product_id", "quantity", "bou
 VALUES
 	(1, 2, 24, 1, 30000),
 	(1, 2, 25, 2, 40000),
-	(1, 2, 26, 3, 35000),
+	(1, 2, 26, 2, 35000),
 	(2, 2, 24, 3, 30000),
 	(2, 2, 25, 2, 40000),
 	(2, 2, 26, 1, 35000),
@@ -456,5 +457,5 @@ VALUES
 	(4, 2, 26, 2, 35000),
 	(1, 3, 2, 1, 20000),
 	(1, 3, 3, 2, 25000),
-	(1, 3, 24, 3, 30000),
-	(1, 3, 25, 3, 40000);
+	(1, 3, 24, 1, 30000),
+	(1, 3, 25, 1, 40000);
