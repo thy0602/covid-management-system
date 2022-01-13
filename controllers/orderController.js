@@ -14,14 +14,32 @@ router.get("/history", async (req, res) => {
     const orders = await orderModel.getOrderHistory(user.id);
     console.log(orders);
 
+    //giả sử lấy được n
+    let listorder = [];
+    let n = 3;
+    let stt = ['paid', 'unpaid'];
+    for (let i = 0; i < 3; i++) {
+        let statusrandom = stt[Math.round(Math.random() * 1)];
+        let color;
+        if (statusrandom === 'paid')
+            color = 'success';
+        else
+            color = 'warning';
+        let orderid = {
+            id: `00${i + 1}`,
+            time: `0${i + 1}/01/2022`,
+            status: statusrandom,
+            status_color: (statusrandom == 'paid') ? 'success' : 'warning',
+            total: Math.round(Math.random() * 100000),
+            disable: (statusrandom == 'paid') ? 'disabled' : '',
+            colorbtnpayment: (statusrandom == 'paid') ? 'secondary' : 'success',
+            listpackage: [{ catepack: '#3', namepack: 'Gói test' }, { catepack: '#2', namepack: 'Gói vệ sinh' }, { catepack: '#1', namepack: 'Gói thực phẩm' }]
+        }
+        listorder[i] = orderid;
+    }
+    console.log(listorder);
     res.render('order/order_history', {
-        id: "001",
-        time: "08/11/2000",
-        status_color: "warning",
-        status: "unpaid",
-        catepack: "#2",
-        namepack: "Gói ăn dọng",
-        total: "100.000"
+        listorder: listorder
     })
 });
 
