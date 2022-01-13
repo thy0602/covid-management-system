@@ -5,6 +5,23 @@ const pack_itemsModel = require('../models/pack_itemsModel');
 const productImageModel = require('../models/productImageModel');
 const orderModel = require('../models/orderModel');
 const userModel = require('../models/userModel');
+const reformatDatetime = require('../utils/reformatDatetime');
+
+function preprocess(order) {
+    return {
+        order_id: order.order_id,
+        ordered_at: order.ordered_at,
+        paid_at: order.paid_at,
+        total_price: order.total_price,
+        user_id: order.user_id,
+        list_package: [
+            {
+                pack_id: order.pack_id,
+                name: order.name
+            }
+        ]
+    }
+}
 
 router.get("/history", async (req, res) => {
     if (!req.cookies.user)
@@ -12,32 +29,39 @@ router.get("/history", async (req, res) => {
 
     const user = await userModel.getByUsername(req.cookies.user);
     const orders = await orderModel.getOrderHistory(user.id);
-    console.log(orders);
 
-    //giả sử lấy được n
-    let listorder = [];
-    let n = 3;
-    let stt = ['paid', 'unpaid'];
-    for (let i = 0; i < 3; i++) {
-        let statusrandom = stt[Math.round(Math.random() * 1)];
-        let color;
-        if (statusrandom === 'paid')
-            color = 'success';
-        else
-            color = 'warning';
-        let orderid = {
-            id: `00${i + 1}`,
-            time: `0${i + 1}/01/2022`,
-            status: statusrandom,
-            status_color: (statusrandom == 'paid') ? 'success' : 'warning',
-            total: Math.round(Math.random() * 100000),
-            disable: (statusrandom == 'paid') ? 'disabled' : '',
-            colorbtnpayment: (statusrandom == 'paid') ? 'secondary' : 'success',
-            listpackage: [{ catepack: '#3', namepack: 'Gói test' }, { catepack: '#2', namepack: 'Gói vệ sinh' }, { catepack: '#1', namepack: 'Gói thực phẩm' }]
-        }
-        listorder[i] = orderid;
+    let processed_orders = [];
+    if (orders.length > 0) {
+        processed_orders.push(preprocess(orders[0]));
     }
-    console.log(listorder);
+    
+    for (let i = 1; i < orders.length; i++) {
+        if (orders[i].order_id == processed_orders[processed_orders.length - 1].order_id) {
+            processed_orders[processed_orders.length - 1].list_package.push({
+                pack_id: orders[i].pack_id, 
+                name: orders[i].name
+            });
+            continue;
+        }
+
+        processed_orders.push(preprocess(orders[i]));
+    }
+    // console.log("PROCESSED_ORDERS: ", processed_orders);
+
+    let listorder = [];
+    for (let order of processed_orders) {
+        let order_item = {
+            order_id: order.order_id,
+            ordered_at: reformatDatetime.getDayMonthYear(order.ordered_at),
+            status: (!order.paid_at) ? "unpaid" : "paid",
+            status_color: (!order.paid_at) ? 'warning' : 'success',
+            total_price: parseInt(order.total_price),
+            disable: (!order.paid_at) ? '' : 'disabled',
+            colorbtnpayment: (!order.paid_at) ? 'success' : 'secondary',
+            listpackage: order.list_package
+        }
+        listorder.push(order_item);
+    }
     res.render('order/order_history', {
         listorder: listorder
     })

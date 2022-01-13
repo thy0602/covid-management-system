@@ -47,10 +47,12 @@ exports.getById = async (id) => {
 
 exports.getOrderHistory = async (user_id) => {
     const queryStr = pgp.as.format(`
-        SELECT DISTINCT od."order_id", o."user_id", od."pack_id", p."name"
+        SELECT DISTINCT od."order_id", o."ordered_at", o."paid_at",
+            o."total_price", o."user_id", od."pack_id", p."name"
         FROM (SELECT * FROM "order" WHERE "user_id" = ${user_id}) o
         JOIN "order_detail" od ON o."id" = od."order_id"
         JOIN "pack" p ON p."id" = od."pack_id"
+        ORDER BY od."order_id";
     `)
     try {
         const res = await db.any(queryStr);
