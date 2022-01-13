@@ -4,7 +4,7 @@
             Order History
         </div>
         <div class="card-body p-0 pt-3">
-            <div class="responsive">
+            <div class="responsive" style="height: 430px; overflow: auto;">
                 {{!-- Đơn hàng --}}
                 {{#each listorder}}
                 <div class="card mb-3">
@@ -24,7 +24,8 @@
                             <div class="col-7 my-auto">
                                 {{!-- package --}}
                                 {{#each listpackage}}
-                                <div class="row bg-white rounded py-2 mb-2 mx-auto">
+                                <div class="row rounded py-2 mb-2 mx-auto hover-cursor-color" name="badge-product"
+                                    id="{{../this.order_id}}-{{this.pack_id}}" onclick="clickPackage(this, this.id);">
                                     <div class="font-weight-bold col-xl-5" id="catepack">
                                         {{pack_id}}
                                     </div>
@@ -65,7 +66,7 @@
                         <th scope="col">Quanity</th>
                     </tr>
                 </thead>
-                <tbody id="tabinfo">
+                <tbody id="products-body">
                     {{!-- detail package --}}
                     <tr>
 
@@ -89,5 +90,44 @@
 <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
 
 <script>
+    $("#products-body").empty();
+
+    function moneyFormatter(x) {
+        let moneyFormatter  = new Intl.NumberFormat();
+        return moneyFormatter.format(x).replace(',', '.');
+    }
+
+    async function clickPackage(obj, id) {
+        //console.log(id);
+        let list = id.split('-');
+        let order_id = list[0], pack_id = list[1];
+
+        $('div[name="badge-product"]').removeClass("pointed");
+        $('div[name="badge-product"]').addClass("hover-cursor-color");
+        $(obj).removeClass("hover-cursor-color");
+        $(obj).addClass("pointed");
+        
+        let products;
+        await $.ajax({
+            url: `/order-detail/${order_id}?pack_id=${pack_id}`,
+            type: 'GET',
+            success: async function (response, status) {
+                products = await response;
+                console.log(products);
+            }
+        });
+
+        $("#products-body").empty();
+        let body = "";
+        for (let product of products) {
+            body += `<tr>
+                        <td>${product.name}</td>
+                        <td>${moneyFormatter(product.price)}</td>
+                        <td>${product.unit}</td>
+                        <td>${product.quantity}</td>
+                    </tr>`;
+        }
+        $("#products-body").append(body);
+    }
 </script>
 {{/section}}

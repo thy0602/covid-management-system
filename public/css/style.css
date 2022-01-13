@@ -19841,6 +19841,19 @@ code {
   cursor: pointer;
 }
 
+.hover-cursor-color {
+  background-color: white;
+}
+
+.pointed {
+  background-color: #8aa6d4;
+}
+
+.hover-cursor-color:hover {
+  cursor: pointer;
+  background-color: #d9e7fc;
+}
+
 .min-width-cell {
   min-width: 110px;
 }

@@ -5,7 +5,8 @@ const pack_itemsModel = require('../models/pack_itemsModel');
 const productImageModel = require('../models/productImageModel');
 const orderModel = require('../models/orderModel');
 const userModel = require('../models/userModel');
-const reformatDatetime = require('../utils/reformatDatetime');
+const datetimeFormatter = require('../utils/datetimeFormatter');
+const { moneyFormatter } = require('../utils/moneyFormatter');
 
 function preprocess(order) {
     return {
@@ -52,10 +53,10 @@ router.get("/history", async (req, res) => {
     for (let order of processed_orders) {
         let order_item = {
             order_id: order.order_id,
-            ordered_at: reformatDatetime.getDayMonthYear(order.ordered_at),
+            ordered_at: datetimeFormatter.getDayMonthYear(order.ordered_at),
             status: (!order.paid_at) ? "unpaid" : "paid",
             status_color: (!order.paid_at) ? 'warning' : 'success',
-            total_price: parseInt(order.total_price),
+            total_price: moneyFormatter(order.total_price),
             disable: (!order.paid_at) ? '' : 'disabled',
             colorbtnpayment: (!order.paid_at) ? 'success' : 'secondary',
             listpackage: order.list_package
