@@ -36,16 +36,16 @@ exports.getByPackId = async (packId, includeDeletedPack=false) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     let queryStr = '';
     if (!includeDeletedPack) {
-        queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.id}='${packId}' AND "${tableFields.is_deleted}"='False';`, table);
+        queryStr = pgp.as.format(`SELECT * FROM $1 WHERE "${tableFields.id}"='${packId}' AND "${tableFields.is_deleted}"='False';`, table);
     } else {
-        queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.id}='${packId}';`, table);
+        queryStr = pgp.as.format(`SELECT * FROM $1 WHERE "${tableFields.id}"='${packId}';`, table);
     }
 
     try {
         const res = await db.one(queryStr);
         return res;
     } catch (e) {
-        console.log("Error packModel/getAll: ", e);
+        console.log("Error packModel/getByPackId: ", e);
         throw e;
     }
 }

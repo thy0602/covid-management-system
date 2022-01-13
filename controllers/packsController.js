@@ -128,56 +128,95 @@ router.post("/:packId/delete", async (req, res) => {
 
 // search pack by name
 router.post('/search', async (req, res) => {
-    const searchStr = req.body;
+    const searchStr = req.body.searchStr;
 
     try {
-        let allPacks = packModel.getAll();
+        let allPacks = await packModel.getAll();
         let filterdPacks = [];
-
+        
+        // get packs with similarity higher then threshold
         for (const pack of allPacks) {
             let similarity = stringSimilarity.compareTwoStrings(searchStr, pack.name);
-            if (similarity > 0.6) {
+            console.log(`get /packs/search ${pack.name} - ${similarity} `);
+            if (similarity > 0.2) {
                 filterdPacks.push(pack);
             }
-
-
         }
-    } catch (error) {
         
+        if (filterdPacks.length > 0) {
+            let packId = filterdPacks[0].id;
+            let packDetail = await packModel.getByPackId(packId);
+            let productsInPack = await pack_itemsModel.getAllProductByPackId(
+                packId
+            );
+
+            for (const product of productsInPack) {
+                let productImages = await productImageModel.getImagesByProductId(
+                    product.id
+                );
+                // console.log('get /packlist productImages:', productImages);
+                product["images"] = productImages.reduce((allUrls, productImage) => {
+                    allUrls.push(productImage.url);
+                    return allUrls;
+                }, []);
+            }
+
+            console.log('get /packs/search filterdPacks:', filterdPacks);
+            res.render("packs/pack_list", {
+                isSearch: 1,
+                isPackage: 1,
+                packs: filterdPacks,
+                packDetail,
+                productsInPack,
+            });
+        } else {
+            res.render("packs/pack_list", {
+                isSearch: 1,
+                isPackage: 1,
+                // packs: null,
+                // packDetail,
+                // productsInPack,
+            });
+        }
+        
+
+    } catch (error) {
+        console.log("Error post /packs/search: ", error);
+        res.status(400).send(error);
     }
 });
 
 // get products list of pack by packId
 router.get("/:packId", async (req, res) => {
     const packId = req.params.packId;
-    const orderBy = req.query["order-by"];
+    // const orderBy = req.query["order-by"];
 
     try {
-        let allPack = await packModel.getAll();
+        // let allPack = await packModel.getAll();
         let packDetail = await packModel.getByPackId(packId);
-        let productsInPack;
+        let productsInPack = await pack_itemsModel.getAllProductByPackId(packId);
 
-        switch (orderBy) {
-            case "name-ascending":
-                productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy( packId, "name", true);
-                break;
+        // switch (orderBy) {
+        //     case "name-ascending":
+        //         productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy( packId, "name", true);
+        //         break;
 
-            case "name-descending":
-                productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, "name", false);
-                break;
+        //     case "name-descending":
+        //         productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, "name", false);
+        //         break;
 
-            case "price-ascending":
-                productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, "price", true);
-                break;
+        //     case "price-ascending":
+        //         productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, "price", true);
+        //         break;
 
-            case "price-descending":
-                productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, "price", false);
-                break;
+        //     case "price-descending":
+        //         productsInPack = await pack_itemsModel.getAllProductByPackIdOrderBy(packId, "price", false);
+        //         break;
 
-            default:
-                productsInPack = await pack_itemsModel.getAllProductByPackId(packId);
-                break;
-        }
+        //     default:
+        //         productsInPack = await pack_itemsModel.getAllProductByPackId(packId);
+        //         break;
+        // }
 
         for (const product of productsInPack) {
             let productImages = await productImageModel.getImagesByProductId(
@@ -190,12 +229,20 @@ router.get("/:packId", async (req, res) => {
             }, []);
         }
 
-        res.render("packs/pack_list", {
-            isPackage: 1,
-            packs: allPack,
+        console.log('get /packs/:packId packDetail: ', packDetail);
+        console.log('get /packs/:packId productsInPack: ', productsInPack);
+        
+        res.json({
             packDetail,
-            productsInPack,
+            packItems: productsInPack
         });
+
+        // res.render("packs/pack_list", {
+        //     isPackage: 1,
+        //     packs: allPack,
+        //     packDetail,
+        //     productsInPack,
+        // });
     } catch (error) {
         console.log("Error get /packs/:packId: ", error);
         res.status(404).send(error);
@@ -204,12 +251,18 @@ router.get("/:packId", async (req, res) => {
 
 // get list of all packs
 router.get("/", async (req, res) => {
+    let packId = req.query['show-detail'];
+
     try {
         let allPack = await packModel.getAll();
         // console.log('get /packlist allPack:', allPack);
-        let firstPack = allPack[0];
+        if (!packId) {
+            packId = allPack[0].id;
+        }
+
+        let packDetail = await packModel.getByPackId(packId);
         let productsInPack = await pack_itemsModel.getAllProductByPackId(
-            firstPack.id
+            packId
         );
 
         for (const product of productsInPack) {
@@ -222,15 +275,18 @@ router.get("/", async (req, res) => {
                 return allUrls;
             }, []);
         }
-        // console.log('get /packlist productsInPack:', productsInPack);
+        
+        console.log('get /packlist packDetail:', packDetail);
+        console.log('get /packlist productsInPack:', productsInPack);
 
         res.render("packs/pack_list", {
             isPackage: 1,
             packs: allPack,
-            packDetail: firstPack,
-            // productsInPack,
+            packDetail,
+            productsInPack,
         });
     } catch (error) {
+        console.log("Error get /packs: ", error);
         res.status(404).send(error);
     }
 });

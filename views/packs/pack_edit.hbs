@@ -224,7 +224,7 @@
                 },
                 success: async function (data, textStatus, jqXHR) {
                     console.log('success: ', data);
-                    window.location.href = `/packs/${packId}`;
+                    window.location.href = `/packs/?show-detail=${packId}`;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('error: ', errorThrown);
