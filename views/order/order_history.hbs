@@ -1,41 +1,45 @@
-<div class="content-wrapper row">
-    <div class="card col-6">
+<div class="px-2 content-wrapper row">
+    <div class="mx-auto card col-6">
         <div class="h3 card-header bg-white">
             Order History
         </div>
-        <div class="card-body ">
-            <div class="overflow-auto">
+        <div class="card-body p-0 pt-3">
+            <div class="responsive">
                 {{!-- Đơn hàng --}}
+                {{#each listorder}}
                 <div class="card mb-3">
-                    <div class="card-body content-wrapper rounded">
+                    <div class="card-body content-wrapper rounded pb-1">
                         <div class="row">
-                            <strong class="h4 col-3 font-weight-bold" id="id">ID: {{id}}</strong>
-                            <strong class="h4 col-4 font-weight-bold" id="time">Order At: {{time}}</strong>
-                            <strong class="h4 col-5 font-weight-bold" id="status">Status:
+                            <div class="h5 col-2" id="id">ID: {{id}}</div>
+                            <div class="h5 col-4 py-0" id="time">Order At: {{time}}</div>
+                            <div class="h5 col-6 " id="status">Status:
                                 <span class="bg-{{status_color}} px-3 rounded py-1">
                                     <!-- đổi màu trang thái-->
                                     {{status}}
                                 </span>
-                            </strong>
+                            </div>
                         </div>
-                        <div class="h4 mt-2">Package</div>
+                        <div class="h5 mt-4 font-weight-bold">Package</div>
                         <div class="row">
                             <div class="col-7 my-auto">
                                 {{!-- package --}}
+                                {{#each listpackage}}
                                 <div class="row bg-white rounded py-2 mb-2 mx-auto">
-                                    <div class="font-weight-bold col-5" id="catepack">
+                                    <div class="font-weight-bold col-xl-5" id="catepack">
                                         {{catepack}}
                                     </div>
-                                    <div class="col-6 pl-5" id="namepack">
+                                    <div class="col" id="namepack">
                                         {{namepack}}
                                     </div>
                                 </div>
+                                {{/each}}
                                 {{!-- package --}}
                             </div>
                             <div class="col-5">
                                 <div class="text-right mr-3">
                                     <div id="total" class="font-weight-bold">Total: {{total}} VND</div>
-                                    <button type="button" class="font-weight-bold mt-3 btn btn-success">
+                                    <button type="button" class="font-weight-bold mt-3 btn btn-{{colorbtnpayment}}"
+                                        {{disable}}>
                                         THANH TOÁN
                                     </button>
                                 </div>
@@ -43,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                {{!-- đơn hàng --}}
+                {{/each}}
             </div>
         </div>
     </div>
@@ -51,28 +55,30 @@
         <div class="h3 card-header bg-white">
             Package Detail
         </div>
-        <table class="table">
-            <thead>
-                <tr class="bg-white text-black">
-                    <th scope="col">Name</th>
-                    <th scope="col">Price(VND)</th>
-                    <th scope="col">Unit</th>
-                    <th scope="col">Quanity</th>
-                </tr>
-            </thead>
-            <tbody id="tabinfo">
-                {{!-- detail package --}}
-                <tr>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr class="bg-white text-black">
+                        <th scope="col">Name</th>
+                        <th scope="col">Price(VND)</th>
+                        <th scope="col">Unit</th>
+                        <th scope="col">Quanity</th>
+                    </tr>
+                </thead>
+                <tbody id="tabinfo">
+                    {{!-- detail package --}}
+                    <tr>
 
-                    <td>kem đánh răng</td>
-                    <td>20.000</td>
-                    <td>Tuýp</td>
-                    <td>1</td>
+                        <td>kem đánh răng</td>
+                        <td>20.000</td>
+                        <td>Tuýp</td>
+                        <td>1</td>
 
-                </tr>
-                {{!-- detail package --}}
-            </tbody>
-        </table>
+                    </tr>
+                    {{!-- detail package --}}
+                </tbody>
+            </table>
+        </div>
 
     </div>
 </div>
