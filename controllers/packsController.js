@@ -4,6 +4,7 @@ const productModel = require("../models/productModel");
 const packModel = require("../models/packModel");
 const pack_itemsModel = require("../models/pack_itemsModel");
 const productImageModel = require("../models/productImageModel");
+const stringSimilarity = require("string-similarity");
 
 // Render UI for creating new pack
 router.get("/new", async (req, res) => {
@@ -125,6 +126,27 @@ router.post("/:packId/delete", async (req, res) => {
     }
 });
 
+// search pack by name
+router.post('/search', async (req, res) => {
+    const searchStr = req.body;
+
+    try {
+        let allPacks = packModel.getAll();
+        let filterdPacks = [];
+
+        for (const pack of allPacks) {
+            let similarity = stringSimilarity.compareTwoStrings(searchStr, pack.name);
+            if (similarity > 0.6) {
+                filterdPacks.push(pack);
+            }
+
+
+        }
+    } catch (error) {
+        
+    }
+});
+
 // get products list of pack by packId
 router.get("/:packId", async (req, res) => {
     const packId = req.params.packId;
@@ -206,7 +228,7 @@ router.get("/", async (req, res) => {
             isPackage: 1,
             packs: allPack,
             packDetail: firstPack,
-            productsInPack,
+            // productsInPack,
         });
     } catch (error) {
         res.status(404).send(error);
