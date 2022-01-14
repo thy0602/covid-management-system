@@ -10,6 +10,7 @@ const tableFields = {
     user_id: 'user_id',
     ordered_at: 'ordered_at',
     paid_at: 'paid_at',
+    total_price: 'total_price'
 }
 
 exports.countAll = async () => {

@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const covidRecordModel = require("../models/covidRecordModel")
+const covidRecordModel = require("../models/covidRecordModel");
 const userModel = require("../models/userModel");
 const orderModel = require("../models/orderModel");
 
-const order_productModel = require("../models/order_productModel");
-const order_packModel = require("../models/order_packModel");
+const packModel = require("../models/packModel");
+const productModel = require("../models/productModel");
+
+const orderDetailModel = require("../models/orderDetailModel");
 
 router.get("/", async function (req, res) {
   const totalCases = await userModel.countAll(),
@@ -16,8 +18,8 @@ router.get("/", async function (req, res) {
     F3 = await userModel.countByStatus("F3"),
     getAll = await covidRecordModel.getAll(),
     orders = await orderModel.getAll(),
-    productSold = await order_productModel.getAllGroupByProductId(),
-    packSold = await order_packModel.getAllGroupByPackId();
+    productSold = await orderDetailModel.getGroupByProduct(),
+    packSold = await orderDetailModel.getGroupByPack();
 
   let userStateUpdate = [];
   for (let i = 0; i < getAll.length; i++) {
@@ -29,32 +31,37 @@ router.get("/", async function (req, res) {
     userStateUpdate.push(newRecord);
   }
 
-  orders.forEach(order => ({
-    ...order,
-    status: paid_at ? 'Pending' : 'Completed'
-  }))
-
-  let totalProduct = 0;
-  productSold.forEach(product => { totalProduct += product.quantity });
-  let products = [];
-  for (let i = 0; i < productSold.length; i++) {
-    const newRecord = {
-      ...productSold[i],
-      max: totalProduct,
+  const formattedOrders = orders.map((order) => {
+    return {
+      ...order,
+      total_price: new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(order.total_price),
     };
-    products.push(newRecord);
-  }
-
-  let totalPack = 0;
-  packSold.forEach(pack => { totalPack += pack.quantity });
-  let packs = [];
-  for (let i = 0; i < packSold.length; i++) {
-    const newRecord = {
-      ...packSold[i],
-      max: totalPack,
+  });
+  
+  let totalPackSold = 0;
+  packSold.forEach((pack)=>totalPackSold += Number.parseInt(pack.count));
+  const formattedPackSold = packSold.map(async(pack) => {
+    return {
+      ...pack,
+      total: totalPackSold,
+      percent: 100*Number.parseFloat(pack.count)/Number.parseFloat(totalPackSold),
+      pack: await packModel.getByPackId(pack.pack_id),
     };
-    packs.push(newRecord);
-  }
+  });
+
+  let totalProductSold = 0;
+  productSold.forEach((product)=>totalProductSold += Number.parseInt(product.count));
+  const formattedProductSold = productSold.map(async(product) => {
+    return {
+      ...product,
+      total: totalProductSold,
+      percent: 100*Number.parseFloat(product.count)/Number.parseFloat(totalProductSold),
+      product: await productModel.getById(product.product_id),
+    };
+  });
 
   res.render("dashboard", {
     totalCases: totalCases.count,
@@ -63,14 +70,14 @@ router.get("/", async function (req, res) {
     F2: F2.count,
     cured: F3.count,
     userStateUpdate,
-    orders,
+    orders: formattedOrders,
     products: {
-      list: products,
-      total: totalProduct
+      list: await Promise.all(formattedProductSold),
+      total: totalProductSold,
     },
     packs: {
-      list: packs,
-      total: totalPack
+      list: await Promise.all(formattedPackSold),
+      total: totalPackSold,
     },
   });
 });
