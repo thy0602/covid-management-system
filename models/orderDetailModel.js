@@ -24,6 +24,28 @@ exports.countAll = async () => {
     }
 }
 
+exports.getGroupByPack = async () => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(`SELECT count(${tableFields.quantity}),${tableFields.pack_id},sum(${tableFields.bought_price}) FROM $1 GROUP BY ${tableFields.pack_id}`, table);
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error orderDetailModel/getGroupByPack: ", e);
+    }
+}
+
+exports.getGroupByProduct = async () => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(`SELECT count(${tableFields.quantity}),${tableFields.product_id},sum(${tableFields.bought_price}) FROM $1 GROUP BY ${tableFields.product_id}`, table);
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error orderDetailModel/getGroupByProduct: ", e);
+    }
+}
+
 exports.getPackItemsByOrderIdAndPackId = async (order_id, pack_id) => {
     const queryStr = pgp.as.format(`
         SELECT p."id", p."name", od."bought_price" as price, p."unit", od."quantity"
