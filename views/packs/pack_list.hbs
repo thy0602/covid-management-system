@@ -1,3 +1,4 @@
+
 <div class="content-wrapper">
     {{!-- welcome --}}
     <div class="row">
@@ -6,72 +7,90 @@
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                     <div class="row ml-0">
                         {{#if isNecessities}}
-                        <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
-                        <button type="button" class="btn btn-2side right-side non-active-btn"
-                            onclick="location.href='/packs';">Package</button>
+                            <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side non-active-btn"
+                                onclick="location.href='/packs';">Package</button>
                         {{else if isPackage}}
-                        <button type="button" class="btn btn-2side left-side non-active-btn"
-                            onclick="location.href='/products';">Necessities</button>
-                        <button type="button" class="btn btn-2side right-side active-btn">Package</button>
+                            <button type="button" class="btn btn-2side left-side non-active-btn"
+                                onclick="location.href='/products';">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side active-btn"
+                                onclick="location.href='/packs';">Package</button>
                         {{else}}
                         {{/if}}
                     </div>
                 </div>
                 <div class="col-12 col-xl-4">
-                    <div class="justify-content-end d-flex">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="content-search-input" placeholder="Search"
+                    {{!-- <div class="justify-content-end d-flex"> --}}
+                        <form action="/packs/search" method="POST" class="justify-content-end d-flex">
+                            <div class="input-group">
+                                <input type="text" name="searchStr" class="form-control" id="pack-search-input" placeholder="Search"
                                 aria-label="search" aria-describedby="search">
-                            <div class="input-group-prepend hover-cursor" id="content-search-icon">
-                                <span class="input-group-text" id="userlist-search">
-                                    <i class="icon-search"></i>
-                                </span>
+                                <div type='submit' class="input-group-prepend hover-cursor" id="pack-search-icon">
+                                    <span class="input-group-text" id="userlist-search">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                </div>
+
+                                {{!-- <button type="submit" class="input-group-prepend hover-cursor" style="outline: none; border: none; padding: 0;">
+                                    <span class="input-group-text" id="userlist-search">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                </button> --}}
                             </div>
-                        </div>
-                    </div>
+                        </form>
+                    {{!-- </div> --}}
                 </div>
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-12 grid-margin">
-            <div class="row">
-                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                    <div class="row">
-                        <h3 class="font-weight-bold mr-5"
-                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Package</h3>
-                        <button class="btn btn-primary mr-2"> Add new</button>
+            {{#if isSearch}}
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <div class="row">
+                            <h3 class="font-weight-bold mr-5"
+                                style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Search result</h3>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12 col-xl-4">
-                    <div class="justify-content-end d-flex">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary">Filter</button>
-                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                                id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
-                                {{!-- <h6 class="dropdown-header">Header</h6> --}}
-                                <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=name-ascending">A-Z</a>
-                                <a class="dropdown-item"
-                                    href="/packs/{{packDetail.id}}?order-by=name-descending">Z-A</a>
-                                <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-ascending">Price
-                                    ascending</a>
-                                <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-descending">Price
-                                    descending</a>
-                                {{!-- <a class="dropdown-item" href="#">New</a> --}}
-                                {{!-- <div class="dropdown-divider"></div> --}}
-                                {{!-- <a class="dropdown-item" href="#">Hot</a> --}}
-                                {{!-- <a class="dropdown-item" href="#">Price</a> --}}
+            {{else}}
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <div class="row">
+                            <h3 class="font-weight-bold mr-5"
+                                style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Package</h3>
+                            <a href="/packs/new" class="btn btn-primary mr-2"> Add new</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-4">
+                        <div class="justify-content-end d-flex">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary">Filter</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                    id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                                    {{!-- <h6 class="dropdown-header">Header</h6> --}}
+                                    <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=name-ascending">A-Z</a>
+                                    <a class="dropdown-item"
+                                        href="/packs/{{packDetail.id}}?order-by=name-descending">Z-A</a>
+                                    {{!-- <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-ascending">Price
+                                        ascending</a>
+                                    <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-descending">Price
+                                        descending</a> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {{/if}}
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-3 stretch-card grid-margin">
             <div class="card">
@@ -88,23 +107,21 @@
                             </thead>
                             <tbody>
                                 {{#each packs}}
-                                <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold"></span><a
-                                                href="/packs/{{this.id}}" class="font-weight-bold"
-                                                style="text-decoration: none; color: #000;">
-                                                {{this.name}}
-                                            </a></span></p>
-                                    </td>
-                                    {{!-- <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i>
+                                    <tr class="hover-cursor pack-row" data-pack-id="{{this.id}}">
+                                        <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
+                                        <td>
+                                            <p class="ml-4 mb-0 hover-cursor">
+                                                <span id="{{this.id}}" class="font-weight-bold">{{this.name}}</span>
+                                            </p>
+                                        </td>
+                                        {{!-- <td class="font-weight-medium">
+                                            <div class="row">
+                                                <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i>
+                                                </div>
+                                                <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
                                             </div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td> --}}
-                                </tr>
+                                        </td> --}}
+                                    </tr>
                                 {{/each}}
                                 {{!-- <tr>
                                     <td class="pl-0"><span class="font-weight-bold">#1</span></td>
@@ -112,47 +129,65 @@
                                         <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
                                     </td>
                                 </tr> --}}
-
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-md-9 stretch-card grid-margin">
             <div class="card">
                 <div class="card-body">
                     <p class="card-title mb-4">Package Detail</p>
-                    <div class="row ml-0">
-                        <div class="mb-4 badge badge-primary hover-cursor"
+                    <div class="row ml-0" id="pack-detail">
+                        {{!-- <div class="mb-4 badge badge-primary hover-cursor"
                             style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><a
-                                href="/packs/{{packDetail.id}}/edit" style="text-decoration: none; color: white;"><i class="mdi mdi-pencil mx-2"></i></a></div>
-                        <div class="mb-4 ml-2 badge badge-danger hover-cursor"
-                            style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="icon-trash mx-2"></i>
-                        </div>
+                                href="/packs/{{packDetail.id}}/edit" style="text-decoration: none; color: white;"><i
+                                    class="mdi mdi-pencil mx-2"></i></a></div> --}}
+
+                        {{#if packDetail.id}}
+                            <div id="pack-edit-icon" class="mb-4 badge badge-primary hover-cursor" onclick="window.location.href='/packs/{{packDetail.id}}/edit'"
+                                style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="mdi mdi-pencil mx-2"></i>
+                            </div>
+                            <div id="pack-del-icon" class="mb-4 ml-2 badge badge-danger hover-cursor" data-toggle="modal" data-target="#modal-del-pack" data-pack-id="{{packDetail.id}}"
+                                style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="icon-trash mx-2"></i>
+                            </div>
+                        {{else}}
+                            <div id="pack-edit-icon" class="mb-4 badge badge-primary hover-cursor"
+                                style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="mdi mdi-pencil mx-2"></i>
+                            </div>
+                            <div id="pack-del-icon" class="mb-4 ml-2 badge badge-danger hover-cursor"
+                                style="padding: 0.5rem; border-radius: 5px; font-size: 1rem"><i class="icon-trash mx-2"></i>
+                            </div>
+                        {{/if}}
+
+                        
                         <div class="mb-4 ml-5 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
                                 <div class="card-body" style="padding: 0.5rem;">
-                                    <p class="mb-0" style="font-size: 1rem;">{{packDetail.name}}</p>
+                                    {{#if packDetail.name}}
+                                        <p id="pack-name" class="mb-0" style="font-size: 1rem;">{{packDetail.name}}</p>
+                                    {{else}}
+                                        <p id="pack-name" class="mb-0" style="font-size: 1rem;">Tên gói</p>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
                         <div class="mb-4 ml-2 stretch-card transparent">
                             <div class="card card-light-blue" style="border-radius: 5px;">
                                 <div class="card-body" style="padding: 0.5rem;">
-                                    <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: 2 lần/tuần</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-4 ml-2 stretch-card transparent">
-                            <div class="card card-light-blue" style="border-radius: 5px;">
-                                <div class="card-body" style="padding: 0.5rem;">
-                                    <p class="mb-0" style="font-size: 1rem;">Số lượng tối đa mỗi sản phẩm:
-                                        {{packDetail.limit}}</p>
+                                    {{#if packDetail.quantity_limit}}
+                                        <p id="pack-limit" class="mb-0" 
+                                            style="font-size: 1rem;">Giới hạn mua: {{packDetail.quantity_limit}} gói/{{packDetail.time_limit_unit}}</p>
+                                    {{else}}
+                                        <p id="pack-limit" class="mb-0" style="font-size: 1rem;">Giới hạn mua: </p>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="table-responsive table-hover" style="height: 430px; overflow: auto;">
                         <table class="table table-borderless">
                             <thead style="border-bottom: 2px solid black">
@@ -161,30 +196,22 @@
                                     <th>Name</th>
                                     <th>Price (VND)</th>
                                     <th>Unit</th>
+                                    <th>Quantity Limit</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="pack-items">
                                 {{#each productsInPack}}
-                                <tr>
-                                    <td class="py-1">
-                                        <img src="/{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
-                                        {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
-                                            alt="image" /> --}}
-                                    </td>
-                                    <td>{{this.name}}</td>
-                                    <td>{{this.price}}</td>
-                                    <td>{{this.unit}}</td>
-                                </tr>
+                                    <tr>
+                                        <td class="py-1">
+                                            <img src="/{{this.images.[0]}}" style="width:180px; height:180px"
+                                                alt="image" />
+                                        </td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.price}}</td>
+                                        <td>{{this.unit}}</td>
+                                        <td>{{this.quantity_limit}}</td>
+                                    </tr>
                                 {{/each}}
-                                {{!-- <tr>
-                                    <td class="py-1">
-                                        <img src="/img/image 7.png" style="width:180px; height:180px" alt="image" />
-                                    </td>
-                                    <td>Kem đánh răng</td>
-                                    <td>20 000</td>
-                                    <td>Tube</td>
-                                </tr> --}}
-
                             </tbody>
                         </table>
                     </div>
@@ -193,3 +220,159 @@
         </div>
     </div>
 </div>
+
+{{!-- Confirm delete modal --}}
+<div class="modal fade" id="modal-del-pack" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-pack-name">
+                {{#if packDetail.name}}
+                    Are you sure to delete "{{packDetail.name}}" ?
+                {{/if}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                {{!-- <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" onclick="onclickDelete(id)">Delete</button> --}}
+                <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" data-pack-id="{{packDetail.id}}">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section "js"}}
+    <!-- Custom js for this page-->
+    <script>
+        $('#pack-search-icon').click(async function(e) {
+            let searchStr = $('#pack-search-input').val();
+            console.log('searchStr: ', searchStr);
+
+            //console.log('AJAX');
+            $.ajax({
+                url: `/packs/search`,
+                type: 'POST',
+                data: {
+                    searchStr
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    //window.location.href = `/packs`;
+                    //$(document).load(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Event click on pack name to view detail
+        $('.pack-row').click(async function(e) {
+            //console.log('clicked: ', e.currentTarget);
+            const packId = $(this).data('pack-id');
+
+            await $.ajax({
+                url: `/packs/${packId}`,
+                type: 'GET',
+                success: function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+
+                    let packDetail = data['packDetail'];
+                    let packItems = data['packItems'];
+                    //console.log('packDetail: ', packDetail);
+                    //console.log('packItems: ', packItems);
+
+                    // Update pack detail
+                    $('#pack-detail').find('div#pack-edit-icon').click(function() {
+                        window.location.href=`/packs/${packDetail.id}/edit`;
+                    });
+                    $('#pack-detail').find('div#pack-del-icon').click(function(e) {
+                        $('#modal-del-pack').modal('show');
+                    });
+                    $('#pack-detail').find('div#pack-del-icon').data({
+                        'pack-id': packDetail.id,
+                        'toggle': "modal",
+                        'target': "#modal-del-pack"
+                    });
+                    $('#pack-detail').find('p#pack-name').text(`${packDetail.name}`);
+                    $('#pack-detail').find('p#pack-limit').text(`Giới hạn mua: ${packDetail.quantity_limit} gói/${packDetail.time_limit_unit}`);
+
+                    // Update modal
+                    $('#modal-pack-name').text(`Are you sure to delete ${packDetail.name} ?`)
+
+
+                    // Update pack items table
+                    $('#pack-items').html('');
+                    for (const product of packItems) {
+                        $('#pack-items').append(
+                            `<tr>
+                                <td class="py-1">
+                                    <img src="/${product.images[0]}" style="width:180px; height:180px"
+                                        alt="image" />
+                                </td>
+                                <td>${product.name}</td>
+                                <td>${product.price}</td>
+                                <td>${product.unit}</td>
+                                <td>${product.quantity_limit}</td>
+                            </tr>`);
+                    }
+
+                    console.log($('#pack-del-icon').data());
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
+        })
+    </script>
+
+    <script>
+        /*
+        async function onclickDelete(id) {
+            console.log("DELETED");
+            await $.ajax({
+                url: `/products/${id}`,
+                type: 'PUT',
+                data: {
+                    is_deleted: true
+                },
+                success: async function (response, status) {
+                    const res = await response;
+                    console.log(res);
+                    window.location.href = '/products';
+                }
+            });
+        }*/
+        
+        $('#btn-del-pack').click(async function (e) {
+            const btn = e.currentTarget;
+            const packId = $('#pack-del-icon').data('pack-id');
+            console.log('btn clicked', btn);
+            console.log('packId: ', packId);
+
+            $.ajax({
+                url: `/packs/${packId}/delete`,
+                type: 'POST',
+                data: {
+                    is_deleted: true
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    window.location.href = `/packs`;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
+        });
+
+    </script>
+
+    <!-- End custom js for this page-->
+{{/section}}
