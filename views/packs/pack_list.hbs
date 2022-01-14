@@ -20,8 +20,8 @@
                     </div>
                 </div>
                 <div class="col-12 col-xl-4">
-                    <div class="justify-content-end d-flex">
-                        <form action="/packs/search" method="POST">
+                    {{!-- <div class="justify-content-end d-flex"> --}}
+                        <form action="/packs/search" method="POST" class="justify-content-end d-flex">
                             <div class="input-group">
                                 <input type="text" name="searchStr" class="form-control" id="pack-search-input" placeholder="Search"
                                 aria-label="search" aria-describedby="search">
@@ -38,7 +38,7 @@
                                 </button> --}}
                             </div>
                         </form>
-                    </div>
+                    {{!-- </div> --}}
                 </div>
             </div>
         </div>
@@ -231,8 +231,10 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                Are you sure to delete "Pack name" ?
+            <div class="modal-body" id="modal-pack-name">
+                {{#if packDetail.name}}
+                    Are you sure to delete "{{packDetail.name}}" ?
+                {{/if}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
@@ -292,7 +294,7 @@
                     });
                     $('#pack-detail').find('div#pack-del-icon').click(function(e) {
                         $('#modal-del-pack').modal('show');
-                    })
+                    });
                     $('#pack-detail').find('div#pack-del-icon').data({
                         'pack-id': packDetail.id,
                         'toggle': "modal",
@@ -300,6 +302,9 @@
                     });
                     $('#pack-detail').find('p#pack-name').text(`${packDetail.name}`);
                     $('#pack-detail').find('p#pack-limit').text(`Giới hạn mua: ${packDetail.quantity_limit} gói/${packDetail.time_limit_unit}`);
+
+                    // Update modal
+                    $('#modal-pack-name').text(`Are you sure to delete ${packDetail.name} ?`)
 
 
                     // Update pack items table
