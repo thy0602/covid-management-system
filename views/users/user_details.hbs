@@ -57,7 +57,7 @@
                         <tr style="max-height: 50px;">
                             <td>{{username}}</td>
                             <td>{{name}}</td>
-                            <td><label class="badge badge-danger px-4">{{current_status}}</label></td>
+                            <td><label class="badge badge-{{#ifStr current_status "F0"}}danger{{/ifStr}}{{#ifStr current_status "F1"}}warning{{/ifStr}}{{#ifStr current_status "F2"}}primary{{/ifStr}} px-4 text-white">{{current_status}}</label></td>
                             <td>
                             <div>
                             <button type="button" class="btn btn-danger btn-icon">
