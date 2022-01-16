@@ -2,7 +2,7 @@ const fs = require("fs");
 const readline = require("readline");
 
 /**
- * log the action to activity.txt file
+ * log the action to activity_logs.txt file
  * @param {*} Object as shown 
  * sender: the current ID 
  * action: action to be performed
