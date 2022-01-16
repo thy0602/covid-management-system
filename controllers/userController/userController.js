@@ -18,10 +18,11 @@ router.use("/:id", async function (req, res, next) {
 router.get("/:id/view", async (req, res) => {
   const user = req.user;
 
-  const relatedUserIds = await relateModel.getById(req.params.id);
+  let relatedUserIds = await relateModel.getById_1(user.id);
+  relatedUserIds = relatedUserIds.concat(await relateModel.getById_2(user.id));
   const relatedUsers = [];
   for (let i = 0; i < relatedUserIds.length; i++) {
-    const relateUser = await userModel.getById(relatedUserIds[i].user_id2);
+    const relateUser = await userModel.getById(relatedUserIds[i].user_id2 == user.id ? relatedUserIds[i].user_id1 : relatedUserIds[i].user_id2);
     relatedUsers.push(relateUser);
   }
 
