@@ -10,7 +10,7 @@ const readline = require("readline");
  * date: performed date
  */
 
-const log_action = ({ sender_id, action, data, date }) => {
+exports.log_action = ({ sender_id, action, data, date }) => {
   let content = `${date}: ${sender_id} ${action} ${
     data ? data.toString() : ""
   }`;
@@ -30,7 +30,7 @@ const log_action = ({ sender_id, action, data, date }) => {
  * pass in {all} to get all log or {limit: value} to limit the result array
  */
 const DEFAULT_VALUE = 10;
-const view_action = async (option) => {
+exports.view_action = async (option) => {
   var all = option.all;
   var limit = option.limit || DEFAULT_VALUE;
 
