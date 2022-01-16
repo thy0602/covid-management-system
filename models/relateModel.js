@@ -10,9 +10,19 @@ const tableFields = {
     user_id2: 'user_id2',
 }
 
-exports.getById = async (id) => {
+exports.getById_1 = async (id) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.user_id1} = '${id}'`, table);
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error db/load relatedModel", e);
+    }
+}
+exports.getById_2 = async (id) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.user_id2} = '${id}'`, table);
     try {
         const res = await db.any(queryStr);
         return res;

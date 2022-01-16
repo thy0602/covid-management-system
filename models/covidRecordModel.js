@@ -27,6 +27,17 @@ exports.getAll = async () => {
   }
 };
 
+exports.create = async (entity) => {
+  const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+  const qStr = pgp.helpers.insert(entity, null, table) + "RETURNING *";
+  try {
+      const res = await db.one(qStr);
+      return res;
+  } catch (error) {
+      console.log('error covidRecordModel/create:', error);
+  }
+};
+
 exports.getById = async (id) => {
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const queryStr = pgp.as.format(
@@ -102,3 +113,4 @@ exports.getCasesFromDate = async (date) => {
     console.log("Error db/load", e);
   }
 };
+
