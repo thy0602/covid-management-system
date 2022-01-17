@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const userModel = require('../../models/userModel');
 const accountModel = require('../../models/accountModel');
+const addressModel = require('../../models/addressModel');
+
+const verify = require('../../middlewares/verify').verify;
+
+router.use('/', (req, res, next) => {
+    if (verify(req, 'admin'))
+        next();
+    else
+        return res.redirect('/');
+});
 
 router.get('/', async function (req, res) {
     const orderBy = req.query['order-by'];
@@ -42,13 +52,31 @@ router.post('/store', async (req, res) => {
 
 router.get('/new', async (req, res) => {
     let user = await userModel.getAllUserOrderBy("username", true);
-    user = user[user.length - 1].username;
-    const regex = /[^\D0]+/g;
-    user = user.slice(0, user.search(regex)) + (parseInt(user.slice(3)) + 1);
-    res.render("users/user_form", {
+    console.log(user);
+    if (user.length != 0) {
+        user = user[user.length - 1].username;
+        const regex = /[^\D0]+/g;
+        user = user.slice(0, user.search(regex)) + (parseInt(user.slice(3)) + 1);
+    } else {
+        user = 'ID_001';
+    }
+
+    let province_list = await addressModel.getAll('province');
+
+    return res.render("users/user_form", {
+        province: province_list,
         username: user
     });
 })
+
+router.get('/getRegion', async (req, res) => {
+    let child_list = await addressModel.getChild(req.query.tableChild, req.query.tableParent, req.query.name);
+    if (!child_list) {
+        return res.status(401).send({ error: "Empty" });
+    }
+    res.status(200).send({ success: true, list: child_list });
+
+});
 
 router.post('/new', async (req, res) => {
 
@@ -62,14 +90,21 @@ router.post('/new', async (req, res) => {
         name: req.body.name,
         username: req.body.username,
         year_of_birth: req.body.yob,
-        address: req.body.address,
-        max_basket: req.body.maxbasket,
-        basket_timelimit: req.body.baskettimeltd,
+        address: req.body.street,
+        identity_number: req.body.indentity,
+        // max_basket: req.body.maxbasket,
+        // basket_timelimit: req.body.baskettimeltd,
         current_status: null,
-        current_location: null
+        current_location: null,
+        province: req.body.province,
+        district: req.body.district,
+        ward: req.body.ward
     }
     const user = await userModel.create(entity);
-    res.send(user);
+    if (user) {
+        return res.redirect('./');
+    }
+    res.send({ error: "Can't create user!" });
 })
 
 router.use('/', require('./userController'))

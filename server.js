@@ -28,7 +28,10 @@ app.use('/order-detail', require('./controllers/orderDetailController'));
 app.use('/dashboard', require('./controllers/dashboardController'));
 
 app.get("/", (req, res) => {
-  res.redirect("/dashboard");
+  if (req.cookies.user)
+    res.redirect("/dashboard");
+  else
+    res.redirect("/account/login-id");
 });
 
 app.listen(port, () => {

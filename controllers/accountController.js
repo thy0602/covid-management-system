@@ -1,7 +1,28 @@
 const express = require("express");
 const router = express.Router();
+const accountModel = require("../models/accountModel");
+router.use('/', async (req, res, next) => {
+    next();
+});
 
-router.get('/login-id', (req, res) => {
+router.get('/login-id', async (req, res) => {
+
+    const admin = await accountModel.getByUsername('admin');
+    if (!admin) {
+        await accountModel.create({
+            username: 'admin',
+            role: 'admin',
+            is_deleted: false,
+            is_locked: false
+        });
+        return res.render('account/login_createpw', {
+            layout: false,
+            id: 'admin',
+            msg: () => 'login_partials/msg_id',
+            message: 'Register passcode for Admin !',
+            color: '#f3d97a'
+        });
+    }
     if (req.user || req.cookies.user)
         return res.redirect('/dashboard');
 

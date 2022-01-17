@@ -1,75 +1,224 @@
-<form class="col-10 mx-auto my-5 font-weight-bold" action="./new" method="post"
-    style="border-radius: 40px; background-color: #d3e6ff;">
-    <div class="form-row mt-5">
-        <div class="form-group col-md-6 row mx-auto">
-            <label for="inputFullname" class="col-sm-3 col-form-label">Full Name</label>
-            <div class="col-sm-7 was-validated">
-                <input type="text" class="form-control" id="name" name="name" required>
-                <div class="invalid-feedback">
-                    Please enter a message in the textarea.
+<div class="content-wrapper">
+    <div class="col-12 justify-content-end d-flex">
+        <button id="cancelform" class="btn btn-danger mr-2 btn-sm" onclick="location.href='./user';">Cancel</button>
+    </div>
+    <form class="col-10 mx-auto py-3 font-weight-bold bg-white" action="./new" method="post"
+        style="border-radius: 40px;">
+        <div class="form-row mt-5">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputFullname" class="col-sm-3 col-form-label">Full Name</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="text" class="form-control" id="name" name="name" required>
+                    <div id='noticename' class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group col-md-6 row mx-auto">
-            <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
-            <div id="border_username" class="col-sm-8">
-                <!-- kiểm tra username có tồn tại chưa bằng ajax nếu tồn tại
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+                <div id="border_username" class="col-sm-8">
+                    <!-- kiểm tra username có tồn tại chưa bằng ajax nếu tồn tại
                                      thì thêm class vào input là is-invalid else is-valid-->
-                <input type="text" class="font-weight-bold form-control bg-white" id="username" name="username"
-                    value={{username}} readonly>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-md-6 row mx-auto">
-            <label for="inputYob" class="col-sm-3 col-form-label">Year Of Birth</label>
-            <div class="col-sm-7 was-validated">
-                <input type="text" class="form-control" id="yob" name="yob" required>
-                <div class="invalid-feedback">
-                    Please enter a message in the textarea.
+                    <input type="text" class="font-weight-bold form-control bg-white" id="username" name="username"
+                        value={{username}} readonly>
                 </div>
             </div>
         </div>
 
-        <div class="form-group col-md-6 row mx-auto">
-            <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
-            <div class="col-sm-8 was-validated">
-                <input type="text" class="form-control" id="address" name="address" required>
-                <div class="invalid-feedback">
-                    Please enter a message in the textarea.
+        <div class="form-row">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputYob" class="col-sm-3 col-form-label">Year Of Birth</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="number" class="form-control" id="yob" name="yob" required>
+                    <div class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputIndentity" class="col-sm-2 col-form-label">Indentity</label>
+                <div class="col-sm-8 was-validated">
+                    <input type="text" class="form-control" id="indentity" name="indentity" required>
+                    <div id="noticeindentity" class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="form-row">
-        <div class="form-group col-md-6 row mx-auto">
-            <label for="inputmaxbasket" class="col-sm-3 col-form-label">Max Basket</label>
-            <div class="col-sm-7 was-validated">
-                <input type="number" min="0" class="form-control" id="maxbasket" name="maxbasket" value="5" required>
+        <div class="form-row">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputStreet" class="col-sm-3 col-form-label">Street</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="text" class="form-control" id="street" name="street" required>
+                    <div class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputProvince" class="col-sm-2 col-form-label">Province</label>
+                <div class="col-sm-8 was-validated">
+                    <select id="province" name="province" class="custom-select"
+                        aria-describedby="validationServer04Feedback1" required>
+                        <option selected disabled value="">Choose...</option>
+                        {{#each province}}
+                        <option value="{{id}}">{{name}}</option>
+                        {{/each}}
+                        {{!-- lấy province --}}
+                    </select>
+                    <div id="validationServer04Feedback1" class="font-weight-lighter invalid-feedback">
+                        Please select a valid Province.
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="form-group col-md-6 row mx-auto">
-            <label for="inputBasketTimeltd" class="col-sm-4 col-form-label">Basket Time Limit</label>
-            <div class="col-sm-6 was-validated">
-                <input type="number" min='0' class="form-control" id="baskettimeltd" name="baskettimeltd" value="1"
-                    required>
+        <div class="form-row">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputDistrict" class="col-sm-3 col-form-label">District</label>
+                <div class="col-sm-7 was-validated">
+                    <select id="district" name="district" class="custom-select"
+                        aria-describedby="validationServer04Feedback2" required>
+                        <option selected disabled value="">Choose...</option>
+                        {{!-- lấy province --}}
+                    </select>
+                    <div id="validationServer04Feedback2" class="font-weight-lighter invalid-feedback">
+                        Please select a valid District.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputWard" class="col-sm-2 col-form-label">Ward</label>
+                <div class="col-sm-8 was-validated">
+                    <select id="ward" name="ward" class="custom-select" aria-describedby="validationServer04Feedback3"
+                        required>
+                        <option selected disabled value="">Choose...</option>
+                        {{!-- lấy ward --}}
+                    </select>
+                    <div id="validationServer04Feedback3" class="font-weight-lighter invalid-feedback">
+                        Please select a valid Ward.
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="text-center">
-        <button type="submit" class="font-weight-bold btn col-2 btn-primary mt-5">Create User</button>
-    </div>
-</form>
+        <div class="form-row">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputmaxbasket" class="col-sm-3 col-form-label">Max Basket</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="number" min="0" class="form-control" id="maxbasket" name="maxbasket" value="5"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputBasketTimeltd" class="col-sm-4 col-form-label">Basket Time Limit</label>
+                <div class="col-sm-6 was-validated">
+                    <input type="number" min='0' class="form-control" id="baskettimeltd" name="baskettimeltd" value="1"
+                        required>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="font-weight-bold btn col-2 btn-primary mt-2">Create User</button>
+        </div>
+    </form>
+</div>
 
 {{#section "js"}}
 <!-- Custom js for this page-->
+
+{{!--
 <script type="text/javascript" src="js/dashboard.js"></script>
-<script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
+<script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script> --}}
 <!-- End custom js for this page-->
+
+<script>
+    $('#indentity').focusout(() => {
+        let x = $("#indentity").val().search(`^[0-9]+$`);
+        if ($("#indentity").val() == '') {
+            $('#noticeindentity').text('Please enter a message in the textarea.');
+            return;
+        }
+        if (x == -1) {
+            $('#indentity').val('');
+            $('#noticeindentity').text('indentity number invalid');
+            return;
+        }
+    });
+    $('#name').focusout(() => {
+        val = $('#name').val() + " ";
+        regrex = /^(([A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ])([a-zàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểếễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]){1,}(\s){1,})*$/;
+        if ($("#name").val() == '') {
+            $('#noticename').text('Please enter a message in the textarea.');
+            return;
+        }
+        if (!regrex.test(val)) {
+            $('#name').val('');
+            $('#noticename').text('Name invalid!');
+            return;
+        }
+    });
+
+    $('#province').focusin(() => {
+        $('#district').empty();
+        $('#district').append(`<option selected disabled value="">Choose...</option>`);
+        $('#ward').empty();
+        $('#ward').append(`<option selected disabled value="">Choose...</option>`);
+    });
+
+    $('#province').focusout(() => {
+        $.ajax({
+            url: './getRegion',
+            type: 'get',
+            data: {
+                tableChild: 'district',
+                tableParent: 'province',
+                name: $("#province").val()
+            },
+            success: async function (response, status) {
+                $('#district').empty();
+                $('#district').append(`<option selected disabled value="">Choose...</option>`);
+                for (let i = 0; i < response.list.length; i++) {
+                    $('#district').append(`<option value="${response.list[i].id}">${response.list[i].name}</option>`);
+                }
+                $('#ward').empty();
+                $('#ward').append(`<option selected disabled value="">Choose...</option>`);
+            },
+            error: async function (response, status) {
+
+            }
+        });
+    });
+    $('#district').focusout(() => {
+        $.ajax({
+            url: './getRegion',
+            type: 'get',
+            data: {
+                tableChild: 'ward',
+                tableParent: 'district',
+                name: $("#district").val()
+            },
+            success: async function (response, status) {
+                $('#ward').empty();
+                $('#ward').append(`<option selected disabled value="">Choose...</option>`);
+                for (let i = 0; i < response.list.length; i++) {
+                    $('#ward').append(`<option value="${response.list[i].id}">${response.list[i].name}</option>`);
+                }
+            },
+            error: async function (response, status) {
+
+            }
+        });
+
+    });
+
+</script>
 
 {{/section}}
