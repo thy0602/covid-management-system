@@ -271,6 +271,13 @@ VALUES
 -- -----------------------------
 -- Table quarantine_location
 -- -----------------------------
+INSERT INTO "quarantine_location"
+VALUES
+	(DEFAULT, 'Bệnh viện Bạch Mai', 120, 0),
+	(DEFAULT, 'Bệnh viện Bệnh nhiệt đới TW', 200, 0),
+	(DEFAULT, 'Bệnh viện TW Huế', 100, 0),
+	(DEFAULT, 'Bệnh viện Nhi đồng 1', 110, 0),
+	(DEFAULT, 'Bệnh viện Nhi đồng 2', 160, 0);
 
 -- -----------------------------
 -- Table quaratine_location_record
