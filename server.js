@@ -26,6 +26,7 @@ app.use('/login', require('./controllers/loginController'));
 app.use('/order-detail', require('./controllers/orderDetailController'));
 
 app.use('/dashboard', require('./controllers/dashboardController'));
+app.use('/server-log', require('./controllers/serverLogController'));
 
 app.get("/", (req, res) => {
   if (req.cookies.user)

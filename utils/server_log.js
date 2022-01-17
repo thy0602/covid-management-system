@@ -11,8 +11,8 @@ const readline = require("readline");
  */
 
 exports.log_action = ({ sender_id, action, data, date }) => {
-  let content = `${date}: ${sender_id} ${action} ${
-    data ? data.toString() : ""
+  let content = `${date}|${sender_id}|${action}|${
+    data ? data.toString() : " "
   }`;
   content += "\n";
 

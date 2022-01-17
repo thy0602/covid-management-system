@@ -1,0 +1,50 @@
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Manager's action management</h4>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                                Manager ID
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                            <th>
+                                Data
+                            </th>
+                            <th>
+                                Date
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each logs}}
+                            <tr>
+                                <td style="width: 50px">
+                                    <img src="/img/user.png" alt="image" />
+                                </td>
+                                <td style="width: 100px">
+                                    {{id}}
+                                </td>
+                                <td>
+                                    {{action}}
+                                </td>
+                                <td>
+                                    {{data}}
+                                </td>
+                                <td>
+                                    {{date}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
