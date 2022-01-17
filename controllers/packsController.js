@@ -20,7 +20,7 @@ router.get("/new", async (req, res) => {
     }
 });
 
-// Store new pack
+// Store new pack (json)
 router.post("/new", async (req, res) => {
     let products = req.body.products;
     let packDetail = req.body.packDetail;
@@ -87,7 +87,7 @@ router.get("/:packId/edit", async (req, res) => {
     }
 });
 
-// Update a pack
+// Update a pack (json)
 router.post("/:packId/edit", async (req, res) => {
     let packId = req.params.packId;
     let products = req.body.products;
@@ -110,6 +110,7 @@ router.post("/:packId/edit", async (req, res) => {
     }
 });
 
+// Delete a pack (json)
 router.post("/:packId/delete", async (req, res) => {
     const packId = req.params.packId;
 
@@ -126,7 +127,7 @@ router.post("/:packId/delete", async (req, res) => {
     }
 });
 
-// search pack by name
+// Search pack by name
 router.post('/search', async (req, res) => {
     const searchStr = req.body.searchStr;
 
@@ -186,7 +187,11 @@ router.post('/search', async (req, res) => {
     }
 });
 
-// get products list of pack by packId
+router.post('/search/:packId', async (req, res) => {
+
+});
+
+// get products list of pack by packId (json)
 router.get("/:packId", async (req, res) => {
     const packId = req.params.packId;
     // const orderBy = req.query["order-by"];
@@ -249,7 +254,7 @@ router.get("/:packId", async (req, res) => {
     }
 });
 
-// get list of all packs
+// Get list of all packs
 router.get("/", async (req, res) => {
     let packId = req.query['show-detail'];
 

@@ -1,0 +1,31 @@
+id,name,province_id
+1,Quận Ba Đình,1
+2,Quận Hoàn Kiếm,1
+3,Quận Tây Hồ,1
+4,Quận Long Biên,1
+5,Quận Cầu Giấy,1
+40,Thành phố Cao Bằng,4
+42,Huyện Bảo Lâm,4
+43,Huyện Bảo Lạc,4
+45,Huyện Hà Quảng,4
+47,Huyện Trùng Khánh,4
+490,Quận Liên Chiểu,48
+491,Quận Thanh Khê,48
+492,Quận Hải Châu,48
+493,Quận Sơn Trà,48
+494,Quận Ngũ Hành Sơn,48
+760,Quận 1,79
+761,Quận 12,79
+762,Quận Thủ Đức,79
+763,Quận 9,79
+764,Quận Gò Vấp,79
+540,Thành phố Quy Nhơn,52
+542,Huyện An Lão,52
+543,Thị xã Hoài Nhơn,52
+544,Huyện Hoài Ân,52
+545,Huyện Phù Mỹ,52
+883,Thành phố Long Xuyên,89
+884,Thành phố Châu Đốc,89
+886,Huyện An Phú,89
+887,Thị xã Tân Châu,89
+888,Huyện Phú Tân,89

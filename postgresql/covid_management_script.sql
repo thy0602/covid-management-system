@@ -60,7 +60,7 @@ CREATE TABLE "user" (
 -- Table province
 -- -----------------------------
 create table "province" (
-	"id" serial PRIMARY KEY,
+	"id" int PRIMARY KEY,
 	"name" varchar(50) NOT NULL
 );
 
@@ -68,7 +68,7 @@ create table "province" (
 -- Table district
 -- -----------------------------
 create table "district" (
-	"id" serial PRIMARY KEY,
+	"id" int PRIMARY KEY,
 	"name" varchar(50) NOT NULL,
 	"province_id" int NOT NULL,
 	
@@ -79,7 +79,7 @@ create table "district" (
 -- Table ward
 -- -----------------------------
 create table "ward" (
-	"id" serial PRIMARY KEY,
+	"id" int PRIMARY KEY,
 	"name" varchar(50) NOT NULL,
 	"district_id" int NOT NULL,
 	
@@ -275,6 +275,18 @@ VALUES
 -- -----------------------------
 -- Table quaratine_location_record
 -- -----------------------------
+
+-- -----------------------------
+-- Table province
+-- -----------------------------
+-- INSERT INTO "province"("id", "name")
+-- VALUES
+-- 	('1', 'Thành phố Hà Nội'),
+-- 	('48', 'Thành phố Đà Nẵng'),
+-- 	('52', 'Tỉnh Bình Định'),
+-- 	('79', 'Thành phố Hồ Chí Minh'),
+-- 	('89', 'Tỉnh An Giang'),
+-- 	('4', 'Tỉnh Cao Bằng');
 
 -- -----------------------------
 -- Table product

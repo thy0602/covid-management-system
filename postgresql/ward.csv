@@ -1,0 +1,150 @@
+id,name,district_id
+1,Phường Phúc Xá,1
+4,Phường Trúc Bạch,1
+6,Phường Vĩnh Phúc,1
+7,Phường Cống Vị,1
+8,Phường Liễu Giai,1
+37,Phường Phúc Tân,2
+40,Phường Đồng Xuân,2
+43,Phường Hàng Mã,2
+46,Phường Hàng Buồm,2
+49,Phường Hàng Đào,2
+91,Phường Phú Thượng,3
+94,Phường Nhật Tân,3
+97,Phường Tứ Liên,3
+100,Phường Quảng An,3
+103,Phường Xuân La,3
+115,Phường Thượng Thanh,4
+118,Phường Ngọc Thụy,4
+121,Phường Giang Biên,4
+124,Phường Đức Giang,4
+127,Phường Việt Hưng,4
+157,Phường Nghĩa Đô,5
+160,Phường Nghĩa Tân,5
+163,Phường Mai Dịch,5
+166,Phường Dịch Vọng,5
+167,Phường Dịch Vọng Hậu,5
+1267,Phường Sông Hiến,40
+1270,Phường Sông Bằng,40
+1273,Phường Hợp Giang,40
+1276,Phường Tân Giang,40
+1279,Phường Ngọc Xuân,40
+1290,Thị trấn Pác Miầu,42
+1291,Xã Đức Hạnh,42
+1294,Xã Lý Bôn,42
+1296,Xã Nam Cao,42
+1297,Xã Nam Quang,42
+1321,Thị trấn Bảo Lạc,43
+1324,Xã Cốc Pàng,43
+1327,Xã Thượng Hà,43
+1330,Xã Cô Ba,43
+1333,Xã Bảo Toàn,43
+1363,Thị trấn Thông Nông,45
+1366,Xã Cần Yên,45
+1367,Xã Cần Nông,45
+1372,Xã Lương Thông,45
+1375,Xã Đa Thông,45
+1447,Thị trấn Trà Lĩnh,47
+1453,Xã Tri Phương,47
+1456,Xã Quang Hán,47
+1462,Xã Xuân Nội,47
+1465,Xã Quang Trung,47
+20194,Phường Hòa Hiệp Bắc,490
+20195,Phường Hòa Hiệp Nam,490
+20197,Phường Hòa Khánh Bắc,490
+20198,Phường Hòa Khánh Nam,490
+20200,Phường Hòa Minh,490
+20203,Phường Tam Thuận,491
+20206,Phường Thanh Khê Tây,491
+20207,Phường Thanh Khê Đông,491
+20209,Phường Xuân Hà,491
+20212,Phường Tân Chính,491
+20227,Phường Thanh Bình,492
+20230,Phường Thuận Phước,492
+20233,Phường Thạch Thang,492
+20236,Phường Hải Châu  I,492
+20239,Phường Hải Châu II,492
+20263,Phường Thọ Quang,493
+20266,Phường Nại Hiên Đông,493
+20269,Phường Mân Thái,493
+20272,Phường An Hải Bắc,493
+20275,Phường Phước Mỹ,493
+20284,Phường Mỹ An,494
+20285,Phường Khuê Mỹ,494
+20287,Phường Hoà Quý,494
+20290,Phường Hoà Hải,494
+26734,Phường Tân Định,760
+26737,Phường Đa Kao,760
+26740,Phường Bến Nghé,760
+26743,Phường Bến Thành,760
+26746,Phường Nguyễn Thái Bình,760
+26764,Phường Thạnh Xuân,761
+26767,Phường Thạnh Lộc,761
+26770,Phường Hiệp Thành,761
+26773,Phường Thới An,761
+26776,Phường Tân Chánh Hiệp,761
+26794,Phường Linh Xuân,762
+26797,Phường Bình Chiểu,762
+26800,Phường Linh Trung,762
+26803,Phường Tam Bình,762
+26806,Phường Tam Phú,762
+26830,Phường Long Bình,763
+26833,Phường Long Thạnh Mỹ,763
+26836,Phường Tân Phú,763
+26839,Phường Hiệp Phú,763
+26842,Phường Tăng Nhơn Phú A,763
+26869,Phường 15,764
+26872,Phường 13,764
+26875,Phường 17,764
+26876,Phường 6,764
+26878,Phường 16,764
+21550,Phường Nhơn Bình,540
+21553,Phường Nhơn Phú,540
+21556,Phường Đống Đa,540
+21559,Phường Trần Quang Diệu,540
+21562,Phường Hải Cảng,540
+21609,Thị trấn An Lão,542
+21610,Xã An Hưng,542
+21613,Xã An Trung,542
+21616,Xã An Dũng,542
+21619,Xã An Vinh,542
+21637,Phường Tam Quan,543
+21640,Phường Bồng Sơn,543
+21643,Xã Hoài Sơn,543
+21646,Xã Hoài Châu Bắc,543
+21649,Xã Hoài Châu,543
+21688,Thị trấn Tăng Bạt Hổ,544
+21690,Xã Ân Hảo Tây,544
+21691,Xã Ân Hảo Đông,544
+21694,Xã Ân Sơn,544
+21697,Xã Ân Mỹ,544
+21730,Thị trấn Phù Mỹ,545
+21733,Thị trấn Bình Dương,545
+21736,Xã Mỹ Đức,545
+21739,Xã Mỹ Châu,545
+21742,Xã Mỹ Thắng,545
+30280,Phường Mỹ Bình,883
+30283,Phường Mỹ Long,883
+30285,Phường Đông Xuyên,883
+30286,Phường Mỹ Xuyên,883
+30289,Phường Bình Đức,883
+30316,Phường Châu Phú B,884
+30319,Phường Châu Phú A,884
+30322,Phường Vĩnh Mỹ,884
+30325,Phường Núi Sam,884
+30328,Phường Vĩnh Ngươn,884
+30337,Thị trấn An Phú,886
+30340,Xã Khánh An,886
+30341,Thị Trấn Long Bình,886
+30343,Xã Khánh Bình,886
+30346,Xã Quốc Thái,886
+30376,Phường Long Thạnh,887
+30377,Phường Long Hưng,887
+30378,Phường Long Châu,887
+30379,Xã Phú Lộc,887
+30382,Xã Vĩnh Xương,887
+30406,Thị trấn Phú Mỹ,888
+30409,Thị trấn Chợ Vàm,888
+30415,Xã Long Hoà,888
+30418,Xã Phú Long,888
+30421,Xã Phú Lâm,888
