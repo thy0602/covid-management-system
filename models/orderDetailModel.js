@@ -60,3 +60,14 @@ exports.getPackItemsByOrderIdAndPackId = async (order_id, pack_id) => {
         console.log("Error getPackItemsByOrderIdAndPackId: ", e);
     }
 }
+
+exports.create = async (entity) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const qStr = pgp.helpers.insert(entity, null, table) + "RETURNING *";
+    try {
+        const res = await db.one(qStr);
+        return res;
+    } catch (error) {
+        console.log('error db/create:', error);
+    }
+};
