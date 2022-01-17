@@ -4,7 +4,7 @@
         <div class="col-md-12 grid-margin">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                    <div class="row ml-2">
+                    {{!-- <div class="row ml-2">
                         {{#if isPatient}}
                         <button type="button" class="btn btn-2side left-side active-btn">Patient</button>
                         <button type="button" class="btn btn-2side right-side non-active-btn"
@@ -15,7 +15,9 @@
                         <button type="button" class="btn btn-2side right-side active-btn">Supervisor</button>
                         {{else}}
                         {{/if}}
-                    </div>
+                    </div> --}}
+                    <h2 class="font-weight-bold"
+                        style="margin-top: 0.5rem; margin-bottom: auto; margin-left: 1.5rem">Patient</h2>
                 </div>
                 <div class="col-12 col-xl-4">
                     <div class="justify-content-end d-flex">
@@ -38,9 +40,8 @@
             <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                     <div class="row">
-                        <h3 class="font-weight-bold mr-5"
-                            style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Patient</h3>
-                        <button class="btn btn-primary mr-2" onclick="location.href='./users/new';"> Add new</button>
+
+                        <button class="btn btn-primary ml-3 mr-2"> Add new</button>
                     </div>
                 </div>
                 <div class="col-12 col-xl-4">
@@ -88,11 +89,11 @@
                                 {{#each userList}}
                                 <tr>
                                     <td class="py-1">
-                                        <img src="./img/faces/face1.jpg" alt="image" />
+                                        <img src="/img/user.png" alt="image" />
                                     </td>
-                                    <td>{{name}}</td>
-                                    <td>{{address}}</td>
-                                    <td>{{current_location}}</td>
+                                    <td class="hover-cursor" onclick="location.href='/user/{{this.id}}/view';">{{name}}</td>
+                                    <td class="hover-cursor" onclick="location.href='/user/{{this.id}}/view';">{{address}}</td>
+                                    <td class="hover-cursor" onclick="location.href='/user/{{this.id}}/view';">{{current_location}}</td>
                                     <td class="font-weight-medium">
                                         <div class="badge badge-{{#ifStr current_status " F0"}}danger{{else}}{{#ifStr
                                             current_status "F1" }}warning{{else}}primary{{/ifStr}}{{/ifStr}}"
@@ -100,8 +101,8 @@
                                     </td>
                                     <td class="font-weight-medium">
                                         <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
+                                            <div class="badge badge-primary" onclick="location.href='/users/{{this.id}}/edit';"><i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger ml-2"><i class="icon-trash mx-2"></i></div>
                                         </div>
                                     </td>
                                 </tr>

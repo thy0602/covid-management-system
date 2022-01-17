@@ -24,6 +24,7 @@ app.use('/order', require('./controllers/orderController'));
 app.use('/quarantine-locations', require('./controllers/quarantineLocationsController'));
 app.use('/login', require('./controllers/loginController'));
 app.use('/order-detail', require('./controllers/orderDetailController'));
+app.use('/manage', require('./controllers/manageUserController'));
 
 app.use('/dashboard', require('./controllers/dashboardController'));
 app.use('/server-log', require('./controllers/serverLogController'));
