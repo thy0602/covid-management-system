@@ -17,6 +17,7 @@ require('./middlewares/session')(app);
 require('./middlewares/passport')(app);
 
 app.use('/account', require('./controllers/accountController'));
+app.use('/myAccount', require('./controllers/myAccountController'));
 app.use('/users', require('./controllers/userController/usersController'));
 app.use('/products', require('./controllers/productsController'));
 app.use('/packs', require('./controllers/packsController'));
