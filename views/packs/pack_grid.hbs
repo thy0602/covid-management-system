@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-12 col-xl-4">
                     {{!-- <div class="justify-content-end d-flex"> --}}
-                        <form action="/packs/search" method="POST" class="justify-content-end d-flex">
+                        <form action="/packs/search" method="POST" class="justify-content-end d-flex mb-1" id="search-form">
                             <div class="input-group">
                                 <input type="text" name="searchStr" class="form-control" id="pack-search-input" placeholder="Search"
                                 aria-label="search" aria-describedby="search">
@@ -29,7 +29,7 @@
                                         <i class="icon-search"></i>
                                     </span>
                                 </div>
-
+                                
                                 {{!-- <button type="submit" class="input-group-prepend hover-cursor" style="outline: none; border: none; padding: 0;">
                                     <span class="input-group-text" id="userlist-search">
                                         <i class="icon-search"></i>
@@ -37,6 +37,11 @@
                                 </button> --}}
                             </div>
                         </form>
+
+                        <div id="search-result" class="card px-3 card-popover" style=" width: 92%;">
+                            <h5 class="py-2 m-1">No result</h5>
+                        </div>
+
                     {{!-- </div> --}}
                 </div>
             </div>
@@ -141,19 +146,104 @@
         .pack-card:hover {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 20px;
         }
+
+        .card-popover {
+            border-radius: 5px;
+            position: absolute;
+            z-index: 30;
+            
+            /*transition: opacity 0.2s ease-in-out;*/
+            transition: height 0ms 400ms, opacity 400ms 0ms;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            /*transition: display 0.4s ease-in-out;*/
+           /* transition: visibility 0s, opacity 0.5s ease-in-out;*/
+        }
+
+        .card-popover-show {
+            /*display: inline-block;*/
+            /*visibility: visible;*/
+            opacity: 1;
+            height: auto;
+            transition: height 0ms 0ms, opacity 600ms 0ms;
+        }
+
+        .search-result-row:hover {
+            filter: brightness(0.85);
+            cursor: pointer;
+        }
     </style>
 {{/section}}
 
 
 {{#section "js"}}
     <!-- Custom js for this page-->
+
+    {{!-- User typing event --}}
     <script>
+        $('#pack-search-input').keyup(async function(e) {
+            let searchStr = $(this).val();
+            //console.log('searchStr: ', searchStr);
+
+            $.ajax({
+                url: `/packs/api/search`,
+                type: 'POST',
+                data: {
+                    searchStr
+                },
+                success: function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    if (data.length > 0) {
+                        $('#search-result').html('');
+                        let content = ``;
+                        for (const pack of data) {
+                            console.log(pack.name);
+                            content += `<h5 onclick="window.location.href='/packs/${pack.id}/view';"
+                                class="py-2 m-1 font-weight-bold search-result-row">${pack.name}</h5>`;
+                        }
+                        $('#search-result').html(content);
+                    } else {
+                        $('#search-result').html('<h5 class="py-2 m-1">No result</h5>');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            })
+        })
+
+        // User click to search box
+        $('#pack-search-input').focus(function(e) {
+            $('#search-result').addClass('card-popover-show');
+        })
+        /*$('#pack-search-input').blur(function(e) {
+            $('#search-result').removeClass('card-popover-show');
+        })*/
+
+        // User click outside of search box and search result
+        $(document).mouseup(function(e) {
+            var container = $('#pack-search-input');
+            let searchResult = $('#search-result');
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!searchResult.is(e.target) && !container.is(e.target) && container.has(e.target).length === 0) 
+            {
+                //container.hide();
+                $('#search-result').removeClass('card-popover-show');
+            }
+        });
+    </script>
+
+    <script>
+        $('#search-form').submit(function() {
+            return false;
+        });
         $('#pack-search-icon').click(async function(e) {
             let searchStr = $('#pack-search-input').val();
             console.log('searchStr: ', searchStr);
 
-            //console.log('AJAX');
-            $.ajax({
+            /*$.ajax({
                 url: `/packs/search`,
                 type: 'POST',
                 data: {
@@ -167,10 +257,13 @@
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('error: ', errorThrown);
                 }
-            });
+            });*/
+
+            return false;
         });
     </script>
 
+    {{!-- Click on delete icon event --}}
     <script>
         $('.icon-del-pack').click(function(e) {
             event.stopPropagation();
@@ -184,7 +277,7 @@
         })
     </script>
 
-   
+    {{!-- Click on modal's delete button event --}}
     <script>
         $('#btn-del-pack').click(async function (e) {
             //const btn = e.currentTarget;
