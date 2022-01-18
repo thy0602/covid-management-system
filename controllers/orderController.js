@@ -68,7 +68,8 @@ router.get("/history", async (req, res) => {
             total_price: moneyFormatter(order.total_price),
             disable: (!order.paid_at) ? '' : 'disabled',
             colorbtnpayment: (!order.paid_at) ? 'success' : 'secondary',
-            listpackage: order.list_package
+            listpackage: order.list_package,
+            is_paid: (!order.paid_at) ? 0 : 1
         }
         listorder.push(order_item);
     }

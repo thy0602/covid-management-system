@@ -8,7 +8,12 @@
                 {{!-- Đơn hàng --}}
                 {{#each listorder}}
                 <div class="card mb-3">
-                    <div class="card-body content-wrapper rounded pb-1">
+                    {{#if is_paid}}
+                        <div class="card-body content-wrapper rounded pb-1" >
+                    {{else}}
+                    <div class="card-body rounded pb-1 hover-cursor-unpaid" name="order-card" 
+                        id="order-{{order_id}}" onclick="clickOrder(this, this.id)">
+                    {{/if}}
                         <div class="row">
                             <div class="h5 col-2" id="id">ID: {{order_id}}</div>
                             <div class="h5 col-5 py-0" id="time">Order At: {{ordered_at}}</div>
@@ -36,13 +41,13 @@
                                 {{/each}}
                                 {{!-- package --}}
                             </div>
-                            <div class="col-5">
-                                <div class="text-right mr-3">
+                            <div class="col-5 d-flex align-items-end">
+                                <div class="text-right my-3">
                                     <div id="total" class="font-weight-bold">Total: {{total_price}} VND</div>
-                                    <button type="button" class="font-weight-bold mt-3 btn btn-{{colorbtnpayment}}"
+                                    <!--<button type="button" class="font-weight-bold mt-3 btn btn-{{colorbtnpayment}}"
                                         {{disable}}>
                                         THANH TOÁN
-                                    </button>
+                                    </button>-->
                                 </div>
                             </div>
                         </div>
@@ -52,7 +57,7 @@
             </div>
         </div>
     </div>
-    <div class="card col-5 mx-auto">
+    <div class="card col-5 mx-auto d-flex">
         <div class="h3 card-header bg-white">
             Package Detail
         </div>
@@ -80,7 +85,14 @@
                 </tbody>
             </table>
         </div>
-
+        <div class="row align-self-end mt-auto">
+            <button type="button" class="font-weight-bold mt-3 btn btn-warning my-4">
+                TOP UP
+            </button>
+            <button type="button" class="font-weight-bold mt-3 btn btn-success my-4 mx-2">
+                MAKE PAYMENT
+            </button>
+        </div>
     </div>
 </div>
 
@@ -129,5 +141,19 @@
         }
         $("#products-body").append(body);
     }
+
+    function clickOrder(obj, id) {
+        /*let list = id.split('-');
+        console.log(list[1]);
+        console.log(id);*/
+        $(obj).toggleClass("clicked-unpaid");
+        /*$('div[name="order-card"]').each(function(index, div_element) {
+            console.log("index:", index);
+            console.log("value:", div_element);
+            console.log("value:", $(div_element).attr("id"));
+        });*/
+    }
+    
+    
 </script>
 {{/section}}
