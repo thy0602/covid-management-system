@@ -51,14 +51,16 @@ router.post('/store', async (req, res) => {
 });
 
 router.get('/new', async (req, res) => {
-    let user = await userModel.getAllUserOrderBy("username", true);
-    console.log(user);
+    let user = await userModel.getAllRoleOrderBy(req.query.role);
     if (user.length != 0) {
         user = user[user.length - 1].username;
         const regex = /[^\D0]+/g;
-        user = user.slice(0, user.search(regex)) + (parseInt(user.slice(3)) + 1);
+        user = user.slice(0, user.search(regex) - 1) + (parseInt(user.slice(3)) + 1);
     } else {
-        user = 'ID_001';
+        if (req.query.role == 'user')
+            user = 'ID_001';
+        else
+            user = 'M_001';
     }
 
     let province_list = await addressModel.getAll('province');
@@ -101,7 +103,13 @@ router.post('/new', async (req, res) => {
         ward: req.body.ward
     }
     const user = await userModel.create(entity);
-    if (user) {
+    const acc = await accountModel.create({
+        username: req.body.username,
+        role: 'user',
+        is_deleted: false,
+        is_locked: false
+    })
+    if (user && acc) {
         return res.redirect('./');
     }
     res.send({ error: "Can't create user!" });

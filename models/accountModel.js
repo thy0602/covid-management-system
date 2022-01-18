@@ -71,6 +71,6 @@ exports.create = async (entity) => {
         const res = await db.one(qStr);
         return res;
     } catch (error) {
-        console.log('error db/create:', error);
+        console.log('error db/acc_create:', error);
     }
 };
