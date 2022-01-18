@@ -117,5 +117,23 @@ router.get('/', async (req, res) => {
     });
 });
 
+router.post('/create', async (req,res)=>{
+    // if (!req.cookies.user)
+    //     res.redirect('/acount/login-id');
+
+    // const user = await userModel.getByUsername(req.cookies.user);
+    // console.log(req.cookies.user);
+
+    const order = await orderModel.create({
+        id: 5,
+        user_id: 1,
+        ordered_at: Date.now(),
+        paid_at: null,
+        total_price: 120000
+    });
+    res.send(order);
+    console.log(req.body);
+});
+
 
 module.exports = router;
