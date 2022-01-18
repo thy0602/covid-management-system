@@ -65,6 +65,19 @@ router.use("/:id", async function (req, res, next) {
   }
 });
 
+router.delete("/:id", async function (req, res, next) {
+  try {
+    const response = await productModel.update({id: req.params.id, is_deleted: true});
+    console.log(response);
+    if (typeof response === "undefined")
+      res.status(500).send("Internal server error");
+
+    res.status(200).send(response);
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
 router.get("/:id/view", async (req, res) => {
   const product = req.product;
   const image = await productImageModel.getImagesByProductId(req.params.id);
