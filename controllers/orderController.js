@@ -8,6 +8,7 @@ const orderDetailModel = require("../models/orderDetailModel");
 const userModel = require('../models/userModel');
 const datetimeFormatter = require('../utils/datetimeFormatter');
 const { moneyFormatter } = require('../utils/moneyFormatter');
+const verify = require('../middlewares/verify').verify;
 
 function preprocess(order) {
     return {
@@ -24,6 +25,13 @@ function preprocess(order) {
         ]
     }
 }
+
+router.use('/', (req, res, next) => {
+    if (verify(req, 'user'))
+        next();
+    else
+        return res.redirect('/');
+});
 
 router.get("/history", async (req, res) => {
     if (!req.cookies.user)
