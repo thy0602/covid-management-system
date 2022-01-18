@@ -48,6 +48,8 @@ router.post("/new", async (req, res) => {
 // Render UI for editing a pack
 router.get("/:packId/edit", async (req, res) => {
     const packId = req.params.packId;
+    const returnTo = req.query['return-to'];
+    console.log("get /packs/:id/edit returnTo: ", returnTo);
 
     try {
         // get all products in this pack
@@ -80,6 +82,7 @@ router.get("/:packId/edit", async (req, res) => {
             packDetail,
             productsInPack,
             productsNotInPack,
+            returnTo
         });
     } catch (error) {
         console.log("Error get /packs/:packId/edit: ", error);
@@ -191,6 +194,39 @@ router.post('/search/:packId', async (req, res) => {
 
 });
 
+// Get detail of a pack
+router.get("/:packId/view", async (req, res) => {
+    const packId = req.params.packId;
+
+    try {
+        let packDetail = await packModel.getByPackId(packId);
+        let productsInPack = await pack_itemsModel.getAllProductByPackId(
+            packId
+        );
+
+        for (const product of productsInPack) {
+            let productImages = await productImageModel.getImagesByProductId(
+                product.id
+            );
+            // console.log('get /packlist productImages:', productImages);
+            product["images"] = productImages.reduce((allUrls, productImage) => {
+                allUrls.push(productImage.url);
+                return allUrls;
+            }, []);
+        }
+
+        res.render("packs/pack_detail", {
+            isPackage: 1,
+            packDetail,
+            productsInPack,
+        });
+
+    } catch (error) {
+        console.log("Error get /packs/:packId/view: ", error);
+        res.status(404).send(error);
+    }
+});
+
 // get products list of pack by packId (json)
 router.get("/:packId", async (req, res) => {
     const packId = req.params.packId;
@@ -257,38 +293,54 @@ router.get("/:packId", async (req, res) => {
 // Get list of all packs
 router.get("/", async (req, res) => {
     let packId = req.query['show-detail'];
+    const orderBy = req.query["order-by"];
+    let allPacks;
 
     try {
-        let allPack = await packModel.getAll();
-        // console.log('get /packlist allPack:', allPack);
+        switch (orderBy) {
+            case "name-ascending":
+                allPacks = await packModel.getAllOrderBy('name', true)
+                break;
+
+            case "name-descending":
+                allPacks = await packModel.getAllOrderBy('name', false);
+                break;
+
+            default:
+                allPacks = await packModel.getAll();
+                break;
+        }
+
+        //allPacks = await packModel.getAll();
+        console.log('get /packlist allPack:', allPacks);
         if (!packId) {
-            packId = allPack[0].id;
+            packId = allPacks[0].id;
         }
 
-        let packDetail = await packModel.getByPackId(packId);
-        let productsInPack = await pack_itemsModel.getAllProductByPackId(
-            packId
-        );
+        // let packDetail = await packModel.getByPackId(packId);
+        // let productsInPack = await pack_itemsModel.getAllProductByPackId(
+        //     packId
+        // );
 
-        for (const product of productsInPack) {
-            let productImages = await productImageModel.getImagesByProductId(
-                product.id
-            );
-            // console.log('get /packlist productImages:', productImages);
-            product["images"] = productImages.reduce((allUrls, productImage) => {
-                allUrls.push(productImage.url);
-                return allUrls;
-            }, []);
-        }
+        // for (const product of productsInPack) {
+        //     let productImages = await productImageModel.getImagesByProductId(
+        //         product.id
+        //     );
+        //     // console.log('get /packlist productImages:', productImages);
+        //     product["images"] = productImages.reduce((allUrls, productImage) => {
+        //         allUrls.push(productImage.url);
+        //         return allUrls;
+        //     }, []);
+        // }
         
-        console.log('get /packlist packDetail:', packDetail);
-        console.log('get /packlist productsInPack:', productsInPack);
+        // console.log('get /packlist packDetail:', packDetail);
+        //console.log('get /packlist productsInPack:', productsInPack);
 
-        res.render("packs/pack_list", {
+        res.render("packs/pack_grid", {
             isPackage: 1,
-            packs: allPack,
-            packDetail,
-            productsInPack,
+            packs: allPacks,
+            // packDetail,
+            // productsInPack,
         });
     } catch (error) {
         console.log("Error get /packs: ", error);

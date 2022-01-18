@@ -32,6 +32,27 @@ exports.getAll = async (includeDeletedPack=false) => {
     }
 }
 
+exports.getAllOrderBy = async (orderBy, ascending=true, includeDeletedPack=false) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    let queryStr = '';
+    const sortOption = ascending ? 'ASC' : 'DESC';
+
+    if (!includeDeletedPack) {
+        queryStr = pgp.as.format(`SELECT * FROM $1 WHERE "${tableFields.is_deleted}"='False'
+                    ORDER BY ${orderBy} ${sortOption};`, table);
+    } else {
+        queryStr = pgp.as.format(`SELECT * FROM $1 ORDER BY ${orderBy} ${sortOption};`, table)
+    }
+    
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error packModel/getAll: ", e);
+        throw e;
+    }
+}
+
 exports.getByPackId = async (packId, includeDeletedPack=false) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     let queryStr = '';
