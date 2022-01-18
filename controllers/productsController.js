@@ -2,10 +2,17 @@ const express = require("express");
 const router = express.Router();
 const productModel = require("../models/productModel");
 const productImageModel = require("../models/productImageModel");
+const verify = require("../middlewares/verify").verify;
 
 const multer = require("../middlewares/multer");
 const fs = require("fs");
 
+router.use('/', (req, res, next) => {
+  if (!verify(req, 'user'))
+    next();
+  else
+    return res.redirect('/');
+});
 router.get("/", async function (req, res) {
   const orderBy = req.query["order-by"];
   let productList;
@@ -43,7 +50,7 @@ router.get("/new", async (req, res) => {
     const product = await productModel.getById(id);
     if (typeof product === "undefined")
       return res.redirect('/products/new');
-    
+
     return res.render("products/product_new", {
       product,
       isSubmitProduct: true

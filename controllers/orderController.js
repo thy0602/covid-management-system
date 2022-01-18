@@ -7,6 +7,7 @@ const orderModel = require('../models/orderModel');
 const userModel = require('../models/userModel');
 const datetimeFormatter = require('../utils/datetimeFormatter');
 const { moneyFormatter } = require('../utils/moneyFormatter');
+const verify = require('../middlewares/verify').verify;
 
 function preprocess(order) {
     return {
@@ -24,6 +25,13 @@ function preprocess(order) {
     }
 }
 
+router.use('/', (req, res, next) => {
+    if (verify(req, 'user'))
+        next();
+    else
+        return res.redirect('/');
+});
+
 router.get("/history", async (req, res) => {
     if (!req.cookies.user)
         res.redirect('/acount/login-id');
@@ -35,11 +43,11 @@ router.get("/history", async (req, res) => {
     if (orders.length > 0) {
         processed_orders.push(preprocess(orders[0]));
     }
-    
+
     for (let i = 1; i < orders.length; i++) {
         if (orders[i].order_id == processed_orders[processed_orders.length - 1].order_id) {
             processed_orders[processed_orders.length - 1].list_package.push({
-                pack_id: orders[i].pack_id, 
+                pack_id: orders[i].pack_id,
                 name: orders[i].name
             });
             continue;
@@ -117,7 +125,7 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.post('/create', async (req,res)=>{
+router.post('/create', async (req, res) => {
     // if (!req.cookies.user)
     //     res.redirect('/acount/login-id');
 
