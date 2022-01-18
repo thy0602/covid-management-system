@@ -6,7 +6,7 @@ exports.verify = (req, role) => {
         return true;
     if (role == 'admin' && req.cookies.user.search('admin') != -1)
         return true;
-    if (role == 'manager' && req.cookies.user.search('manager') != -1)
+    if (role == 'manager' && req.cookies.user.search('M_') != -1)
         return true;
     return false;
 }
