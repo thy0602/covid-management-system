@@ -116,7 +116,8 @@ CREATE TABLE "quarantine_location" (
 	"id" serial PRIMARY KEY,
 	"name" varchar(100) NOT NULL,
 	"capacity" int NOT NULL,
-	"occupancy" int NOT NULL
+	"occupancy" int NOT NULL,
+	"is_deleted" boolean NOT NULL DEFAULT false
 );
 
 -- -----------------------------
