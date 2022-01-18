@@ -90,7 +90,7 @@
                                 <div class="mb-4 stretch-card transparent">
                                     <div class="card card-light-blue" style="border-radius: 5px;">
                                         <div class="card-body" style="padding: 0.5rem;">
-                                            <p class="mb-0" style="font-size: 1rem;" id="packNameCart">
+                                            <p class="mb-0" style="font-size: 1rem;" id="packNameCart" data-pack-id="{{packDetail.id}}" data-pack-name="{{packDetail.name}}">
                                                 {{packDetail.name}}
                                             </p>
                                         </div>
@@ -99,7 +99,8 @@
                                 <div class="mb-4 ml-2 stretch-card transparent">
                                     <div class="card card-light-blue" style="border-radius: 5px;">
                                         <div class="card-body" style="padding: 0.5rem;">
-                                            <p class="mb-0" style="font-size: 1rem;">Giới hạn mua: {{packDetail.quantity_limit}} lần/{{packDetail.time_limit_unit}}</p>
+                                            <p class="mb-0" style="font-size: 1rem;">Giới hạn mua:
+                                                {{packDetail.quantity_limit}} lần/{{packDetail.time_limit_unit}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +108,8 @@
                         </div>
                         <div class="col-12 col-xl-3" style="margin-top: -1rem;">
                             <div class="justify-content-end d-flex">
-                                <button type="button" class="btn btn-success addToCart" onclick="addToCart()">Add to Cart</button>
+                                <button type="button" class="btn btn-success addToCart" onclick="addToCart()">Add to
+                                    Cart</button>
                             </div>
                         </div>
                     </div>
@@ -124,14 +126,14 @@
                             </thead>
                             <tbody>
                                 {{#each productsInPack}}
-                                <tr>
+                                <tr data-product-id="{{this.id}}">
                                     <td class="py-1">
                                         <img src="/{{this.images.[0]}}" style="width:180px; height:180px" alt="image" />
                                         {{!-- <img src="/img/image 7.png" style="width:180px; height:180px"
                                             alt="image" /> --}}
                                     </td>
                                     <td id="nameProduct">{{this.name}}</td>
-                                    <td>{{this.price}}</td>
+                                    <td id="price">{{this.price}}</td>
                                     <td>{{this.unit}}</td>
                                     <td><input type="number" value="{{this.quantity_limit}}"
                                             style="text-align: center; max-width: 4rem; margin-left: 0.75rem"
@@ -169,7 +171,6 @@
 
 <script type="text/javascript">
     var cartList = JSON.parse(localStorage.getItem("cartList"));
-    localStorage.setItem("cartList", JSON.stringify(cartList));
 
     $(document).ready(function () {
         window.pulse_continue_loop = true;
@@ -178,16 +179,16 @@
         localStorage.setItem("cartList", JSON.stringify(cartList));
         showCart();
 
-       $("#cartTable").on('click','.deleteOrder',function(){
-         // get the current row
-        var currentRow=$(this).closest("tr").index(); 
-        var list = JSON.parse(localStorage.getItem("cartList"));
-        list.splice(currentRow,1);
-        localStorage.setItem("cartList", JSON.stringify(list));
-        showCart();
+        $("#cartTable").on('click', '.deleteOrder', function () {
+            // get the current row
+            var currentRow = $(this).closest("tr").index();
+            var list = JSON.parse(localStorage.getItem("cartList"));
+            list.splice(currentRow, 1);
+            localStorage.setItem("cartList", JSON.stringify(list));
+            showCart();
         });
 
-        $('#checkOut').on('click', function(){
+        $('#checkOut').on('click', function () {
             checkOut();
         });
     })
@@ -215,67 +216,69 @@
     }
 
     function addToCart() {
-        const packName = $("#packNameCart").text();
+        const packName = $("#packNameCart").data('pack-name');
+        const packID = $("#packNameCart").data('pack-id');
         var list = JSON.parse(localStorage.getItem("cartList"));
         let exist = 0;
-        for(var i = 0; i < list.length; i++){
-            if(list[i].name == packName){
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].name == packName) {
                 exist = 1;
             }
         }
         console.log(exist);
-        if (exist){
+        if (exist) {
             alert("You cannot buy the same product package in the same order");
         }
-        else{
+        else {
             var aData = [];
             $("#orderTable tbody tr").each(function () {
                 var currentRow = $(this);
                 var nameProduct = currentRow.find("td:eq(1)").text();
                 var quantity = currentRow.find("#quantityProduct").val();
+                var price = currentRow.find("#price").text();
+                let productId = currentRow.data('product-id');
 
                 var obj = {};
                 obj.nameProduct = nameProduct;
                 obj.quantity = quantity;
+                obj.boughtPrice = quantity*price
+                obj.productId = productId;
                 aData.push(obj);
             });
-                var objOrder = {};
-                objOrder.name = packName;
-                objOrder.productList = aData;
-                list.push(objOrder);
-                localStorage.setItem("cartList", JSON.stringify(list));     
+            var objOrder = {};
+            objOrder.name = packName;
+            objOrder.id = packID;
+            objOrder.productList = aData;
+            list.push(objOrder);
+            localStorage.setItem("cartList", JSON.stringify(list));
         }
         $("#listCart").empty();
         showCart();
     }
 
-
-    function checkOut() {
+    async function onclickCheckOut() {
         var list = JSON.parse(localStorage.getItem("cartList"));
-        /*list = [];
+
+        $.ajax({
+            url: `/order/create`,
+            type: 'POST',
+            data: {
+                list
+            },
+            success: async function (data, textStatus, jqXHR) {
+                console.log('success: ', data);
+                window.location.href = `/order/history`;
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('error: ', errorThrown);
+            }
+        });
+
+        list = [];
         localStorage.setItem("cartList", JSON.stringify(list));
-        $("#listCart").empty();*/
-
-        /*const id=$("#id").val(), username = $('#username').val(), name = $('#name').val(), 
-            year_of_birth = $('#year_of_birth').val(), address = $('#address').val(),
-            max_basket = $('#max_basket').val(), basket_timelimit = $('#basket_timelimit').val(),
-            current_location = $('#current_location').val(), current_status = $('#current_status').val();*/
-
-       var jqxhr = $.post(`/order/create`,list, function() {
-
-        })
-          .done(function() {
-            alert( "Edit success" );
-          })
-          .fail(function(err) {
-            alert( "Error: Can not order");
-          })
-          // Set another completion function for the request above
-          jqxhr.always(function() {
-            $(location).attr("href",$(location).attr("href"));
-          });
-        
     }
+
+    $('#checkOut').click(onclickCheckOut);
 
 </script>
 

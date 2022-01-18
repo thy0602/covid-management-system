@@ -62,12 +62,13 @@ exports.getPackItemsByOrderIdAndPackId = async (order_id, pack_id) => {
 }
 
 exports.create = async (entity) => {
-    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const qStr = pgp.helpers.insert(entity, null, table) + "RETURNING *";
+    const table = new pgp.helpers.TableName({table: tableName, schema: schema});
+    const queryStr = pgp.helpers.insert(entity, Object.values(tableFields), table) + ' RETURNING *';
     try {
-        const res = await db.one(qStr);
+        const res = await db.any(queryStr);
         return res;
     } catch (error) {
-        console.log('error db/create:', error);
+        console.log('Error pack_itemsModel/add: ', error);
+        throw error;
     }
-};
+}
