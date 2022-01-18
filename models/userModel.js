@@ -84,6 +84,20 @@ exports.getAllUserOrderBy = async (orderBy, ascending = true) => {
     }
 }
 
+exports.getAllUserWithLockedOrderBy = async (orderBy, ascending = true) => {
+    const sortOption = ascending ? 'ASC' : 'DESC';
+    const queryStr = pgp.as.format(`SELECT * FROM "user" p, "account" a
+    WHERE a.username = p.username ORDER BY ${orderBy} ${sortOption};`)
+
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error getAllUserOrderBy: ", e);
+        // throw e;
+    }
+}
+
 exports.getAllRoleOrderBy = async (role) => {
     const queryStr = pgp.as.format(`SELECT p.username FROM "user" p, "account" a
                                     WHERE a.role = '${role}' and a.username = p.username ORDER BY p.username ASC;`)

@@ -4,6 +4,7 @@ const packModel = require('../models/packModel');
 const pack_itemsModel = require('../models/pack_itemsModel');
 const productImageModel = require('../models/productImageModel');
 const orderModel = require('../models/orderModel');
+const orderDetailModel = require("../models/orderDetailModel");
 const userModel = require('../models/userModel');
 const datetimeFormatter = require('../utils/datetimeFormatter');
 const { moneyFormatter } = require('../utils/moneyFormatter');
@@ -126,21 +127,50 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
-    // if (!req.cookies.user)
-    //     res.redirect('/acount/login-id');
+    if (!req.cookies.user)
+        res.redirect('/acount/login-id');
 
-    // const user = await userModel.getByUsername(req.cookies.user);
-    // console.log(req.cookies.user);
+    const user = await userModel.getByUsername(req.cookies.user);
 
-    const order = await orderModel.create({
-        id: 5,
-        user_id: 1,
-        ordered_at: Date.now(),
+    let list = req.body.list;
+    let totalPrice = 0;
+    for (const order_pack of list) {
+        for (const order_detail of order_pack.productList) {
+            totalPrice += parseInt(order_detail.boughtPrice);
+        }
+    }
+    // console.log("Total Price is: ", totalPrice);
+    let order = {
+        user_id: user.id,
         paid_at: null,
-        total_price: 120000
-    });
-    res.send(order);
-    console.log(req.body);
+        total_price: totalPrice
+    }
+    let orderDetailList = [];
+
+    try {
+        let result = await orderModel.create(order);
+
+        for (const order_pack of list) {
+            for (const order_detail of order_pack.productList) {
+                orderDetailList.push({
+                    'order_id': result.id,
+                    'pack_id': order_pack.id,
+                    'product_id': order_detail.productId,
+                    'quantity': order_detail.quantity,
+                    'bought_price': order_detail.boughtPrice
+                });
+            }
+        }
+
+        // console.log("Order Detail List is: ", orderDetailList);
+
+        result = await orderDetailModel.create(orderDetailList);
+        // console.log("post /packs/:packId/edit insert pack_items result: ", result);
+        res.json(result);
+    } catch (error) {
+        console.log("Error post /packs/new: ", error);
+        res.status(400).send(error);
+    }
 });
 
 
