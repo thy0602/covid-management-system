@@ -7,7 +7,7 @@ const addressModel = require('../../models/addressModel');
 const verify = require('../../middlewares/verify').verify;
 
 router.use('/', (req, res, next) => {
-    if (verify(req, 'admin')||verify(req,'manager'))
+    if (verify(req, 'admin') || verify(req, 'manager'))
         next();
     else
         return res.redirect('/');
@@ -55,7 +55,10 @@ router.get('/new', async (req, res) => {
     if (user.length != 0) {
         user = user[user.length - 1].username;
         const regex = /[^\D0]+/g;
-        user = user.slice(0, user.search(regex) - 1) + (parseInt(user.slice(3)) + 1);
+        let i = 0;
+        if (parseInt(user.slice(3)) + 1 > 9)
+            i = -1
+        user = user.slice(0, user.search(regex) + i) + (parseInt(user.slice(3)) + 1);
     } else {
         if (req.query.role == 'user')
             user = 'ID_001';
@@ -67,7 +70,8 @@ router.get('/new', async (req, res) => {
 
     return res.render("users/user_form", {
         province: province_list,
-        username: user
+        username: user,
+        rolename: req.query.role
     });
 })
 
@@ -82,12 +86,6 @@ router.get('/getRegion', async (req, res) => {
 
 router.post('/new', async (req, res) => {
 
-    console.log(req.body);
-    const accuser = await accountModel.create({
-        username: req.body.username,
-        role: 'user',
-        is_deleted: false
-    });
     const entity = {
         name: req.body.name,
         username: req.body.username,
@@ -102,13 +100,13 @@ router.post('/new', async (req, res) => {
         district: req.body.district,
         ward: req.body.ward
     }
-    const user = await userModel.create(entity);
     const acc = await accountModel.create({
         username: req.body.username,
-        role: 'user',
+        role: req.body.username.search('ID_') != -1 ? 'user' : 'manager',
         is_deleted: false,
         is_locked: false
     })
+    const user = await userModel.create(entity);
     if (user && acc) {
         return res.redirect('./');
     }

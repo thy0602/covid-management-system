@@ -1,8 +1,19 @@
 <div class="content-wrapper">
-    <div class="col-12 justify-content-end d-flex">
-        <button id="cancelform" class="btn btn-danger mr-2 btn-sm" onclick="location.href='./user';">Cancel</button>
+    <div class="row">
+        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+            <h2 class="font-weight-bold" style="margin-top: 0.5rem; margin-bottom: auto; margin-left: 1.5rem">Create
+                {{rolename}}
+            </h2>
+        </div>
+        <div class="col-12 col-xl-3 justify-content-end d-flex">
+            <button id="cancelform" class="btn btn-danger mr-2 btn-sm" onclick="location.href='./user';"
+                style="height: 30px;">Cancel</button>
+        </div>
     </div>
-    <form class="col-10 mx-auto py-3 font-weight-bold bg-white" action="./new" method="post"
+    {{!-- <div class="col-12 justify-content-end d-flex">
+        <button id="cancelform" class="btn btn-danger mr-2 btn-sm" onclick="location.href='./user';">Cancel</button>
+    </div> --}}
+    <form class="col-10 mx-auto py-3 mt-2 font-weight-bold bg-white" action="./new" method="post"
         style="border-radius: 40px;">
         <div class="form-row mt-5">
             <div class="form-group col-md-6 row mx-auto">
