@@ -15,7 +15,8 @@ const tableFields = {
 
 // https://ubiq.co/database-blog/how-to-get-first-row-per-group-in-postgresql/
 exports.getProductList = async () => {
-    const queryStr = pgp.as.format(`SELECT * FROM "product" p
+    const queryStr = pgp.as.format(`SELECT * FROM 
+                                (SELECT * FROM "product" WHERE "is_deleted" IS FALSE)
                                 LEFT JOIN (SELECT * FROM (
                                     SELECT *,
                                     row_number() over (partition by "product_id") 
@@ -32,7 +33,8 @@ exports.getProductList = async () => {
 
 exports.getAllProductOrderBy = async (orderBy, ascending=true) => {
   const sortOption = ascending ? 'ASC' : 'DESC';
-  const queryStr = pgp.as.format(`SELECT * FROM "product" p
+  const queryStr = pgp.as.format(`SELECT * FROM
+                                (SELECT * FROM "product" WHERE "is_deleted" IS FALSE) p
                                 LEFT JOIN (SELECT * FROM (
                                     SELECT *,
                                     row_number() over (partition by "product_id") 
@@ -51,10 +53,11 @@ exports.getAllProductOrderBy = async (orderBy, ascending=true) => {
 
 exports.getById = async (id) => {
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.id} = '${id}'`, table);
+    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE ${tableFields.id} = '${id}' 
+                                    AND ${tableFields.is_deleted} IS FALSE;`, table);
     try {
-        const res = await db.one(queryStr);
-        return res;
+        const res = await db.any(queryStr);
+        return res[0];
     } catch (e) {
         console.log("Error db/load product/id:", e);
     }
@@ -97,8 +100,13 @@ var csGeneric = new pgp.helpers.ColumnSet([
 
 exports.update = async (entity) => {
   const queryStr = pgp.helpers.update(entity, csGeneric) + ` WHERE ${tableFields.id} = ${entity.id} RETURNING *`;
-  const res = await db.one(queryStr);
-  return res;
+
+  try {
+    const res = await db.one(queryStr);
+    return res;
+  } catch (e) {
+    console.log("Error db/update", e.message);
+  }
 }
 
 exports.create = async (entity) => {
