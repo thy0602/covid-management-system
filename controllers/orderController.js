@@ -78,6 +78,15 @@ router.get("/history", async (req, res) => {
     })
 });
 
+router.post('/total_price', async (req, res) => {
+    const ids = req.body.ids;
+    if (typeof ids === 'undefined')
+        res.status(200).send({ amount: 0 });
+    console.log("IDS: ", ids);
+    const response = await orderModel.getTotalPriceByIds(ids);
+    res.status(200).send({ amount: response });
+});
+
 // get products list of pack by packId
 router.get('/:packId', async (req, res) => {
     const packId = req.params.packId;

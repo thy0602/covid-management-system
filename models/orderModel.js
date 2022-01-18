@@ -74,3 +74,17 @@ exports.create = async (entity) => {
         throw error;
     }
 }
+
+exports.getTotalPriceByIds = async (ids) => {
+    if (ids.length <= 0)
+        return 0;
+    const queryStr = pgp.as.format('SELECT SUM("total_price") FROM "order" WHERE "id" IN ($1:csv)', [ids]);
+
+    try {
+        const res = await db.one(queryStr);
+        return res.sum;
+    } catch (error) {
+        console.log('Error orderModel/getTotalOrderByIds: ', error);
+        throw error;
+    }
+}

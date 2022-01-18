@@ -89,17 +89,58 @@
             <button type="button" class="font-weight-bold mt-3 btn btn-warning my-4">
                 TOP UP
             </button>
-            <button type="button" class="font-weight-bold mt-3 btn btn-success my-4 mx-2">
+            <button type="button" class="font-weight-bold mt-3 btn btn-success my-4 mx-2" onclick="showModalPay(this.id)">
                 MAKE PAYMENT
             </button>
         </div>
+        <div class="modal fade" id="modal-payment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-pack-name">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Enter your password</label>
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        {{!-- <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" onclick="onclickDelete(id)">Delete</button> --}}
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="onClickPay()">Make payment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+  <div id="toast" class="toast" style="position: absolute; top: 0; right: 0; width: 300px; height: 100px; background-color: #dbd9fc">
+    <div class="toast-header">
+    <strong class="mr-auto">Notification</strong>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body" id="toast-body">
+    Hello, world! This is a toast message.
+  </div>
+  </div>
+</div>
 </div>
 
 {{#section "js"}}
 <!-- Custom js for this page-->
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
     $("#products-body").empty();
@@ -143,17 +184,96 @@
     }
 
     function clickOrder(obj, id) {
-        /*let list = id.split('-');
-        console.log(list[1]);
-        console.log(id);*/
         $(obj).toggleClass("clicked-unpaid");
-        /*$('div[name="order-card"]').each(function(index, div_element) {
-            console.log("index:", index);
-            console.log("value:", div_element);
-            console.log("value:", $(div_element).attr("id"));
-        });*/
+    }
+
+    function showModalPay(id) {
+        $(`#modal-payment`).modal('show');
+    }
+
+    function toastNow(msg) {
+        $("#toast-body").text(msg);
+        $("#toast").toast({ delay: 4000 });
+        $("#toast").toast('show');
     }
     
-    
+    async function onClickPay() {
+        let is_authorized = false;
+        let username, amount, err;
+        await $.ajax({
+            url: "/api/authenticate",
+            type: 'POST',
+            data: {
+                password: $("#password").val()
+            },
+            success: async function (response, status) {
+                const res = await response;
+                is_authorized = res.data.is_authorized;
+                username = res.data.username;
+            }
+        });
+        if (!is_authorized) {
+            toastNow("Wrong password!");
+            return;
+        }
+
+        let order_ids = [];
+        $('div[name="order-card"]').each(function(index, div_element) {
+            const div_id = $(div_element).attr("id");
+            const id = div_id.split('-')[1];
+            //console.log(id);
+            if ($(div_element).hasClass("clicked-unpaid"))
+                order_ids.push(id);
+        });
+        console.log("ids:", order_ids);
+        if (order_ids.length == 0) {
+            toastNow("Please choose at least an order to make payment");
+            return;
+        }
+
+        await $.ajax({
+            url: "/order/total_price",
+            type: 'POST',
+            data: {
+                ids: order_ids
+            },
+            success: async function (response, status) {
+                const res = await response;
+                amount = res.amount;
+                console.log("amount: ", amount);
+            },
+        });
+
+        /*await $.ajax({
+            url: "http://localhost:3000/api/transaction",
+            type: 'POST',
+            data: {
+                username: username,
+                ids: order_ids,
+                amount: amount
+            },
+            success: async function (response, status) {
+                const res = await response;
+                toastNow("Make payment successfully          Please reload to see result! :)");
+                console.log(res);
+            },
+            error: async function (xhr, status, message) {
+                toastNow(message);
+                console.log("Error: ", message);
+            }
+        });*/
+
+        axios.post('http://localhost:3000/api/transaction', {
+            username: username,
+            ids: order_ids,
+            amount: amount
+        })
+        .then((response) => {
+            console.log(response);
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
 </script>
 {{/section}}
