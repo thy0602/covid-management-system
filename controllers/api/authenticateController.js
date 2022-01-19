@@ -20,4 +20,10 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/', (req, res) => {
+    if (!req.cookies.user)
+        return res.redirect('/account/login-id');
+    return res.status(200).send({ username: req.cookies.user });
+})
+
 module.exports = router;

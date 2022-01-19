@@ -58,6 +58,25 @@
   <script src="/js/todolist.js"></script>
   <!-- endinject -->
 
+<script>
+  async function loadPage() {
+    await $.ajax({
+      url: `/api/authenticate`,
+      type: 'GET',
+      success: async function (response, status) {
+          const res = await response;
+          const username = res.username;
+          console.log("USERNAME: ", username);
+          $("#username").text(username);
+      }
+    });
+  };
+  
+
+  $().ready(() => {
+      loadPage();
+  });
+</script>
   
   {{{_sections.js}}}
 </html>
