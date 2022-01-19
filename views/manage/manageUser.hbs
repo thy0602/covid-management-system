@@ -1,3 +1,7 @@
+{{#section "css"}}
+    <link rel="stylesheet" href="/css/animationmsg.css">
+{{/section}}
+
 <div class="content-wrapper">
     <div class="col-12 grid-margin">
         <div class="row">
@@ -5,10 +9,11 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Minimum Limit</h4>
-                        <form class="form-inline" action='' method='post'>
+                        <form class="form-inline" action='/manage/setlimit' method='post'>
                             <label class="sr-only" for="inlineFormInputName2">Name</label>
                             <div class="input-group" style="margin: 20px 20px; width: calc(100% - 40px)">
-                                <input type="number" class="form-control" name="minium_limit" value="100000" style="border: 1px solid #4B49AC">
+                                <input type="number" class="form-control" name="minium_limit" value="{{minium_limit}}"
+                                    style="border: 1px solid #4B49AC">
                                 <div class="input-group-append">
                                     <span class="input-group-text">VND</span>
                                 </div>
@@ -16,6 +21,9 @@
                             <div
                                 style="width: 140px; margin-left: calc((100% - 140px)/2); margin-bottom: 10px; margin-top: 10px">
                                 <button id="checkOut" type="submit" class="btn btn-success">Save Change</button>
+                            </div>
+                            <div class="mx-auto mt-0">
+                                {{>(msg)}}
                             </div>
                         </form>
                     </div>
