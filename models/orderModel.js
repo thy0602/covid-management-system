@@ -88,3 +88,38 @@ exports.getTotalPriceByIds = async (ids) => {
         throw error;
     }
 }
+
+exports.getUnpaidTotalPrice = async (user_id) => {
+    const queryStr = pgp.as.format(`SELECT SUM("total_price") FROM "order" 
+                                    WHERE "user_id" = ${user_id} AND "paid_at" is NULL`);
+
+    try {
+        const res = await db.one(queryStr);
+        return res.sum;
+    } catch (error) {
+        console.log('Error orderModel/getTotalOrderByIds: ', error);
+        throw error;
+    }
+}
+
+exports.markPaid = async (ids) => {
+    try {
+        const time = new Date().toISOString();
+            const updateData = ids.map((id) => { 
+            return { id: id, paid_at: time } 
+        });
+
+        // declare your ColumnSet once, and then reuse it:
+        const cs = new pgp.helpers.ColumnSet(['?id', {name: 'paid_at', mod: ':raw', init: ()=> 'NOW()'}],
+                                             {table: tableName});
+        
+        // // generating the update query where it is needed:
+        const update = pgp.helpers.update(updateData, cs) + ' WHERE v.id = t.id RETURNING *';
+        
+        const res = await db.any(update);
+        return res;
+    } catch (error) {
+        console.log('Error orderModel/markPaid: ', error);
+       
+    }
+}

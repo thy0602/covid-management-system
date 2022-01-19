@@ -86,7 +86,7 @@
             </table>
         </div>
         <div class="row align-self-end mt-auto">
-            <button type="button" class="font-weight-bold mt-3 btn btn-warning my-4">
+            <button type="button" class="font-weight-bold mt-3 btn btn-warning my-4" onclick="location.href='http://localhost:3000/home';">
                 TOP UP
             </button>
             <button type="button" class="font-weight-bold mt-3 btn btn-success my-4 mx-2" onclick="showModalPay(this.id)">
@@ -111,7 +111,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" >Cancel</button>
                         {{!-- <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" onclick="onclickDelete(id)">Delete</button> --}}
                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="onClickPay()">Make payment</button>
                     </div>
@@ -121,7 +121,7 @@
     </div>
 
     <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-  <div id="toast" class="toast" style="position: absolute; top: 0; right: 0; width: 300px; height: 100px; background-color: #dbd9fc">
+  <div id="toast" class="toast" style="position: absolute; top: 0; right: 0; width: 400px; height: 100px; background-color: #dbd9fc">
     <div class="toast-header">
     <strong class="mr-auto">Notification</strong>
     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -143,11 +143,11 @@
 
 <script>
     $("#products-body").empty();
-    var username, amount, err, token;
+    var username, amount, err, token, payment_limit, unpaid_total_price;
 
     function moneyFormatter(x) {
         let moneyFormatter  = new Intl.NumberFormat();
-        return moneyFormatter.format(x).replace(',', '.');
+        return moneyFormatter.format(x);
     }
 
     async function clickPackage(obj, id) {
@@ -208,6 +208,16 @@
         }
 
         await $.ajax({
+            url: "/order/unpaid_prices",
+            type: 'GET',
+            success: async function (response, status) {
+                const res = await response;
+                unpaid_total_price = res.amount;
+                console.log("unpaid_total_price: ", unpaid_total_price);
+            },
+        });
+
+        await $.ajax({
             url: "/order/total_price",
             type: 'POST',
             data: {
@@ -219,6 +229,28 @@
                 console.log("amount: ", amount);
             },
         });
+
+        await $.ajax({
+            url: "/api/payment-limit",
+            type: 'GET',
+            success: async function (response, status) {
+                const res = await response;
+                payment_limit = res.value;
+                console.log("payment_limit: ", payment_limit);
+            },
+        });
+
+        let today = new Date();
+        const paid_money = (unpaid_total_price < payment_limit) ? unpaid_total_price : payment_limit;
+        console.log("paid_money:", paid_money);
+        console.log(today.getDate());
+        if (today.getDate() == 1) {
+            if (amount < paid_money) {
+                toastNow(`Have to make payment from ${moneyFormatter(paid_money)} or more <br>
+                        Please choose more order to make payment!`);
+                return;
+            }
+        }
 
         $(`#modal-payment`).modal('show');
     } 
@@ -258,6 +290,10 @@
             return;
         }
 
+        const int_order_ids = order_ids.map((id) => {
+            return parseInt(id);
+        });
+        console.log("int_order_ids:",int_order_ids);
         await $.ajax({
             url: "http://localhost:3000/api/transaction",
             type: 'POST',
@@ -268,12 +304,25 @@
             },
             success: async function (response, status) {
                 const res = await response;
-                toastNow("Make payment successfully <br> Please reload to see result! :)");
-                console.log(res);
+                await $.ajax({
+                    url: "/order/paid",
+                    type: 'PUT',
+                    data: {
+                        ids: int_order_ids
+                    },
+                    success: async function (response, status) {
+                        const res = await response;
+                        if (res.success)
+                            toastNow("Make payment successfully <br> Please reload to see result! :)");
+                        else
+                            toastNow("Make payment unsuccessfully!");
+                    }
+                });
             },
             error: async function (xhr, status, message) {
-                toastNow(message);
-                console.log("Error: ", message);
+                toastNow(xhr.responseText);
+
+                console.log("Error: ", xhr.responseText);
             }
         });
     }

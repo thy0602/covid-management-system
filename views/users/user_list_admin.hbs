@@ -8,10 +8,10 @@
                         {{#if isPatient}}
                         <button type="button" class="btn btn-2side left-side active-btn">Patient</button>
                         <button type="button" class="btn btn-2side right-side non-active-btn"
-                            onclick="location.href='';">Supervisor</button>
+                            onclick="location.href='/admin/supervisor';">Supervisor</button>
                         {{else if isSupervisor}}
                         <button type="button" class="btn btn-2side left-side non-active-btn"
-                            onclick="location.href='';">Patient</button>
+                            onclick="location.href='/admin/patient';">Patient</button>
                         <button type="button" class="btn btn-2side right-side active-btn">Supervisor</button>
                         {{else}}
                         {{/if}}
@@ -54,9 +54,19 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
                                 {{!-- <h6 class="dropdown-header">Header</h6> --}}
-                                <a class="dropdown-item" href="/admin?order-by=name-ascending">A-Z</a>
-                                <a class="dropdown-item" href="/admin?order-by=name-descending">Z-A</a>
-                                <a class="dropdown-item" href="/admin?order-by=serious-status">Serious Status</a>
+                                {{#if isPatient}}
+                                <a class="dropdown-item" href="/admin/patient?order-by=name-ascending">A-Z</a>
+                                <a class="dropdown-item" href="/admin/patient?order-by=name-descending">Z-A</a>
+                                <a class="dropdown-item" href="/admin/patient?order-by=serious-status">Serious
+                                    Status</a>
+                                {{else if isSupervisor}}
+                                <a class="dropdown-item" href="/admin/supervisor?order-by=name-ascending">A-Z</a>
+                                <a class="dropdown-item" href="/admin/supervisor?order-by=name-descending">Z-A</a>
+                                <a class="dropdown-item" href="/admin/supervisor?order-by=serious-status">Serious
+                                    Status</a>
+                                {{else}}
+                                {{/if}}
+
                                 {{!-- <div class="dropdown-divider"></div> --}}
                                 {{!-- <a class="dropdown-item" href="/users?order-by=price-descending">Serious
                                     Status</a> --}}
@@ -86,7 +96,7 @@
                             </thead>
                             <tbody>
                                 {{#each userList}}
-                                <tr data-user-id="{{this.id}}">
+                                <tr data-user-id="{{this.username}}">
                                     <td class="py-1">
                                         <img src="/img/user.png" alt="image" />
                                     </td>
@@ -105,13 +115,13 @@
                                                     class="mdi mdi-pencil mx-2"></i></div>
                                             <div class="badge badge-danger ml-2"><i class="icon-trash mx-2"></i></div>
                                             {{#if this.is_locked}}
-                                            <button class="badge badge-secondary hover-cursor lockUser ml-2"
+                                            <button class="badge badge-secondary hover-cursor lockUser ml-2" onclick=""
                                                 style="border: none"><i class="mdi mdi-lock mx-2"></i></button>
                                             {{else}}
-                                            <button class="badge badge-warning hover-cursor lockUser ml-2"
+                                            <button class="badge badge-warning hover-cursor lockUser ml-2" onclick=""
                                                 style="border: none"><i class="mdi mdi-lock mx-2"></i></button>
                                             {{/if}}
-                                            
+
                                         </div>
                                     </td>
                                 </tr>
@@ -144,10 +154,22 @@
             // get the current row
             var currentRow = $(this).closest("tr");
             let userId = currentRow.data('user-id');
-            let is_locked = currentRow.find('.isLocked').eq(0).data('isLocked-state');
-            console.log(is_locked);
+            console.log(userId);
 
-            
+            $.ajax({
+                url: `/admin/lock`,
+                type: 'POST',
+                data: {
+                    userId
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    window.location.href = `/admin/patient`;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
         });
     })
 </script>
