@@ -9,6 +9,7 @@ const fs = require("fs");
 
 const jwt = require('jsonwebtoken');
 const secretKey = 'ThisIsASecretKey';
+const stringSimilarity = require("string-similarity");
 
 router.use('/', (req, res, next) => {
   if (!verify(req, 'user'))
@@ -65,6 +66,56 @@ router.get("/new", async (req, res) => {
   res.render("products/product_new", {
     isSubmitProduct: false
   });
+});
+
+// Search pack by name (json)
+router.post('/search', async (req, res) => {
+  const searchStr = req.body.searchStr;
+
+  try {
+      let productList = await productModel.getAllProductOrderBy("name", true);
+      let filterdProducts = [];
+      
+      // get proeucts with similarity higher then threshold
+      for (const product of productList) {
+          let similarity = stringSimilarity.compareTwoStrings(searchStr, product.name.toLowerCase());
+          if (similarity > 0.1) {
+              product['similarity'] = similarity;
+              filterdProducts.push(product);
+          }
+      }
+      
+      filterdProducts.sort((a, b) => (a.similarity < b.similarity) ? 1 : -1)
+      console.log('get /products/search filterdProducts:', filterdProducts);
+      //res.json(filterdPacks.slice(0, 5));
+      res.status(200).send(filterdProducts);
+  } catch (error) {
+      console.log("Error post /products/search: ", error);
+      res.status(400).send(error);
+  }
+});
+
+router.get('/get-all', async (req, res) => {
+  try {
+      let productList = await productModel.getAllProductOrderBy("name", true);
+
+      res.status(200).send(productList);
+  } catch (error) {
+      console.log("Error get products/get-all: ", error);
+      res.status(400).send(error);
+  }
+});
+
+router.get('/filter', async (req, res) => {
+  const price = req.query.price;
+  try {
+      let productList = await productModel.filterByPrice(parseInt(price));
+
+      res.status(200).send(productList);
+  } catch (error) {
+      console.log("Error get products/filter: ", error);
+      res.status(400).send(error);
+  }
 });
 
 router.use("/:id", async function (req, res, next) {
