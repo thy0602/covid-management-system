@@ -2,18 +2,18 @@
     <div class="row">
         <div class="col-12 col-xl-8 mb-4 mb-xl-0">
             <h2 class="font-weight-bold" style="margin-top: 0.5rem; margin-bottom: auto; margin-left: 1.5rem">Create
-                Patient
+                {{rolename}}
             </h2>
         </div>
         <div class="col-12 col-xl-3 justify-content-end d-flex">
-            <button id="cancelform" class="btn btn-danger mr-2 btn-sm" onclick="location.href='./user';"
+            <button id="cancelform" class="btn btn-danger mr-2 btn-sm" onclick="location.href='./{{rolename}}';"
                 style="height: 30px;">Cancel</button>
         </div>
     </div>
     {{!-- <div class="col-12 justify-content-end d-flex">
         <button id="cancelform" class="btn btn-danger mr-2 btn-sm" onclick="location.href='./user';">Cancel</button>
     </div> --}}
-    <form class="col-10 mx-auto py-3 font-weight-bold bg-white mt-3" action="./new" method="post"
+    <form class="col-10 mx-auto py-3 font-weight-bold bg-white mt-3" action="./new?object={{rolename}}" method="post"
         style="border-radius: 40px;">
         <div class="form-row mt-3">
             <div class="form-group col-md-6 row mx-auto">
@@ -118,11 +118,12 @@
             </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row" {{hidden}}>
             <div class="form-group col-md-6 row mx-auto">
                 <label for="inputCovidstatus" class="col-sm-3 col-form-label">Covid Status</label>
                 <div class="col-sm-7 was-validated">
-                    <select id="covidstt" name="covidstt" class="custom-select" aria-describedby="feedback04" required>
+                    <select id="covidstt" name="covidstt" class="custom-select" aria-describedby="feedback04"
+                        {{required}}>
                         <option selected disabled value="">Choose...</option>
                         <option value="F0">F0</option>
                         <option value="F1">F1</option>
@@ -139,7 +140,7 @@
                 <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
                 <div class="col-sm-8 was-validated">
                     <select id="location" name="location" class="custom-select"
-                        aria-describedby="validationServer04Feedback1" required>
+                        aria-describedby="validationServer04Feedback1" {{required}}>
                         <option selected disabled value="">Choose...</option>
                         {{#each location}}
                         <option value="{{id}}">{{name}}</option>
