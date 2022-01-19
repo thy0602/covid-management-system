@@ -121,3 +121,21 @@ exports.create = async (entity) => {
     console.log("Error db/create", e.message);
   }
 }
+
+exports.filterByPrice = async (price) => {
+  const queryStr = pgp.as.format(`SELECT * FROM
+                                (SELECT * FROM "product" WHERE "is_deleted" IS FALSE AND "price" <= ${price}) p
+                                LEFT JOIN (SELECT * FROM (
+                                    SELECT *,
+                                    row_number() over (partition by "product_id") 
+                                    as row_number
+                                    FROM "product_image") temp WHERE row_number=1) pi
+                                ON p."id" = pi."product_id" ORDER BY p."name" ASC;`)
+
+  try {
+    const res = await db.any(queryStr);
+    return res;
+  } catch (e) {
+    console.log("Error product/filterByPrice", e.message);
+  }
+}
