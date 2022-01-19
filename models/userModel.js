@@ -83,12 +83,36 @@ exports.getAllUserOrderBy = async (orderBy, ascending = true) => {
         // throw e;
     }
 }
+exports.getAllPatientOrderBy = async (orderBy, ascending = true) => {
+    const sortOption = ascending ? 'ASC' : 'DESC';
+    const queryStr = pgp.as.format(`SELECT * FROM "user" p WHERE p.username LIKE 'ID%' ORDER BY ${orderBy} ${sortOption};`)
+
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error getAllUserOrderBy: ", e);
+        // throw e;
+    }
+}
 
 exports.getAllUserWithLockedOrderBy = async (orderBy, ascending = true) => {
     const sortOption = ascending ? 'ASC' : 'DESC';
     const queryStr = pgp.as.format(`SELECT * FROM "user" p, "account" a
-    WHERE a.username = p.username ORDER BY ${orderBy} ${sortOption};`)
+    WHERE a.username = p.username AND p.username LIKE 'ID%' ORDER BY ${orderBy} ${sortOption};`)
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error getAllUserOrderBy: ", e);
+        // throw e;
+    }
+}
 
+exports.getAllManagerWithLockedOrderBy = async (orderBy, ascending = true) => {
+    const sortOption = ascending ? 'ASC' : 'DESC';
+    const queryStr = pgp.as.format(`SELECT * FROM "user" p, "account" a
+    WHERE a.username = p.username AND p.username LIKE 'M%' ORDER BY ${orderBy} ${sortOption};`)
     try {
         const res = await db.any(queryStr);
         return res;

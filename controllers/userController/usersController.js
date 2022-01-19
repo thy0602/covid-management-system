@@ -18,19 +18,19 @@ router.get('/', async function (req, res) {
     let userList;
     switch (orderBy) {
         case 'name-ascending':
-            userList = await userModel.getAllUserOrderBy('name', true);
+            userList = await userModel.getAllPatientOrderBy('name', true);
             break;
 
         case 'name-descending':
-            userList = await userModel.getAllUserOrderBy('name', false);
+            userList = await userModel.getAllPatientOrderBy('name', false);
             break;
 
         case 'serious-status':
-            userList = await userModel.getAllUserOrderBy('current_status', true);
+            userList = await userModel.getAllPatientOrderBy('current_status', true);
             break;
 
         default:
-            userList = await userModel.getAll();
+            userList = await userModel.getAllPatientOrderBy('name', true);
             break;
     }
 

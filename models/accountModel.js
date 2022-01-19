@@ -64,6 +64,20 @@ exports.update = async (PKvalue, entity) => {
     return res;
 }
 
+exports.updateByUsername = async (username, entity) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const condition = pgp.as.format(` WHERE "${tableFields.username}"='${username}'`);
+    const queryStr = pgp.helpers.update(entity, Object.keys(entity), table) + condition + ' RETURNING *';
+
+    try {
+        const res = await db.one(queryStr);
+        return res;
+    } catch (error) {
+        console.log("Error accountModel/updateByUsername: ", error);
+        throw error;
+    }
+}
+
 exports.create = async (entity) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     const qStr = pgp.helpers.insert(entity, null, table) + "RETURNING *";
