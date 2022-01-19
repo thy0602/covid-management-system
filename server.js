@@ -2,6 +2,10 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 var path = require('path');
 
+//handle https
+const fs = require("fs");
+var https = require('https');
+
 const port = 3001;
 const app = express();
 
@@ -43,6 +47,15 @@ app.get("/", (req, res) => {
     res.redirect("/account/login-id");
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on localhost:${port}`);
+var privateKey  = fs.readFileSync(__dirname+'/secret-key/key.pem');
+var certificate = fs.readFileSync(__dirname+'/secret-key/cert.pem');
+
+var options = {
+  key: privateKey,
+  cert: certificate
+};
+
+var server = https.createServer(options, app);
+server.listen(port, function () {
+  console.log('HTTPS Express server is up on port ' + port);
 });
