@@ -1,3 +1,40 @@
+{{#section "css"}}
+<style>
+    #msg {
+        -webkit-animation: cssAnimation 5s forwards;
+        animation: cssAnimation 2s forwards;
+    }
+
+    @keyframes cssAnimation {
+        0% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    @-webkit-keyframes cssAnimation {
+        0% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+{{/section}}
+
 <div class="content-wrapper">
     <div class="col-12 grid-margin">
         <div class="row">
@@ -5,10 +42,10 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Minimum Limit</h4>
-                        <form class="form-inline" action='./setlimit' method='post'>
+                        <form class="form-inline" action='/manage/setlimit' method='post'>
                             <label class="sr-only" for="inlineFormInputName2">Name</label>
                             <div class="input-group" style="margin: 20px 20px; width: calc(100% - 40px)">
-                                <input type="number" class="form-control" name="minium_limit" value="100000"
+                                <input type="number" class="form-control" name="minium_limit" value="{{minium_limit}}"
                                     style="border: 1px solid #4B49AC">
                                 <div class="input-group-append">
                                     <span class="input-group-text">VND</span>
@@ -17,6 +54,9 @@
                             <div
                                 style="width: 140px; margin-left: calc((100% - 140px)/2); margin-bottom: 10px; margin-top: 10px">
                                 <button id="checkOut" type="submit" class="btn btn-success">Save Change</button>
+                            </div>
+                            <div class="mx-auto mt-0">
+                                {{>(msg)}}
                             </div>
                         </form>
                     </div>

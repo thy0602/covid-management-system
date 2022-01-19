@@ -3,6 +3,7 @@ const router = express.Router();
 const userModel = require('../models/userModel');
 const accountModel = require('../models/accountModel');
 const addressModel = require('../models/addressModel');
+const paymentLimitModel = require('../models/paymentLimitModel');
 
 const verify = require('../middlewares/verify').verify;
 
@@ -13,13 +14,10 @@ const verify = require('../middlewares/verify').verify;
 //         return res.redirect('/');
 // });
 
-router.get('/setlimit', async (req, res) => {
-    res.render('manage/manageUser');
-});
-
 router.post('/setlimit', async (req, res) => {
     console.log(req.body.minium_limit);
-    res.render('manage/manageUser');
+    const value = paymentLimitModel.updatePaymentLimit(req.body.minium_limit);
+    res.redirect('/manage?status=true');
 })
 
 router.get('/', async function (req, res) {
@@ -43,10 +41,22 @@ router.get('/', async function (req, res) {
             break;
     }
 
-    res.render("manage/manageUser", {
+    const paymentLimit = await paymentLimitModel.getPaymentLimit();
+
+    let ms = {
         userList: userList,
-        isPatient: 1
-    });
+        isPatient: 1,
+        minium_limit: paymentLimit.value
+    }
+    if (req.query.status) {
+        ms.message = 'Update Minimum Limit successfully!';
+        ms.color = '#8584c7';
+        ms.msg = () => 'login_partials/msg_password';
+    }
+    else
+        ms.msg = () => 'empty';
+    console.log(ms);
+    res.render("manage/manageUser", ms);
 });
 
 module.exports = router;
