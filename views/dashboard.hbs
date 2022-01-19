@@ -1,14 +1,23 @@
 <div class="content-wrapper">
   {{!-- welcome --}}
-  <div class="row">
-    <div class="col-md-12 grid-margin">
-      <div class="row">
-        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-          <h3 class="font-weight-bold">Welcome {{username}}</h3>
-          <h6 class="font-weight-normal mb-0">All systems are running smoothly!
-            You have
-            <span class="text-primary">{{notiAmount}} unread alerts!</span>
-          </h6>
+  <div class="row mb-4 ml-2">
+    <div class="col-12 col-xl-8 mb-4 mb-xl-0 ">
+      <h3 class="font-weight-bold">Welcome {{user.name}}</h3>
+      <h6 class="font-weight-normal mb-0">All systems are running smoothly!</h6>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="justify-content-end d-flex">
+        <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+          <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate2"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="mdi mdi-calendar mx-1"></i> {{from}}
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2" style="">
+            <a class="dropdown-item" href="/dashboard?from=today">Today</a>
+            <a class="dropdown-item" href="/dashboard?from=lastweek">Last 7 days</a>
+            <a class="dropdown-item" href="/dashboard?from=lastmonth">Last 30 days</a>
+            <a class="dropdown-item" href="/dashboard?from=lastyear">Last 365 days</a>
+          </div>
         </div>
       </div>
     </div>
@@ -18,8 +27,9 @@
     <div class="col-md-6 grid-margin stretch-card">
       <div class="card card-dark-blue">
         <div class="card-body">
-          <h2 style="margin-top: 20px">Total cases</p>
-            <h1>{{totalCases}} Cases</p>
+          <h2 style="margin-top: 20px">Total cases</h2>
+            <h1>{{totalCases}} Cases</h1>
+            <h4 style="margin-top: 20px">(Total cases switched: {{totalCasesSwitched}} Cases)</h4>
         </div>
       </div>
     </div>
@@ -30,6 +40,7 @@
             <div class="card-body">
               <p class="mb-4">Total F0</p>
               <p class="fs-30 mb-2">{{F0}} Cases</p>
+              <p>Total F0 switched: {{F0_switched}} Cases</p>
             </div>
           </div>
         </div>
@@ -38,6 +49,7 @@
             <div class="card-body">
               <p class="mb-4">Total F1</p>
               <p class="fs-30 mb-2">{{F1}} Cases</p>
+              <p>Total F1 switched: {{F1_switched}} Cases</p>
             </div>
           </div>
         </div>
@@ -48,6 +60,7 @@
             <div class="card-body">
               <p class="mb-4">Total F2</p>
               <p class="fs-30 mb-2">{{F2}} Cases</p>
+              <p>Total F2 switched: {{F2_switched}} Cases</p>
             </div>
           </div>
         </div>
@@ -95,7 +108,8 @@
       <div class="card">
         <div class="card-body">
           <p class="card-title">User State Update</p>
-          <ul class="icon-data-list" style="width: 100%; overflow:hidden; overflow-y:scroll;">
+          <ul class="icon-data-list"
+            style="width: 100%; height: 425px; max-height: 450px; overflow:hidden; overflow-y:scroll;">
             {{#each userStateUpdate}}
             <li>
               <div class="d-flex">
@@ -252,7 +266,7 @@
                   <td>{{ordered_at}}</td>
                   <td class="font-weight-medium">
                     <div class="badge badge-{{#if paid_at}}success{{else}}warning{{/if}}">
-                      {{#if paid_at}}Completed{{else}}Pending{{/if}}
+                      {{#if paid_at}}Paid{{else}}Pending{{/if}}
                     </div>
                   </td>
                 </tr>
@@ -263,12 +277,74 @@
         </div>
       </div>
     </div>
+    <div class="col-lg-5 grid-margin grid-margin-lg-0 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand">
+              <div class=""></div>
+            </div>
+            <div class="chartjs-size-monitor-shrink">
+              <div class=""></div>
+            </div>
+          </div>
+          <h4 class="card-title">Pie chart</h4>
+          <canvas id="pieChart" width="296" height="148" style="display: block; width: 296px; height: 148px;"
+            class="chartjs-render-monitor"></canvas>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 {{#section "js"}}
 <!-- Custom js for this page-->
 <script type="text/javascript" src="js/dashboard.js"></script>
+<script type="text/javascript">
+  $(function () {
+    var orders = {{{ convert orders }}}
+    var pending = 0, paid = 0;
+  for (var i = 0; i < orders.length; i++) {
+    if (orders[i].paid_at) {
+      paid++;
+    } else {
+      pending++;
+    }
+  }
+
+  var doughnutPieData = {
+    datasets: [{
+      data: [paid, pending],
+      backgroundColor: [
+        'rgba(0, 255, 86, 0.5)',
+        'rgba(255, 192, 0, 0.5)',
+      ],
+    }],
+
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+    labels: [
+      'Paid',
+      'Pending',
+    ]
+  };
+  var doughnutPieOptions = {
+    responsive: true,
+    animation: {
+      animateScale: true,
+      animateRotate: true
+    }
+  };
+
+  var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+  var pieChart = new Chart(pieChartCanvas, {
+    type: 'pie',
+    data: doughnutPieData,
+    options: doughnutPieOptions
+  });
+  })
+
+</script>
+<script type="text/javascript" src="vendors/chart.js/Chart.min.js"></script>
 <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
 <!-- End custom js for this page-->
 {{/section}}

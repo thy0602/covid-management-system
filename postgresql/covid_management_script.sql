@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS "order_detail" CASCADE;
 DROP TABLE IF EXISTS "order_pack" CASCADE;  -- deprecated
 DROP TABLE IF EXISTS "order_product" CASCADE;  -- deprecated
+DROP TABLE IF EXISTS "payment_limit" CASCADE;  -- deprecated
 
 
 -- ======================================
@@ -36,24 +37,6 @@ CREATE TABLE "account" (
 	"role" varchar(10) NOT NULL,  -- manager/admin/user
 	"is_deleted" boolean NOT NULL DEFAULT false,
 	"is_locked" boolean NOT NULL DEFAULT false
-);
-
--- -----------------------------
--- Table user
--- -----------------------------
-CREATE TABLE "user" (
-	"id" serial PRIMARY KEY,
-	"name" varchar(50) NOT NULL,
-	"year_of_birth" int NOT NULL,
-	"address" varchar NOT NULL,
--- 	"max_basket" int NOT NULL,
--- 	"basket_timelimit" int NOT NULL,
-	"identity_number" varchar(12) NOT NULL,
-	"username" varchar(50) NOT NULL,
-	"current_status" varchar(10),
-	"current_location" varchar(100),
-	
- 	FOREIGN KEY (username) REFERENCES account(username)
 );
 
 -- -----------------------------
@@ -85,6 +68,27 @@ create table "ward" (
 	
 	FOREIGN KEY (district_id) REFERENCES "district"("id")
 ); 
+
+-- -----------------------------
+-- Table user
+-- -----------------------------
+CREATE TABLE "user" (
+	"id" serial PRIMARY KEY,
+	"name" varchar(50) NOT NULL,
+	"year_of_birth" int NOT NULL,
+	"address" varchar NOT NULL,
+-- 	"max_basket" int NOT NULL,
+-- 	"basket_timelimit" int NOT NULL,
+	"identity_number" varchar(12) NOT NULL,
+	"username" varchar(50) NOT NULL,
+	"current_status" varchar(10),
+	"current_location" varchar(100),
+	"province" int NOT NULL,
+	"district" int NOT NULL,
+	"ward" int NOT NULL,
+	
+ 	FOREIGN KEY (username) REFERENCES account(username)
+);
 
 -- -----------------------------
 -- Table relate
@@ -188,6 +192,7 @@ CREATE TABLE "order" (
 	"ordered_at" timestamp DEFAULT NOW(),
 	"paid_at" timestamp,
 	"total_price" numeric(19, 4) NOT NULL,
+	"is_urgent" boolean NOT NULL DEFAULT false,
 	
 	FOREIGN KEY (user_id) REFERENCES "user"("id")
 );
@@ -234,6 +239,13 @@ CREATE TABLE "order_detail" (
 	FOREIGN KEY (product_id) REFERENCES "product"("id")
 );
 
+-- -----------------------------
+-- Table payment_limit
+-- -----------------------------
+CREATE TABLE "payment_limit" (
+	"value" numeric(19, 4) NOT NULL
+);
+
 -- ======================================
 -- Insert data (đang bổ sung)
 -- ======================================
@@ -243,7 +255,7 @@ CREATE TABLE "order_detail" (
 INSERT INTO "account"("username", "password", "role", "is_deleted")
 VALUES
 	('admin', '$2b$10$VDqC/tAM2BZ/GIX2CuDtPOTptGgEZjZ9YI.IL2igb0qOK0VyWNHUS', 'admin', false),
-	('manager', '$2b$10$ygjxelzrzamQxVDTMC8zyOmTS01JtlkOSD4SZjYgmW2tx.EML3jAq', 'manager', false),
+	('M_001', '$2b$10$ygjxelzrzamQxVDTMC8zyOmTS01JtlkOSD4SZjYgmW2tx.EML3jAq', 'manager', false),
 	('ID_001', '$2b$10$UU/.rQwJRux4HLMqDue37OeY1S.BByJb7l3kI.noOeQ.PLu3v.DK6', 'user', false),
 	('ID_002', '$2b$10$XXFLhavUekaG8AgYlPMA..ZuLZ3rmx/15lNC/oDiCTXLAZMXfct4m', 'user', false),
 	('ID_003', '$2b$10$xHVqAckOGbDP8kuOtSt3Pu7iHO7xDSKRWWfIyhsDT2M4YuOXXcWGm', 'user', false),
@@ -253,13 +265,13 @@ VALUES
 -- -----------------------------
 -- Table user
 -- -----------------------------
-INSERT INTO "user"("id", "name", "year_of_birth", "address", "identity_number", "username")
+INSERT INTO "user"("id", "name", "year_of_birth", "address", "identity_number", "username", "province", "district", "ward")
 VALUES 
-	(DEFAULT, 'thin', 2000, 'Vietnam', '000000000001', 'ID_001'),
-	(DEFAULT, 'duy', 1999, 'Vietnam', '000000000002', 'ID_002'),
-	(DEFAULT, 'thy', 2001, 'Vietnam', '000000000003', 'ID_003'),
-	(DEFAULT, 'nhan', 1998, 'Vietnam', '000000000004', 'ID_004'),
-	(DEFAULT, 'trung', 2002, 'Vietnam', '000000000005', 'ID_005');
+	(DEFAULT, 'thin', 2000, 'Vietnam', '000000000001', 'ID_001', 1, 1, 1),
+	(DEFAULT, 'duy', 1999, 'Vietnam', '000000000002', 'ID_002', 1, 1, 1),
+	(DEFAULT, 'thy', 2001, 'Vietnam', '000000000003', 'ID_003', 1, 1, 1),
+	(DEFAULT, 'nhan', 1998, 'Vietnam', '000000000004', 'ID_004', 1, 1, 1),
+	(DEFAULT, 'trung', 2002, 'Vietnam', '000000000005', 'ID_005', 1, 1, 1);
 
 -- -----------------------------
 -- Table relate
@@ -450,12 +462,12 @@ VALUES
 -- -----------------------------
 INSERT INTO "order"("id", "user_id", "ordered_at", "paid_at", "total_price")
 VALUES
-	(1, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00', 295000);
+	(DEFAULT, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00', 295000);
 INSERT INTO "order"("id", "user_id", "ordered_at", "total_price")
 VALUES
-	(2, 1, '2021-12-06 10:30:00', 205000),
-	(3, 1, '2021-12-06 12:30:00', 105000),
-	(4, 2, '2021-12-06 9:30:00', 210000);
+	(DEFAULT, 1, '2021-12-06 10:30:00', 205000),
+	(DEFAULT, 1, '2021-12-06 12:30:00', 105000),
+	(DEFAULT, 2, '2021-12-06 9:30:00', 210000);
 
 
 -- -----------------------------
@@ -479,3 +491,8 @@ VALUES
 	(1, 3, 3, 2, 25000),
 	(1, 3, 24, 1, 30000),
 	(1, 3, 25, 1, 40000);
+
+-- -----------------------------
+-- Table payment_limit
+-- -----------------------------
+INSERT INTO "payment_limit"("value") VALUES (500000);

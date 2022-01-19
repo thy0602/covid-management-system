@@ -3,11 +3,13 @@ const router = express.Router();
 const userModel = require('../../models/userModel');
 const accountModel = require('../../models/accountModel');
 const addressModel = require('../../models/addressModel');
+const covidRecordModel = require('../../models/covidRecordModel');
+const location = require('../../models/quarantineLocationModel');
 
 const verify = require('../../middlewares/verify').verify;
 
 router.use('/', (req, res, next) => {
-    if (verify(req, 'admin'))
+    if (verify(req, 'admin') || verify(req, 'manager'))
         next();
     else
         return res.redirect('/');
@@ -51,20 +53,26 @@ router.post('/store', async (req, res) => {
 });
 
 router.get('/new', async (req, res) => {
-    let user = await userModel.getAllUserOrderBy("username", true);
-    console.log(user);
+    let user = await userModel.getAllRoleOrderBy('user');
     if (user.length != 0) {
         user = user[user.length - 1].username;
         const regex = /[^\D0]+/g;
-        user = user.slice(0, user.search(regex)) + (parseInt(user.slice(3)) + 1);
+        let i = 0;
+        let head = user.slice(user.search(regex));
+        console.log(head);
+        if ((head.length == 1 && head[0] == '9') || (head[1] == '9' && head[0] == '9'))
+            i = -1
+        user = user.slice(0, user.search(regex) + i) + (parseInt(user.slice(3)) + 1);
     } else {
-        user = 'ID_001';
+        if (req.query.role == 'user')
+            user = 'ID_001';
     }
-
     let province_list = await addressModel.getAll('province');
+    let location_list = await addressModel.getAll('quarantine_location');
 
     return res.render("users/user_form", {
         province: province_list,
+        location: location_list,
         username: user
     });
 })
@@ -80,28 +88,38 @@ router.get('/getRegion', async (req, res) => {
 
 router.post('/new', async (req, res) => {
 
-    console.log(req.body);
-    const accuser = await accountModel.create({
+    const acc = await accountModel.create({
         username: req.body.username,
         role: 'user',
-        is_deleted: false
-    });
-    const entity = {
+        is_deleted: false,
+        is_locked: false
+    })
+    const user = await userModel.create({
         name: req.body.name,
         username: req.body.username,
         year_of_birth: req.body.yob,
         address: req.body.street,
         identity_number: req.body.indentity,
-        // max_basket: req.body.maxbasket,
-        // basket_timelimit: req.body.baskettimeltd,
-        current_status: null,
-        current_location: null,
+        current_status: req.body.covidstt,
+        current_location: req.body.location,
         province: req.body.province,
         district: req.body.district,
         ward: req.body.ward
-    }
-    const user = await userModel.create(entity);
-    if (user) {
+    });
+
+    let user_id = await userModel.getByUsername(req.body.username);
+    const status = await covidRecordModel.create({
+        covid_status: req.body.covidstt,
+        record_time: new Date(),
+        user_id: user_id.id,
+    });
+    const lct = await location.getById(req.body.location);
+    const lstt = await location.update({
+        id: req.body.location,
+        occupancy: lct.occupancy + 1
+    })
+
+    if (user && acc && status && lstt) {
         return res.redirect('./');
     }
     res.send({ error: "Can't create user!" });

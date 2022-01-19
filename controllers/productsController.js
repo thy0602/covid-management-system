@@ -2,11 +2,23 @@ const express = require("express");
 const router = express.Router();
 const productModel = require("../models/productModel");
 const productImageModel = require("../models/productImageModel");
+const verify = require("../middlewares/verify").verify;
 
 const multer = require("../middlewares/multer");
 const fs = require("fs");
 
+const jwt = require('jsonwebtoken');
+const secretKey = 'ThisIsASecretKey';
+
+router.use('/', (req, res, next) => {
+  if (!verify(req, 'user'))
+    next();
+  else
+    return res.redirect('/');
+});
 router.get("/", async function (req, res) {
+  // var decoded = jwt.verify(req.cookies.jwt, secretKey);
+  // console.log("DECODED: ", decoded); // bar
   const orderBy = req.query["order-by"];
   let productList;
   switch (orderBy) {
@@ -43,7 +55,7 @@ router.get("/new", async (req, res) => {
     const product = await productModel.getById(id);
     if (typeof product === "undefined")
       return res.redirect('/products/new');
-    
+
     return res.render("products/product_new", {
       product,
       isSubmitProduct: true
@@ -62,6 +74,19 @@ router.use("/:id", async function (req, res, next) {
     next();
   } else {
     res.redirect("/products");
+  }
+});
+
+router.delete("/:id", async function (req, res, next) {
+  try {
+    const response = await productModel.update({id: req.params.id, is_deleted: true});
+    console.log(response);
+    if (typeof response === "undefined")
+      res.status(500).send("Internal server error");
+
+    res.status(200).send(response);
+  } catch (e) {
+    res.status(400).send(e.message);
   }
 });
 

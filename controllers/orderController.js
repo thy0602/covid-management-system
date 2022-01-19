@@ -4,9 +4,11 @@ const packModel = require('../models/packModel');
 const pack_itemsModel = require('../models/pack_itemsModel');
 const productImageModel = require('../models/productImageModel');
 const orderModel = require('../models/orderModel');
+const orderDetailModel = require("../models/orderDetailModel");
 const userModel = require('../models/userModel');
 const datetimeFormatter = require('../utils/datetimeFormatter');
 const { moneyFormatter } = require('../utils/moneyFormatter');
+const verify = require('../middlewares/verify').verify;
 
 function preprocess(order) {
     return {
@@ -24,6 +26,13 @@ function preprocess(order) {
     }
 }
 
+router.use('/', (req, res, next) => {
+    if (verify(req, 'user'))
+        next();
+    else
+        return res.redirect('/');
+});
+
 router.get("/history", async (req, res) => {
     if (!req.cookies.user)
         res.redirect('/acount/login-id');
@@ -35,11 +44,11 @@ router.get("/history", async (req, res) => {
     if (orders.length > 0) {
         processed_orders.push(preprocess(orders[0]));
     }
-    
+
     for (let i = 1; i < orders.length; i++) {
         if (orders[i].order_id == processed_orders[processed_orders.length - 1].order_id) {
             processed_orders[processed_orders.length - 1].list_package.push({
-                pack_id: orders[i].pack_id, 
+                pack_id: orders[i].pack_id,
                 name: orders[i].name
             });
             continue;
@@ -59,13 +68,49 @@ router.get("/history", async (req, res) => {
             total_price: moneyFormatter(order.total_price),
             disable: (!order.paid_at) ? '' : 'disabled',
             colorbtnpayment: (!order.paid_at) ? 'success' : 'secondary',
-            listpackage: order.list_package
+            listpackage: order.list_package,
+            is_paid: (!order.paid_at) ? 0 : 1
         }
         listorder.push(order_item);
     }
     res.render('order/order_history', {
         listorder: listorder
     })
+});
+
+router.put('/paid', async (req, res) => {
+    let ids = req.body.ids;
+    console.log("ids: ", ids);
+
+    ids = ids.map((id) => {
+        return parseInt(id);
+    });
+    console.log("ids: ", ids);
+    try {
+        if (typeof ids == 'undefined')
+        return res.status(200).send({ success: false });
+        const response = await orderModel.markPaid(ids);
+        console.log("Mark paid:", response);
+        return res.status(200).send({ success: true });
+    } catch(e) {
+        return res.status(200).send({ success: false });
+    }
+});
+
+router.post('/total_price', async (req, res) => {
+    const ids = req.body.ids;
+    if (typeof ids === 'undefined') {
+        res.status(200).send({ amount: 0 });
+    }
+
+    const response = await orderModel.getTotalPriceByIds(ids);
+    res.status(200).send({ amount: response });
+});
+
+router.get('/unpaid_prices', async (req, res) => {
+    const user = await userModel.getByUsername(req.cookies.user);
+    const response = await orderModel.getUnpaidTotalPrice(user.id);
+    return res.status(200).send({ amount: response });
 });
 
 // get products list of pack by packId
@@ -115,6 +160,53 @@ router.get('/', async (req, res) => {
         packDetail: firstPack,
         productsInPack
     });
+});
+
+router.post('/create', async (req, res) => {
+    if (!req.cookies.user)
+        res.redirect('/acount/login-id');
+
+    const user = await userModel.getByUsername(req.cookies.user);
+
+    let list = req.body.list;
+    let totalPrice = 0;
+    for (const order_pack of list) {
+        for (const order_detail of order_pack.productList) {
+            totalPrice += parseInt(order_detail.boughtPrice);
+        }
+    }
+    // console.log("Total Price is: ", totalPrice);
+    let order = {
+        user_id: user.id,
+        paid_at: null,
+        total_price: totalPrice
+    }
+    let orderDetailList = [];
+
+    try {
+        let result = await orderModel.create(order);
+
+        for (const order_pack of list) {
+            for (const order_detail of order_pack.productList) {
+                orderDetailList.push({
+                    'order_id': result.id,
+                    'pack_id': order_pack.id,
+                    'product_id': order_detail.productId,
+                    'quantity': order_detail.quantity,
+                    'bought_price': order_detail.boughtPrice
+                });
+            }
+        }
+
+        // console.log("Order Detail List is: ", orderDetailList);
+
+        result = await orderDetailModel.create(orderDetailList);
+        // console.log("post /packs/:packId/edit insert pack_items result: ", result);
+        res.json(result);
+    } catch (error) {
+        console.log("Error post /packs/new: ", error);
+        res.status(400).send(error);
+    }
 });
 
 

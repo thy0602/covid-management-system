@@ -16,7 +16,13 @@ module.exports = (app) => {
       sum: (a, b) => a + b,
       formatMoney: function (money) {
         return moneyFormatter.moneyFormatter(money);
-      }
+      },
+      convert(data) {
+        if (!data) {
+          return;
+        }
+        return JSON.stringify(data);
+      },
     },
   });
 

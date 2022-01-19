@@ -100,6 +100,49 @@ exports.getTodaySpecificCase = async (type) => {
   }
 };
 
+exports.getStatusFromDate = async (startDate,status) => {
+  const formattedStartDate = new Date(startDate).toLocaleDateString().replace("/", "-").replace("/", "-") + " 00:00:00";
+  const todayEnd = new Date().toLocaleDateString().replace("/", "-").replace("/", "-") + " 23:59:59";
+  const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+  const queryStr = pgp.as.format(
+    `SELECT * FROM $1 WHERE "${tableFields.covid_status}" = '${status}' AND "${tableFields.record_time}" BETWEEN '${formattedStartDate}' AND '${todayEnd}'`,
+    table
+  );
+  try {
+    const res = await db.any(queryStr);
+    if (res) {
+      return res;
+    } else {
+      return 0;
+    }
+  } catch (e) {
+    console.log("Error db/getStatusFromDate", e);
+  }
+}
+
+exports.getAllFromDate = async (startDate) => {
+  const formattedStartDate = new Date(startDate).toLocaleDateString().replace("/", "-").replace("/", "-") +
+  " 00:00:00";
+  const todayEnd =
+      new Date().toLocaleDateString().replace("/", "-").replace("/", "-") +
+      " 23:59:59";
+  const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+  const queryStr = pgp.as.format(
+    `SELECT * FROM $1 WHERE "${tableFields.record_time}" BETWEEN '${formattedStartDate}' AND '${todayEnd}'`,
+    table
+  );
+  try {
+    const res = await db.any(queryStr);
+    if (res) {
+      return res;
+    } else {
+      return 0;
+    }
+  } catch (e) {
+    console.log("Error db/getAllFromDate", e);
+  }
+}
+
 exports.getCasesFromDate = async (date) => {
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const queryStr = pgp.as.format(

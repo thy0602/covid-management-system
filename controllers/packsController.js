@@ -5,6 +5,14 @@ const packModel = require("../models/packModel");
 const pack_itemsModel = require("../models/pack_itemsModel");
 const productImageModel = require("../models/productImageModel");
 const stringSimilarity = require("string-similarity");
+const verify = require("../middlewares/verify").verify;
+
+router.use('/', (req, res, next) => {
+    if (verify(req, 'admin') || verify(req, 'manager'))
+        next();
+    else
+        return res.redirect('/');
+});
 
 // Render UI for creating new pack
 router.get("/new", async (req, res) => {
@@ -60,8 +68,8 @@ router.get("/:packId/edit", async (req, res) => {
         for (const product of productsInPack) {
             let productImages = await productImageModel.getImagesByProductId(product.id);
             product["images"] = productImages.reduce((allUrls, productImage) => {
-                    allUrls.push(productImage.url);
-                    return allUrls;
+                allUrls.push(productImage.url);
+                return allUrls;
             }, []);
         }
         // console.log('get /packs/:id/edit productsInPack: ', productsInPack);
@@ -137,7 +145,7 @@ router.post('/search', async (req, res) => {
     try {
         let allPacks = await packModel.getAll();
         let filterdPacks = [];
-        
+
         // get packs with similarity higher then threshold
         for (const pack of allPacks) {
             let similarity = stringSimilarity.compareTwoStrings(searchStr, pack.name);
@@ -146,7 +154,7 @@ router.post('/search', async (req, res) => {
                 filterdPacks.push(pack);
             }
         }
-        
+
         if (filterdPacks.length > 0) {
             let packId = filterdPacks[0].id;
             let packDetail = await packModel.getByPackId(packId);
@@ -182,7 +190,7 @@ router.post('/search', async (req, res) => {
                 // productsInPack,
             });
         }
-        
+
 
     } catch (error) {
         console.log("Error post /packs/search: ", error);
@@ -295,7 +303,7 @@ router.get("/:packId", async (req, res) => {
 
         console.log('get /packs/:packId packDetail: ', packDetail);
         console.log('get /packs/:packId productsInPack: ', productsInPack);
-        
+
         res.json({
             packDetail,
             packItems: productsInPack
@@ -356,8 +364,8 @@ router.get("/", async (req, res) => {
         //     }, []);
         // }
         
-        // console.log('get /packlist packDetail:', packDetail);
-        //console.log('get /packlist productsInPack:', productsInPack);
+        console.log('get /packlist packDetail:', packDetail);
+        console.log('get /packlist productsInPack:', productsInPack);
 
         res.render("packs/pack_grid", {
             isPackage: 1,

@@ -8,7 +8,12 @@
                 {{!-- Đơn hàng --}}
                 {{#each listorder}}
                 <div class="card mb-3">
-                    <div class="card-body content-wrapper rounded pb-1">
+                    {{#if is_paid}}
+                        <div class="card-body content-wrapper rounded pb-1" >
+                    {{else}}
+                    <div class="card-body rounded pb-1 hover-cursor-unpaid" name="order-card" 
+                        id="order-{{order_id}}" onclick="clickOrder(this, this.id)">
+                    {{/if}}
                         <div class="row">
                             <div class="h5 col-2" id="id">ID: {{order_id}}</div>
                             <div class="h5 col-5 py-0" id="time">Order At: {{ordered_at}}</div>
@@ -36,13 +41,13 @@
                                 {{/each}}
                                 {{!-- package --}}
                             </div>
-                            <div class="col-5">
-                                <div class="text-right mr-3">
+                            <div class="col-5 d-flex align-items-end">
+                                <div class="text-right my-3">
                                     <div id="total" class="font-weight-bold">Total: {{total_price}} VND</div>
-                                    <button type="button" class="font-weight-bold mt-3 btn btn-{{colorbtnpayment}}"
+                                    <!--<button type="button" class="font-weight-bold mt-3 btn btn-{{colorbtnpayment}}"
                                         {{disable}}>
                                         THANH TOÁN
-                                    </button>
+                                    </button>-->
                                 </div>
                             </div>
                         </div>
@@ -52,7 +57,7 @@
             </div>
         </div>
     </div>
-    <div class="card col-5 mx-auto">
+    <div class="card col-5 mx-auto d-flex">
         <div class="h3 card-header bg-white">
             Package Detail
         </div>
@@ -80,8 +85,54 @@
                 </tbody>
             </table>
         </div>
-
+        <div class="row align-self-end mt-auto">
+            <button type="button" class="font-weight-bold mt-3 btn btn-warning my-4" onclick="location.href='http://localhost:3000/home';">
+                TOP UP
+            </button>
+            <button type="button" class="font-weight-bold mt-3 btn btn-success my-4 mx-2" onclick="showModalPay(this.id)">
+                MAKE PAYMENT
+            </button>
+        </div>
+        <div class="modal fade" id="modal-payment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-pack-name">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Enter your password</label>
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" >Cancel</button>
+                        {{!-- <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" onclick="onclickDelete(id)">Delete</button> --}}
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="onClickPay()">Make payment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+  <div id="toast" class="toast" style="position: absolute; top: 0; right: 0; width: 400px; height: 100px; background-color: #dbd9fc">
+    <div class="toast-header">
+    <strong class="mr-auto">Notification</strong>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body" id="toast-body">
+    Hello, world! This is a toast message.
+  </div>
+  </div>
+</div>
 </div>
 
 {{#section "js"}}
@@ -89,12 +140,14 @@
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
 
+
 <script>
     $("#products-body").empty();
+    var username, amount, err, token, payment_limit, unpaid_total_price;
 
     function moneyFormatter(x) {
         let moneyFormatter  = new Intl.NumberFormat();
-        return moneyFormatter.format(x).replace(',', '.');
+        return moneyFormatter.format(x);
     }
 
     async function clickPackage(obj, id) {
@@ -129,5 +182,150 @@
         }
         $("#products-body").append(body);
     }
+
+    function clickOrder(obj, id) {
+        $(obj).toggleClass("clicked-unpaid");
+    }
+
+    function toastNow(msg) {
+        $("#toast-body").html(msg);
+        $("#toast").toast({ delay: 4000 });
+        $("#toast").toast('show');
+    }
+
+    async function showModalPay(id) {
+        let order_ids = [];
+        $('div[name="order-card"]').each(function(index, div_element) {
+            const div_id = $(div_element).attr("id");
+            const id = div_id.split('-')[1];
+            //console.log(id);
+            if ($(div_element).hasClass("clicked-unpaid"))
+                order_ids.push(id);
+        });
+        if (order_ids.length == 0) {
+            toastNow("Please choose at least an order to make payment");
+            return;
+        }
+
+        await $.ajax({
+            url: "/order/unpaid_prices",
+            type: 'GET',
+            success: async function (response, status) {
+                const res = await response;
+                unpaid_total_price = res.amount;
+                console.log("unpaid_total_price: ", unpaid_total_price);
+            },
+        });
+
+        await $.ajax({
+            url: "/order/total_price",
+            type: 'POST',
+            data: {
+                ids: order_ids
+            },
+            success: async function (response, status) {
+                const res = await response;
+                amount = res.amount;
+                console.log("amount: ", amount);
+            },
+        });
+
+        await $.ajax({
+            url: "/api/payment-limit",
+            type: 'GET',
+            success: async function (response, status) {
+                const res = await response;
+                payment_limit = res.value;
+                console.log("payment_limit: ", payment_limit);
+            },
+        });
+
+        let today = new Date();
+        const paid_money = (unpaid_total_price < payment_limit) ? unpaid_total_price : payment_limit;
+        console.log("paid_money:", paid_money);
+        console.log(today.getDate());
+        if (today.getDate() == 1) {
+            if (amount < paid_money) {
+                toastNow(`Have to make payment from ${moneyFormatter(paid_money)} or more <br>
+                        Please choose more order to make payment!`);
+                return;
+            }
+        }
+
+        $(`#modal-payment`).modal('show');
+    } 
+    
+    async function onClickPay() {
+        let is_authorized = false;
+        //let username, amount, err, token;
+        await $.ajax({
+            url: "/api/authenticate",
+            type: 'POST',
+            data: {
+                password: $("#password").val()
+            },
+            success: async function (response, status) {
+                const res = await response;
+                is_authorized = res.data.is_authorized;
+                username = res.data.username;
+                token = res.data.token;
+            }
+        });
+        if (!is_authorized) {
+            toastNow("Wrong password!");
+            return;
+        }
+
+        let order_ids = [];
+        $('div[name="order-card"]').each(function(index, div_element) {
+            const div_id = $(div_element).attr("id");
+            const id = div_id.split('-')[1];
+            //console.log(id);
+            if ($(div_element).hasClass("clicked-unpaid"))
+                order_ids.push(id);
+        });
+        console.log("ids:", order_ids);
+        if (order_ids.length == 0) {
+            toastNow("Please choose at least an order to make payment");
+            return;
+        }
+
+        const int_order_ids = order_ids.map((id) => {
+            return parseInt(id);
+        });
+        console.log("int_order_ids:",int_order_ids);
+        await $.ajax({
+            url: "http://localhost:3000/api/transaction",
+            type: 'POST',
+            data: {
+                username: username,
+                token: token,
+                amount: amount
+            },
+            success: async function (response, status) {
+                const res = await response;
+                await $.ajax({
+                    url: "/order/paid",
+                    type: 'PUT',
+                    data: {
+                        ids: int_order_ids
+                    },
+                    success: async function (response, status) {
+                        const res = await response;
+                        if (res.success)
+                            toastNow("Make payment successfully <br> Please reload to see result! :)");
+                        else
+                            toastNow("Make payment unsuccessfully!");
+                    }
+                });
+            },
+            error: async function (xhr, status, message) {
+                toastNow(xhr.responseText);
+
+                console.log("Error: ", xhr.responseText);
+            }
+        });
+    }
+
 </script>
 {{/section}}

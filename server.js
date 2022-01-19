@@ -17,6 +17,7 @@ require('./middlewares/session')(app);
 require('./middlewares/passport')(app);
 
 app.use('/account', require('./controllers/accountController'));
+app.use('/myAccount', require('./controllers/myAccountController'));
 app.use('/users', require('./controllers/userController/usersController'));
 app.use('/products', require('./controllers/productsController'));
 app.use('/packs', require('./controllers/packsController'));
@@ -24,9 +25,16 @@ app.use('/order', require('./controllers/orderController'));
 app.use('/quarantine-locations', require('./controllers/quarantineLocationsController'));
 app.use('/login', require('./controllers/loginController'));
 app.use('/order-detail', require('./controllers/orderDetailController'));
+app.use('/manage', require('./controllers/manageUserController'));
+app.use('/admin', require('./controllers/adminController'));
+app.use('/area', require('./controllers/areaController'));
+
 
 app.use('/dashboard', require('./controllers/dashboardController'));
 app.use('/server-log', require('./controllers/serverLogController'));
+app.use('/api/authenticate', require('./controllers/api/authenticateController'));
+app.use('/api/payment-limit', require('./controllers/api/paymentLimitController'));
+app.use('/api/manage', require('./controllers/manageController'));
 
 app.get("/", (req, res) => {
   if (req.cookies.user)
