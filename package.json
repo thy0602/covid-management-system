@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/thy0602/covid-management-system#readme",
   "dependencies": {
+    "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",

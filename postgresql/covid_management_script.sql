@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS "order_detail" CASCADE;
 DROP TABLE IF EXISTS "order_pack" CASCADE;  -- deprecated
 DROP TABLE IF EXISTS "order_product" CASCADE;  -- deprecated
+DROP TABLE IF EXISTS "payment_limit" CASCADE;  -- deprecated
 
 
 -- ======================================
@@ -234,6 +235,13 @@ CREATE TABLE "order_detail" (
 	FOREIGN KEY (order_id) REFERENCES "order"("id"),
 	FOREIGN KEY (pack_id) REFERENCES "pack"("id"),
 	FOREIGN KEY (product_id) REFERENCES "product"("id")
+);
+
+-- -----------------------------
+-- Table payment_limit
+-- -----------------------------
+CREATE TABLE "payment_limit" (
+	"value" numeric(19, 4) NOT NULL
 );
 
 -- ======================================
@@ -481,3 +489,8 @@ VALUES
 	(1, 3, 3, 2, 25000),
 	(1, 3, 24, 1, 30000),
 	(1, 3, 25, 1, 40000);
+
+-- -----------------------------
+-- Table payment_limit
+-- -----------------------------
+INSERT INTO "payment_limit"("value") VALUES (500000);

@@ -19845,13 +19845,26 @@ code {
   background-color: white;
 }
 
+.hover-cursor-unpaid {
+  background-color: #F5F7FF;
+}
+
+.hover-cursor-unpaid:hover {
+  cursor: pointer;
+  background-color: #deeafc;
+}
+
+.clicked-unpaid {
+  background-color: #d1dced;
+}
+
 .pointed {
   background-color: #8aa6d4;
 }
 
 .hover-cursor-color:hover {
   cursor: pointer;
-  background-color: #d9e7fc;
+  background-color: #e1e2e3;
 }
 
 .min-width-cell {
