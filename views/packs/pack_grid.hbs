@@ -1,0 +1,307 @@
+<div class="content-wrapper">
+    {{!-- welcome --}}
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                    <div class="row ml-0">
+                        {{#if isNecessities}}
+                            <button type="button" class="btn btn-2side left-side active-btn">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side non-active-btn"
+                                onclick="location.href='/packs';">Package</button>
+                        {{else if isPackage}}
+                            <button type="button" class="btn btn-2side left-side non-active-btn"
+                                onclick="location.href='/products';">Necessities</button>
+                            <button type="button" class="btn btn-2side right-side active-btn"
+                                onclick="location.href='/packs';">Package</button>
+                        {{else}}
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4">
+                    {{!-- <div class="justify-content-end d-flex"> --}}
+                        <form action="/packs/search" method="POST" class="justify-content-end d-flex mb-1" id="search-form">
+                            <div class="input-group">
+                                <input type="text" name="searchStr" class="form-control" id="pack-search-input" placeholder="Search"
+                                aria-label="search" aria-describedby="search">
+                                <div type='submit' class="input-group-prepend hover-cursor" id="pack-search-icon">
+                                    <span class="input-group-text" id="userlist-search">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                </div>
+                                
+                                {{!-- <button type="submit" class="input-group-prepend hover-cursor" style="outline: none; border: none; padding: 0;">
+                                    <span class="input-group-text" id="userlist-search">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                </button> --}}
+                            </div>
+                        </form>
+
+                        <div id="search-result" class="card px-3 card-popover" style=" width: 92%;">
+                            <h5 class="py-2 m-1">No result</h5>
+                        </div>
+
+                    {{!-- </div> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            {{#if isSearch}}
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <div class="row">
+                            <h3 class="font-weight-bold mr-5"
+                                style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Search result</h3>
+                        </div>
+                    </div>
+                </div>
+            {{else}}
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <div class="row">
+                            <h3 class="font-weight-bold mr-5"
+                                style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">Package</h3>
+                            <a href="/packs/new" class="btn btn-primary mr-2"> Add new</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-4">
+                        <div class="justify-content-end d-flex">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary">Sort</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                    id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                                    {{!-- <h6 class="dropdown-header">Header</h6> --}}
+                                    <a class="dropdown-item" href="/packs/?order-by=name-ascending">A-Z</a>
+                                    <a class="dropdown-item"
+                                        href="/packs/?order-by=name-descending">Z-A</a>
+                                    {{!-- <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-ascending">Price
+                                        ascending</a>
+                                    <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-descending">Price
+                                        descending</a> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+
+    <div class="row">
+        {{#each packs}}
+            <div class="col-md-3 mb-4">
+                <div class="card hover-cursor pack-card" style="width: 100%;" onclick="window.location.href='/packs/{{this.id}}/view';">
+                    {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <p class="card-text">Giới hạn mua: {{this.quantity_limit}} gói/{{this.time_limit_unit}}</p>
+                        <a class="btn btn-sm btn-primary mt-3" href="/packs/{{this.id}}/edit?return-to=/packs">
+                            <i class="mdi mdi-pencil mx-2"></i></a>
+                        <button class="btn btn-sm btn-danger mt-3 ml-1 icon-del-pack" 
+                            data-pack-id="{{this.id}}" data-pack-name="{{this.name}}"><i class="icon-trash mx-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+{{!-- Confirm delete modal --}}
+<div class="modal fade" id="modal-del-pack" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-pack-name">
+                    Are you sure to delete "Packname" ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                {{!-- <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" onclick="onclickDelete(id)">Delete</button> --}}
+                <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom css for this page-->
+{{#section "css"}}
+    <style>
+        .pack-card {
+            box-shadow: 0;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        .pack-card:hover {
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 20px;
+        }
+
+        .card-popover {
+            border-radius: 5px;
+            position: absolute;
+            z-index: 30;
+            
+            /*transition: opacity 0.2s ease-in-out;*/
+            transition: height 0ms 400ms, opacity 400ms 0ms;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            /*transition: display 0.4s ease-in-out;*/
+           /* transition: visibility 0s, opacity 0.5s ease-in-out;*/
+        }
+
+        .card-popover-show {
+            /*display: inline-block;*/
+            /*visibility: visible;*/
+            opacity: 1;
+            height: auto;
+            transition: height 0ms 0ms, opacity 600ms 0ms;
+        }
+
+        .search-result-row:hover {
+            filter: brightness(0.85);
+            cursor: pointer;
+        }
+    </style>
+{{/section}}
+
+
+{{#section "js"}}
+    <!-- Custom js for this page-->
+
+    {{!-- User typing event --}}
+    <script>
+        $('#pack-search-input').keyup(async function(e) {
+            let searchStr = $(this).val();
+            //console.log('searchStr: ', searchStr);
+
+            $.ajax({
+                url: `/packs/api/search`,
+                type: 'POST',
+                data: {
+                    searchStr
+                },
+                success: function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    if (data.length > 0) {
+                        $('#search-result').html('');
+                        let content = ``;
+                        for (const pack of data) {
+                            console.log(pack.name);
+                            content += `<h5 onclick="window.location.href='/packs/${pack.id}/view';"
+                                class="py-2 m-1 font-weight-bold search-result-row">${pack.name}</h5>`;
+                        }
+                        $('#search-result').html(content);
+                    } else {
+                        $('#search-result').html('<h5 class="py-2 m-1">No result</h5>');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            })
+        })
+
+        // User click to search box
+        $('#pack-search-input').focus(function(e) {
+            $('#search-result').addClass('card-popover-show');
+        })
+        /*$('#pack-search-input').blur(function(e) {
+            $('#search-result').removeClass('card-popover-show');
+        })*/
+
+        // User click outside of search box and search result
+        $(document).mouseup(function(e) {
+            var container = $('#pack-search-input');
+            let searchResult = $('#search-result');
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!searchResult.is(e.target) && !container.is(e.target) && container.has(e.target).length === 0) 
+            {
+                //container.hide();
+                $('#search-result').removeClass('card-popover-show');
+            }
+        });
+    </script>
+
+    <script>
+        $('#search-form').submit(function() {
+            return false;
+        });
+        $('#pack-search-icon').click(async function(e) {
+            let searchStr = $('#pack-search-input').val();
+            console.log('searchStr: ', searchStr);
+
+            /*$.ajax({
+                url: `/packs/search`,
+                type: 'POST',
+                data: {
+                    searchStr
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    //window.location.href = `/packs`;
+                    //$(document).load(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });*/
+
+            return false;
+        });
+    </script>
+
+    {{!-- Click on delete icon event --}}
+    <script>
+        $('.icon-del-pack').click(function(e) {
+            event.stopPropagation();
+            const packId = $(this).data('pack-id');
+            const packName = $(this).data('pack-name');
+
+            $('#modal-del-pack').modal('show');
+            $('#modal-pack-name').text(`Are you sure to delete "${packName}"?`);
+            $('#btn-del-pack').data('pack-id', packId);
+            console.log('click delete: ', packId);
+        })
+    </script>
+
+    {{!-- Click on modal's delete button event --}}
+    <script>
+        $('#btn-del-pack').click(async function (e) {
+            //const btn = e.currentTarget;
+            const packId = $(this).data('pack-id');
+
+            //console.log('btn clicked', btn);
+            console.log('packId: ', packId);
+
+            $.ajax({
+                url: `/packs/${packId}/delete`,
+                type: 'POST',
+                data: {
+                    is_deleted: true
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    window.location.href = `/packs`;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
+        });
+    </script>
+
+    <!-- End custom js for this page-->
+{{/section}}

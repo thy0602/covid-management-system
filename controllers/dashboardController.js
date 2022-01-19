@@ -14,10 +14,15 @@ router.get("/", async function (req, res) {
   let from = "today";
   if (req.query.from)
     from = req.query.from;
+  if (!req.cookies.user)
+    return res.redirect('/account/login-id');
 
   let logOnUser = {name: 'Admin'};
-  if (req.cookies.user != 'admin'){
-     logOnUser = await userModel.getByUsername(req.cookies.user);
+  if (req.cookies.user != 'admin') {
+    if (req.cookies.user[0] == 'M')
+      logOnUser = { name: req.cookies.user };
+    else
+      logOnUser = await userModel.getByUsername(req.cookies.user);
   }
 
   let fromDate = new Date();

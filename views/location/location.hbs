@@ -7,7 +7,7 @@
                     <div class="row">
                         <h3 class="font-weight-bold mr-5"
                             style="margin-top: auto; margin-bottom: auto; margin-left: 1.5rem">
-                            Location</h3>
+                            Quarantine Locations</h3>
                     </div>
                 </div>
 
@@ -21,11 +21,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-xl-3">
-                            <button id="addnew" class="btn btn-primary mr-2">Add new</button>
+                            <button id="btn-add-location" class="btn btn-primary mr-2">Add new</button>
                         </div>
                         <div class="col-12 col-xl-5">
                             <div class="justify-content-end d-flex">
-                                <div class="btn-group">
+                                {{!-- <div class="btn-group">
                                     <button type="button" class="btn btn-primary">Filter</button>
                                     <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                         id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
@@ -38,12 +38,12 @@
                                         <a class="dropdown-item" href="/products?order-by=name-descending">Z-A
                                             (by Name)</a>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-12 col-xl-4">
                             <div class="justify-content-end d-flex">
-                                <div class="input-group">
+                                {{!-- <div class="input-group">
                                     <input type="text" class="form-control" id="content-search-input"
                                         placeholder="Search" aria-label="search" aria-describedby="search">
                                     <div class="rounded input-group-prepend hover-cursor" id="content-search-icon">
@@ -51,35 +51,36 @@
                                             <i class="icon-search"></i>
                                         </span>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
 
-                    <div class="table-responsive table-hover">
+                    <div class="table-responsive table-hover mt-3">
                         <table class="table table-borderless">
                             <thead style="border-bottom: 2px solid black">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Address</th>
+                                    {{!-- <th>Address</th> --}}
                                     <th>Capacity</th>
                                     <th>Occupancy</th>
-                                    <th>Edit</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each locationList}}
                                 <tr>
                                     <td>{{this.name}}</td>
-                                    <td>{{this.address}}</td>
+                                    {{!-- <td>{{this.address}}</td> --}}
                                     <td>{{this.capacity}}</td>
                                     <td>{{this.occupancy}}</td>
                                     <td class="font-weight-medium">
                                         <div class="row">
-                                            <div class="badge badge-primary hover-cursor"><i
-                                                    class="mdi mdi-pencil mx-2"></i></div>
-                                            <div class="badge badge-danger hover-cursor ml-1"><i
-                                                    class="icon-trash mx-2"></i></div>
+                                            <div class="badge badge-primary hover-cursor location-edit-icon" data-location-id="{{this.id}}" 
+                                                data-location-name="{{this.name}}" data-capacity="{{this.capacity}}" data-occupancy="{{this.occupancy}}">
+                                                <i class="mdi mdi-pencil mx-2"></i></div>
+                                            <div class="badge badge-danger hover-cursor ml-1 location-del-icon" data-toggle="modal" data-target="#modal-del-location" 
+                                                data-location-id="{{this.id}}" data-location-name="{{this.name}}"><i class="icon-trash mx-2"></i></div>
                                         </div>
                                     </td>
                                 </tr>
@@ -92,28 +93,39 @@
         </div>
     </div>
 
-    <!-- Case add new -->
-
-    <form id="addnewform" class="col-10 mx-auto py-3 font-weight-bold bg-white" action="./new" method="post"
+    <!-- Case add new location -->
+    <form id="form-add-location" class="col-10 mx-auto py-3 font-weight-bold bg-white" action="/quarantine-locations/new" method="post"
         style="border-radius: 40px; display: none">
         <div class="col-12 justify-content-end d-flex">
-            <button id="cancelform" class="btn btn-danger mr-2 btn-sm">Cancel</button>
+            <button id="form-add-btn-cancel" class="btn btn-danger mr-2 btn-sm">Cancel</button>
         </div>
         <div class="form-row mt-5">
             <div class="form-group col-md-6 row mx-auto">
                 <label for="inputName" class="col-sm-3 col-form-label">Name</label>
                 <div class="col-sm-7 was-validated">
-                    <input type="text" class="form-control" id="name" name="name" required>
+                    <input type="text" class="form-control" id="inputName" name="name" required>
                     <div class="font-weight-lighter invalid-feedback">
                         Please enter a message in the textarea.
                     </div>
                 </div>
             </div>
 
-            <div class="form-group col-md-6 row mx-auto">
+            {{!-- <div class="form-group col-md-6 row mx-auto">
                 <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
                 <div class="col-sm-8 was-validated">
                     <input type="text" class="form-control" id="address" name="address" required>
+                    <div class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                </div>
+            </div> --}}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="inputCapacity" class="col-sm-3 col-form-label">Capacity</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="number" class="form-control" id="inputCapacity" name="capacity" min="10" required>
                     <div class="font-weight-lighter invalid-feedback">
                         Please enter a message in the textarea.
                     </div>
@@ -123,19 +135,9 @@
 
         <div class="form-row">
             <div class="form-group col-md-6 row mx-auto">
-                <label for="inputCapacity" class="col-sm-3 col-form-label">Capacity</label>
+                <label for="inputOccupancy" class="col-sm-3 col-form-label">Occupancy</label>
                 <div class="col-sm-7 was-validated">
-                    <input type="number" class="form-control" id="capacity" name="capacity" required>
-                    <div class="font-weight-lighter invalid-feedback">
-                        Please enter a message in the textarea.
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group col-md-6 row mx-auto">
-                <label for="inputOccupancy" class="col-sm-2 col-form-label">Occupancy</label>
-                <div class="col-sm-8 was-validated">
-                    <input type="number" class="form-control" id="occupancy" name="occupancy" required>
+                    <input type="number" class="form-control" id="inputOccupancy" name="occupancy" min="0" required>
                     <div class="font-weight-lighter invalid-feedback">
                         Please enter a message in the textarea.
                     </div>
@@ -144,10 +146,89 @@
         </div>
 
         <div class="text-center">
-            <button type="submit" class="font-weight-bold btn col-2 btn-primary mt-5">Create
-                New Place</button>
+            <button type="submit" class="font-weight-bold btn col-2 btn-primary mt-5">Create</button>
         </div>
     </form>
+
+
+    {{!-- Case edit location --}}
+    <form id="form-edit-location" class="col-10 mx-auto py-3 font-weight-bold bg-white" method="POST"
+        style="border-radius: 40px; display: none">
+        <div class="col-12 justify-content-end d-flex">
+            <button id="form-edit-btn-cancel" class="btn btn-danger mr-2 btn-sm">Cancel</button>
+        </div>
+        <div class="form-row mt-5">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="editName" class="col-sm-3 col-form-label">Name</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="text" class="form-control" id="editName" name="name" required>
+                    <div class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                </div>
+            </div>
+
+            {{!-- <div class="form-group col-md-6 row mx-auto">
+                <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-8 was-validated">
+                    <input type="text" class="form-control" id="address" name="address" required>
+                    <div class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                </div>
+            </div> --}}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="editCapacity" class="col-sm-3 col-form-label">Capacity</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="number" class="form-control" id="editCapacity" name="capacity" min="10" required>
+                    <div class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6 row mx-auto">
+                <label for="editOccupancy" class="col-sm-3 col-form-label">Occupancy</label>
+                <div class="col-sm-7 was-validated">
+                    <input type="number" class="form-control" id="editOccupancy" name="occupancy" min="0" required>
+                    <div class="font-weight-lighter invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="font-weight-bold btn col-2 btn-primary mt-5">Update</button>
+        </div>
+    </form>
+</div>
+
+{{!-- Confirm delete modal --}}
+<div class="modal fade" id="modal-del-location" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-location-name">
+                    Are you sure to delete "Location" ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                {{!-- <button type="button" class="btn btn-danger" id="btn-del-pack" data-dismiss="modal" onclick="onclickDelete(id)">Delete</button> --}}
+                <button type="button" class="btn btn-danger" id="btn-del-location" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{#section "js"}}
@@ -155,14 +236,100 @@
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
 
+{{!-- Show add location form --}}
 <script>
-    $("#addnew").click(() => {
+    $("#btn-add-location").click(() => {
         $("#locationList").css("display", "none");
-        $("#addnewform").css("display", "contents");
+        $("#form-add-location").css("display", "contents");
     })
-    $("#cancelform").click(() => {
+    $("#form-add-btn-cancel").click(() => {
         $("#locationList").css("display", "contents");
-        $("#addnewform").css("display", "none");
+        $("#form-add-location").css("display", "none");
+    })
+</script>
+
+{{!-- Show edit location form --}}
+<script>
+    /*$("#btn-edit-location").click(() => {
+        $("#locationList").css("display", "none");
+        $("#form-edit-location").css("display", "contents");
+    })*/
+    $("#form-edit-btn-cancel").click(() => {
+        document.forms['form-edit-location'].reset();
+        $("#locationList").css("display", "contents");
+        $("#form-edit-location").css("display", "none");
+    })
+</script>
+
+{{!-- Edit location event --}}
+<script>
+    $('.location-edit-icon').click(async function(e) {
+        const locationId = $(this).data('location-id');
+        const locationName = $(this).data('location-name');
+        const capacity = $(this).data('capacity');
+        const occupancy = $(this).data('occupancy');
+        console.log('locationId: ', locationId);
+
+        $("#locationList").css("display", "none");
+        $("#form-edit-location").css("display", "contents");
+
+        const editLocationForm = document.forms['form-edit-location'];
+        editLocationForm['name'].value = locationName;
+        editLocationForm['capacity'].value = capacity;
+        editLocationForm['occupancy'].value = occupancy;
+        editLocationForm.action = `/quarantine-locations/${locationId}/edit`;
+        //editLocationForm.submit();
+
+
+        /*await $.ajax(
+            url: `/quarantine-locations/${locationId}`,
+            type: 'GET',
+            data: {},
+            success: async function (data, textStatus, jqXHR) {
+                console.log('success: ', data);
+                //window.location.href = `/packs`;
+
+                //document.forms['form-edit-location']['name'].value = data.name;
+                //document.forms['form-edit-location']['capacity'].value = data.capacity;
+                //document.forms['form-edit-location']['occupancy'].value = data.occupancy;
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('error: ', errorThrown);
+            }
+        )*/
+    })
+</script>
+
+{{!-- Delete location event --}}
+<script>
+    let locationId;
+
+    $('.location-del-icon').click(function(e) {
+        locationId = $(this).data('location-id');
+        const locationName = $(this).data('location-name');
+        $('#modal-location-name').text(`Are you sure to delete "${locationName}"?`);
+    })
+
+    $('#btn-del-location').click(async function(e) {
+        const triggerBtn = e.currentTarget;
+        //const locationId = $(triggerBtn).data('location-id');
+        console.log('trigger: ', triggerBtn);
+        console.log('location id: ', locationId);
+
+        $.ajax({
+                url: `/quarantine-locations/${locationId}/delete`,
+                type: 'POST',
+                data: {
+                    is_deleted: true
+                },
+                success: async function (data, textStatus, jqXHR) {
+                    console.log('success: ', data);
+                    window.location.href = `/quarantine-locations`;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error: ', errorThrown);
+                }
+            });
     })
 </script>
 

@@ -1,5 +1,6 @@
 const exphbs = require("express-handlebars");
 var express_handlebars_sections = require("express-handlebars-sections");
+let moneyFormatter = require('../utils/moneyFormatter');
 
 module.exports = (app) => {
   const hbs = exphbs.create({
@@ -13,6 +14,9 @@ module.exports = (app) => {
         return options.inverse(this);
       },
       sum: (a, b) => a + b,
+      formatMoney: function (money) {
+        return moneyFormatter.moneyFormatter(money);
+      },
       convert(data) {
         if (!data) {
           return;
@@ -21,6 +25,7 @@ module.exports = (app) => {
       },
     },
   });
+
   express_handlebars_sections(hbs);
   app.engine(".hbs", hbs.engine);
   app.set("view engine", ".hbs");
