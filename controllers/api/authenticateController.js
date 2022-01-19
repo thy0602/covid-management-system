@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
         const user = await accountModel.getByUsername(req.cookies.user);
         let is_valid = await bcrypt.compare(password, user.password);
 
-        res.status(200).send({ message: "Success!", data: {username: req.cookies.user, is_authorized: is_valid } });
+        res.status(200).send({ message: "Success!", data: {username: req.cookies.user, is_authorized: is_valid, token: req.cookies.jwt } });
         // if (is_valid)
         //     res.status(200).send({ message: "Success!", data: req.cookies.user });
         // else

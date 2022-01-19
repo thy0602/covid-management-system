@@ -140,7 +140,6 @@
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/Chart.roundedBarCharts.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
     $("#products-body").empty();
@@ -187,19 +186,31 @@
         $(obj).toggleClass("clicked-unpaid");
     }
 
-    function showModalPay(id) {
-        $(`#modal-payment`).modal('show');
-    }
-
     function toastNow(msg) {
         $("#toast-body").text(msg);
         $("#toast").toast({ delay: 4000 });
         $("#toast").toast('show');
     }
+
+    function showModalPay(id) {
+        let order_ids = [];
+        $('div[name="order-card"]').each(function(index, div_element) {
+            const div_id = $(div_element).attr("id");
+            const id = div_id.split('-')[1];
+            //console.log(id);
+            if ($(div_element).hasClass("clicked-unpaid"))
+                order_ids.push(id);
+        });
+        if (order_ids.length == 0) {
+            toastNow("Please choose at least an order to make payment");
+            return;
+        }
+        $(`#modal-payment`).modal('show');
+    } 
     
     async function onClickPay() {
         let is_authorized = false;
-        let username, amount, err;
+        let username, amount, err, token;
         await $.ajax({
             url: "/api/authenticate",
             type: 'POST',
@@ -210,6 +221,7 @@
                 const res = await response;
                 is_authorized = res.data.is_authorized;
                 username = res.data.username;
+                token = res.data.token;
             }
         });
         if (!is_authorized) {
@@ -244,12 +256,12 @@
             },
         });
 
-        /*await $.ajax({
+        await $.ajax({
             url: "http://localhost:3000/api/transaction",
             type: 'POST',
             data: {
                 username: username,
-                ids: order_ids,
+                token: token,
                 amount: amount
             },
             success: async function (response, status) {
@@ -261,17 +273,6 @@
                 toastNow(message);
                 console.log("Error: ", message);
             }
-        });*/
-
-        axios.post('http://localhost:3000/api/transaction', {
-            username: username,
-            ids: order_ids,
-            amount: amount
-        })
-        .then((response) => {
-            console.log(response);
-        }, (error) => {
-            console.log(error);
         });
     }
 
