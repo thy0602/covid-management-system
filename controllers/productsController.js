@@ -7,6 +7,9 @@ const verify = require("../middlewares/verify").verify;
 const multer = require("../middlewares/multer");
 const fs = require("fs");
 
+const jwt = require('jsonwebtoken');
+const secretKey = 'ThisIsASecretKey';
+
 router.use('/', (req, res, next) => {
   if (!verify(req, 'user'))
     next();
@@ -14,6 +17,8 @@ router.use('/', (req, res, next) => {
     return res.redirect('/');
 });
 router.get("/", async function (req, res) {
+  // var decoded = jwt.verify(req.cookies.jwt, secretKey);
+  // console.log("DECODED: ", decoded); // bar
   const orderBy = req.query["order-by"];
   let productList;
   switch (orderBy) {

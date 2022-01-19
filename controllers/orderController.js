@@ -68,13 +68,23 @@ router.get("/history", async (req, res) => {
             total_price: moneyFormatter(order.total_price),
             disable: (!order.paid_at) ? '' : 'disabled',
             colorbtnpayment: (!order.paid_at) ? 'success' : 'secondary',
-            listpackage: order.list_package
+            listpackage: order.list_package,
+            is_paid: (!order.paid_at) ? 0 : 1
         }
         listorder.push(order_item);
     }
     res.render('order/order_history', {
         listorder: listorder
     })
+});
+
+router.post('/total_price', async (req, res) => {
+    const ids = req.body.ids;
+    if (typeof ids === 'undefined')
+        res.status(200).send({ amount: 0 });
+    console.log("IDS: ", ids);
+    const response = await orderModel.getTotalPriceByIds(ids);
+    res.status(200).send({ amount: response });
 });
 
 // get products list of pack by packId
