@@ -463,11 +463,11 @@ VALUES
 INSERT INTO "order"("id", "user_id", "ordered_at", "paid_at", "total_price")
 VALUES
 	(DEFAULT, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00', 295000);
-INSERT INTO "order"("id", "user_id", "ordered_at", "total_price")
+INSERT INTO "order"("id", "user_id", "ordered_at", "total_price", "is_urgent")
 VALUES
-	(DEFAULT, 1, '2021-12-06 10:30:00', 205000),
-	(DEFAULT, 1, '2021-12-06 12:30:00', 105000),
-	(DEFAULT, 2, '2021-12-06 9:30:00', 210000);
+	(DEFAULT, 1, '2021-12-06 10:30:00', 205000, TRUE),
+	(DEFAULT, 1, '2021-12-06 12:30:00', 105000, FALSE),
+	(DEFAULT, 2, '2021-12-06 9:30:00', 210000, TRUE);
 
 
 -- -----------------------------

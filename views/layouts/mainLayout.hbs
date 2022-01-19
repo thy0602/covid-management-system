@@ -73,7 +73,6 @@
   };
   
   $("#noti").click(async () => {
-    console.log("heeee");
     let orders;
     await $.ajax({
       url: `/account/notification`,
@@ -101,11 +100,8 @@
 
   $().ready(async () => {
       await loadPage();
-      if (username[0] === 'I') {
-        console.log('user');
-      }
-      else {
-        $("#ring").remove();
+      if (username[0] !== 'I') {
+        $("#noti").remove();
       }
   });
 </script>

@@ -364,8 +364,8 @@ router.get("/", async (req, res) => {
         //     }, []);
         // }
         
-        console.log('get /packlist packDetail:', packDetail);
-        console.log('get /packlist productsInPack:', productsInPack);
+        // console.log('get /packlist packDetail:', packDetail);
+        // console.log('get /packlist productsInPack:', productsInPack);
 
         res.render("packs/pack_grid", {
             isPackage: 1,
