@@ -5,6 +5,11 @@ const userModel = require("../../models/userModel");
 const covidRecordModel = require("../../models/covidRecordModel");
 const relateModel = require("../../models/relateModel");
 
+const provinceModel = require("../../models/provinceModel")
+const districtModel = require("../../models/districtModel")
+const wardModel = require("../../models/wardModel")
+const quarantineLocationModel = require("../../models/quarantineLocationModel")
+
 router.use("/:id", async function (req, res, next) {
   const user = await userModel.getById(req.params.id);
   if (user) {
@@ -27,13 +32,29 @@ router.get("/:id/view", async (req, res) => {
   }
 
   const currentChanges = await covidRecordModel.getById(req.params.id);
-
-  res.render("users/user_details", { user, relatedUsers, currentChanges });
+  res.render("users/user_details", { user, relatedUsers, currentChanges  });
 });
 
 router.get("/:id/edit", async (req, res) => {
-  const user = req.user;
-  res.render("users/user_edit", { user });
+  let provinces = await provinceModel.getAll();
+  let districts = await districtModel.getByProvinceId(req.user.province);
+  let wards = await wardModel.getByDistrictId(req.user.district);
+  let quarantines =  await quarantineLocationModel.getAll();
+  const user = {
+    ...req.user, 
+    current_location: req.user.current_location!=null ? {id: req.user.current_location, name: quarantines.find(quarantine => quarantine.id == req.user.current_location).name} : "",
+    province: {id: req.user.province, name: provinces.find(province => province.id == req.user.province).name},
+    district:  {id: req.user.district, name:districts.find(district => district.id == req.user.district).name},
+    ward: {id: req.user.ward, name: wards.find(ward => ward.id == req.user.ward).name},
+  }
+  
+  if (req.user.current_location != null){
+    quarantines = quarantines.filter(quarantine => quarantine.id != req.user.current_location)
+  }
+  provinces = provinces.filter(province => province.id != req.user.province)
+  districts = districts.filter(district => district.id != req.user.district)
+  wards = wards.filter(ward => ward.id != req.user.ward)
+  res.render("users/user_edit", { user, provinces, districts, wards,quarantines });
 });
 
 //recursion for related update
