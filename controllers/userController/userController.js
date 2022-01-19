@@ -40,6 +40,8 @@ router.get("/:id/edit", async (req, res) => {
   let districts = await districtModel.getByProvinceId(req.user.province);
   let wards = await wardModel.getByDistrictId(req.user.district);
   let quarantines =  await quarantineLocationModel.getAll();
+  quarantines = quarantines.filter(q => q.occupancy != q.capacity);
+
   const user = {
     ...req.user, 
     current_location: req.user.current_location!=null ? {id: req.user.current_location, name: quarantines.find(quarantine => quarantine.id == req.user.current_location).name} : "",
@@ -51,9 +53,11 @@ router.get("/:id/edit", async (req, res) => {
   if (req.user.current_location != null){
     quarantines = quarantines.filter(quarantine => quarantine.id != req.user.current_location)
   }
+  
   provinces = provinces.filter(province => province.id != req.user.province)
   districts = districts.filter(district => district.id != req.user.district)
   wards = wards.filter(ward => ward.id != req.user.ward)
+
   res.render("users/user_edit", { user, provinces, districts, wards,quarantines });
 });
 
@@ -86,6 +90,24 @@ const updateAllRelated = async (updatedUser) => {
 
 router.post("/:id/edit", async (req, res) => {
   const result = await userModel.update(req.body);
+
+  if (req.user.current_location != req.body.current_location) {
+    //location changes, update location
+    
+    let oldLocation = await quarantineLocationModel.getById(Number.parseInt(req.user.current_location));
+    oldLocation = {
+      ...oldLocation,
+      occupancy: oldLocation.occupancy-1,
+    }
+
+    await quarantineLocationModel.update(oldLocation)
+    let newLocation = await quarantineLocationModel.getById(Number.parseInt(req.body.current_location));
+    newLocation = {
+      ...newLocation,
+      occupancy: newLocation.occupancy +1,
+    }
+    await quarantineLocationModel.update(newLocation)
+  }
   if (req.user.current_status != req.body.current_status) {
     //status changes, apply new record
     const newCovidRecord = await covidRecordModel.create({
@@ -93,6 +115,8 @@ router.post("/:id/edit", async (req, res) => {
       record_time: new Date(),
       user_id: req.user.id,
     });
+
+
 
     //update related
     if (req.user.current_status == "F1") {
