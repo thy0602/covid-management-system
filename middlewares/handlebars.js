@@ -12,7 +12,13 @@ module.exports = (app) => {
         }
         return options.inverse(this);
       },
-      sum: (a, b) => a + b
+      sum: (a, b) => a + b,
+      convert(data) {
+        if (!data) {
+          return;
+        }
+        return JSON.stringify(data);
+      },
     },
   });
   express_handlebars_sections(hbs);

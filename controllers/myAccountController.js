@@ -10,7 +10,6 @@ router.get("/", async function (req, res) {
     const userID = req.cookies.user;
 
     const user = await userModel.getByUsername(userID);
-    console.log(user)
 
     let relatedUserIds = await relateModel.getById_1(user.id);
     relatedUserIds = relatedUserIds.concat(
@@ -25,8 +24,6 @@ router.get("/", async function (req, res) {
       );
       relatedUsers.push(relateUser);
     }
-
-    console.log(relatedUsers)
 
     const currentChanges = await covidRecordModel.getById(user.id);
 

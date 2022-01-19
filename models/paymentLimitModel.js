@@ -6,7 +6,11 @@ const { db } = require('../db/db_config.js');
 
 const tableName = "payment_limit";
 
-exports.updatePaymentLimit = async (value) => {
+const tableFields = {
+    value: "value"
+}
+
+exports.updateValue = async (value) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
     const queryStr = pgp.as.format(`UPDATE $1 SET value = ${value} RETURNING *`, table);
 
@@ -21,17 +25,15 @@ exports.updatePaymentLimit = async (value) => {
     }
 }
 
-exports.getPaymentLimit = async () => {
+exports.getValue = async () => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const queryStr = pgp.as.format(`SELECT value FROM $1;`, table);
-
-    console.log(queryStr);
+    const queryStr = pgp.as.format(`SELECT * FROM $1`, table);
 
     try {
+        // one: trả về 1 kết quả
         const res = await db.one(queryStr);
         return res;
-    } catch (error) {
-        console.log("Error packModel/updatePaymentLimit: ", error);
-        throw error;
+    } catch (e) {
+        console.log("Error db/get", e);
     }
 }

@@ -32,6 +32,7 @@ app.use('/admin', require('./controllers/adminController'));
 app.use('/dashboard', require('./controllers/dashboardController'));
 app.use('/server-log', require('./controllers/serverLogController'));
 app.use('/api/authenticate', require('./controllers/api/authenticateController'));
+app.use('/api/payment-limit', require('./controllers/api/paymentLimitController'));
 
 app.get("/", (req, res) => {
   if (req.cookies.user)
