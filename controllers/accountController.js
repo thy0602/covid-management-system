@@ -88,6 +88,9 @@ router.get('/register-password', (req, res) => {
 router.get('/notification', async (req, res) => {
     if (!req.cookies.user)
         return res.redirect('/dashboard');
+
+    if (req.cookies.user[0] == 'M' || req.cookies.user == 'admin')
+        return res.redirect('/dashboard');
     
     try {
         const user = await userModel.getByUsername(req.cookies.user);
