@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const accountModel = require("../models/accountModel");
+const userModel = require("../models/userModel");
+const orderModel = require("../models/orderModel");
+
 router.use('/', async (req, res, next) => {
     next();
 });
@@ -80,6 +83,20 @@ router.get('/register-password', (req, res) => {
         id: req.query.id,
         msg: () => 'empty'
     });
+})
+
+router.get('/notification', async (req, res) => {
+    if (!req.cookies.user)
+        return res.redirect('/dashboard');
+    
+    try {
+        const user = await userModel.getByUsername(req.cookies.user);
+        console.log("USER: ", user);
+        const orders = await orderModel.getUrgentOrders(user.id);
+        res.status(200).send({ orders: orders});
+    } catch(e) {
+        res.status(200).send({ error: e});
+    }
 })
 
 module.exports = router;

@@ -191,6 +191,7 @@ CREATE TABLE "order" (
 	"ordered_at" timestamp DEFAULT NOW(),
 	"paid_at" timestamp,
 	"total_price" numeric(19, 4) NOT NULL,
+	"is_urgent" boolean NOT NULL DEFAULT false,
 	
 	FOREIGN KEY (user_id) REFERENCES "user"("id")
 );
@@ -460,12 +461,12 @@ VALUES
 -- -----------------------------
 INSERT INTO "order"("id", "user_id", "ordered_at", "paid_at", "total_price")
 VALUES
-	(1, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00', 295000);
+	(DEFAULT, 1, '2021-12-06 10:30:00', '2021-12-06 10:35:00', 295000);
 INSERT INTO "order"("id", "user_id", "ordered_at", "total_price")
 VALUES
-	(2, 1, '2021-12-06 10:30:00', 205000),
-	(3, 1, '2021-12-06 12:30:00', 105000),
-	(4, 2, '2021-12-06 9:30:00', 210000);
+	(DEFAULT, 1, '2021-12-06 10:30:00', 205000),
+	(DEFAULT, 1, '2021-12-06 12:30:00', 105000),
+	(DEFAULT, 2, '2021-12-06 9:30:00', 210000);
 
 
 -- -----------------------------

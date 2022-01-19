@@ -7,12 +7,12 @@ const paymentLimitModel = require('../models/paymentLimitModel');
 
 const verify = require('../middlewares/verify').verify;
 
-// router.use('/', (req, res, next) => {
-//     if (verify(req, 'admin')||verify(req,'manager'))
-//         next();
-//     else
-//         return res.redirect('/');
-// });
+router.use('/', (req, res, next) => {
+    if (verify(req, 'admin'))
+        next();
+    else
+        return res.redirect('/');
+});
 
 router.post('/setlimit', async (req, res) => {
     console.log(req.body.minium_limit);
@@ -20,7 +20,7 @@ router.post('/setlimit', async (req, res) => {
     res.redirect('/manage?status=true');
 })
 
-router.get('/', async function (req, res) {
+router.get('/view', async function (req, res) {
     const orderBy = req.query['order-by'];
     let userList;
     switch (orderBy) {

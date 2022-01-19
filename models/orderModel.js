@@ -123,3 +123,44 @@ exports.markPaid = async (ids) => {
        
     }
 }
+
+exports.getUnpaidOrders = async () => {
+    const queryStr = pgp.as.format(`SELECT u."name", o."id", o."user_id", o."ordered_at", o."total_price", o."is_urgent"
+                                    FROM "order" o
+                                    JOIN "user" u on o.user_id = u.id 
+                                    WHERE "paid_at" is NULL`);
+
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (error) {
+        console.log('Error orderModel/getUnpaidOrders: ', error);
+        throw error;
+    }
+}
+
+exports.markIsUrgent = async (order_id) => {
+    const queryStr = pgp.as.format(`UPDATE "order" SET "is_urgent" = TRUE WHERE "id" = ${order_id} RETURNING *`);
+
+    try {
+        const res = await db.one(queryStr);
+        return res;
+    } catch (error) {
+        console.log('Error orderModel/getUnpaidOrders: ', error);
+        throw error;
+    }
+}
+
+exports.getUrgentOrders = async (user_id) => {
+    const queryStr = pgp.as.format(`SELECT * FROM "order" WHERE "user_id" = ${user_id} 
+                                    AND "paid_at" IS NULL AND "is_urgent" IS TRUE`);
+
+    try {
+        const res = await db.any(queryStr);
+        console.log(res);
+        return res;
+    } catch (error) {
+        console.log('Error orderModel/getUrgentOrder: ', error);
+        throw error;
+    }
+}
