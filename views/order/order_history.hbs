@@ -143,6 +143,7 @@
 
 <script>
     $("#products-body").empty();
+    var username, amount, err, token;
 
     function moneyFormatter(x) {
         let moneyFormatter  = new Intl.NumberFormat();
@@ -187,12 +188,12 @@
     }
 
     function toastNow(msg) {
-        $("#toast-body").text(msg);
+        $("#toast-body").html(msg);
         $("#toast").toast({ delay: 4000 });
         $("#toast").toast('show');
     }
 
-    function showModalPay(id) {
+    async function showModalPay(id) {
         let order_ids = [];
         $('div[name="order-card"]').each(function(index, div_element) {
             const div_id = $(div_element).attr("id");
@@ -205,12 +206,26 @@
             toastNow("Please choose at least an order to make payment");
             return;
         }
+
+        await $.ajax({
+            url: "/order/total_price",
+            type: 'POST',
+            data: {
+                ids: order_ids
+            },
+            success: async function (response, status) {
+                const res = await response;
+                amount = res.amount;
+                console.log("amount: ", amount);
+            },
+        });
+
         $(`#modal-payment`).modal('show');
     } 
     
     async function onClickPay() {
         let is_authorized = false;
-        let username, amount, err, token;
+        //let username, amount, err, token;
         await $.ajax({
             url: "/api/authenticate",
             type: 'POST',
@@ -244,19 +259,6 @@
         }
 
         await $.ajax({
-            url: "/order/total_price",
-            type: 'POST',
-            data: {
-                ids: order_ids
-            },
-            success: async function (response, status) {
-                const res = await response;
-                amount = res.amount;
-                console.log("amount: ", amount);
-            },
-        });
-
-        await $.ajax({
             url: "http://localhost:3000/api/transaction",
             type: 'POST',
             data: {
@@ -266,7 +268,7 @@
             },
             success: async function (response, status) {
                 const res = await response;
-                toastNow("Make payment successfully          Please reload to see result! :)");
+                toastNow("Make payment successfully <br> Please reload to see result! :)");
                 console.log(res);
             },
             error: async function (xhr, status, message) {
