@@ -16,7 +16,7 @@ const verify = require('../middlewares/verify').verify;
 
 router.post('/setlimit', async (req, res) => {
     console.log(req.body.minium_limit);
-    const value = paymentLimitModel.updatePaymentLimit(req.body.minium_limit);
+    const value = paymentLimitModel.updateValue(req.body.minium_limit);
     res.redirect('/manage?status=true');
 })
 
@@ -41,7 +41,7 @@ router.get('/', async function (req, res) {
             break;
     }
 
-    const paymentLimit = await paymentLimitModel.getPaymentLimit();
+    const paymentLimit = await paymentLimitModel.getValue();
 
     let ms = {
         userList: userList,
@@ -50,8 +50,7 @@ router.get('/', async function (req, res) {
     }
     if (req.query.status) {
         ms.message = 'Update Minimum Limit successfully!';
-        ms.color = '#8584c7';
-        ms.msg = () => 'login_partials/msg_password';
+        ms.msg = () => 'msg_paymentlimit';
     }
     else
         ms.msg = () => 'empty';
