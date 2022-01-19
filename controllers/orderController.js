@@ -78,13 +78,39 @@ router.get("/history", async (req, res) => {
     })
 });
 
+router.put('/paid', async (req, res) => {
+    let ids = req.body.ids;
+    console.log("ids: ", ids);
+
+    ids = ids.map((id) => {
+        return parseInt(id);
+    });
+    console.log("ids: ", ids);
+    try {
+        if (typeof ids == 'undefined')
+        return res.status(200).send({ success: false });
+        const response = await orderModel.markPaid(ids);
+        console.log("Mark paid:", response);
+        return res.status(200).send({ success: true });
+    } catch(e) {
+        return res.status(200).send({ success: false });
+    }
+});
+
 router.post('/total_price', async (req, res) => {
     const ids = req.body.ids;
-    if (typeof ids === 'undefined')
+    if (typeof ids === 'undefined') {
         res.status(200).send({ amount: 0 });
-    console.log("IDS: ", ids);
+    }
+
     const response = await orderModel.getTotalPriceByIds(ids);
     res.status(200).send({ amount: response });
+});
+
+router.get('/unpaid_prices', async (req, res) => {
+    const user = await userModel.getByUsername(req.cookies.user);
+    const response = await orderModel.getUnpaidTotalPrice(user.id);
+    return res.status(200).send({ amount: response });
 });
 
 // get products list of pack by packId
