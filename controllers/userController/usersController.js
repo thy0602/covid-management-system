@@ -3,6 +3,8 @@ const router = express.Router();
 const userModel = require('../../models/userModel');
 const accountModel = require('../../models/accountModel');
 const addressModel = require('../../models/addressModel');
+const covidRecordModel = require('../../models/covidRecordModel');
+const location = require('../../models/quarantineLocationModel');
 
 const verify = require('../../middlewares/verify').verify;
 
@@ -18,19 +20,19 @@ router.get('/', async function (req, res) {
     let userList;
     switch (orderBy) {
         case 'name-ascending':
-            userList = await userModel.getAllPatientOrderBy('name', true);
+            userList = await userModel.getAllUserOrderBy('name', true);
             break;
 
         case 'name-descending':
-            userList = await userModel.getAllPatientOrderBy('name', false);
+            userList = await userModel.getAllUserOrderBy('name', false);
             break;
 
         case 'serious-status':
-            userList = await userModel.getAllPatientOrderBy('current_status', true);
+            userList = await userModel.getAllUserOrderBy('current_status', true);
             break;
 
         default:
-            userList = await userModel.getAllPatientOrderBy('name', true);
+            userList = await userModel.getAll();
             break;
     }
 
@@ -51,27 +53,27 @@ router.post('/store', async (req, res) => {
 });
 
 router.get('/new', async (req, res) => {
-    let user = await userModel.getAllRoleOrderBy(req.query.role);
+    let user = await userModel.getAllRoleOrderBy('user');
     if (user.length != 0) {
         user = user[user.length - 1].username;
         const regex = /[^\D0]+/g;
         let i = 0;
-        if (parseInt(user.slice(3)) + 1 > 9)
+        let head = user.slice(user.search(regex));
+        console.log(head);
+        if ((head.length == 1 && head[0] == '9') || (head[1] == '9' && head[0] == '9'))
             i = -1
         user = user.slice(0, user.search(regex) + i) + (parseInt(user.slice(3)) + 1);
     } else {
         if (req.query.role == 'user')
             user = 'ID_001';
-        else
-            user = 'M_001';
     }
-
     let province_list = await addressModel.getAll('province');
+    let location_list = await addressModel.getAll('quarantine_location');
 
     return res.render("users/user_form", {
         province: province_list,
-        username: user,
-        rolename: req.query.role
+        location: location_list,
+        username: user
     });
 })
 
@@ -86,28 +88,38 @@ router.get('/getRegion', async (req, res) => {
 
 router.post('/new', async (req, res) => {
 
-    const entity = {
+    const acc = await accountModel.create({
+        username: req.body.username,
+        role: 'user',
+        is_deleted: false,
+        is_locked: false
+    })
+    const user = await userModel.create({
         name: req.body.name,
         username: req.body.username,
         year_of_birth: req.body.yob,
         address: req.body.street,
         identity_number: req.body.indentity,
-        // max_basket: req.body.maxbasket,
-        // basket_timelimit: req.body.baskettimeltd,
-        current_status: null,
-        current_location: null,
+        current_status: req.body.covidstt,
+        current_location: req.body.location,
         province: req.body.province,
         district: req.body.district,
         ward: req.body.ward
-    }
-    const acc = await accountModel.create({
-        username: req.body.username,
-        role: req.body.username.search('ID_') != -1 ? 'user' : 'manager',
-        is_deleted: false,
-        is_locked: false
+    });
+
+    let user_id = await userModel.getByUsername(req.body.username);
+    const status = await covidRecordModel.create({
+        covid_status: req.body.covidstt,
+        record_time: new Date(),
+        user_id: user_id.id,
+    });
+    const lct = await location.getById(req.body.location);
+    const lstt = await location.update({
+        id: req.body.location,
+        occupancy: lct.occupancy + 1
     })
-    const user = await userModel.create(entity);
-    if (user && acc) {
+
+    if (user && acc && status && lstt) {
         return res.redirect('./');
     }
     res.send({ error: "Can't create user!" });
