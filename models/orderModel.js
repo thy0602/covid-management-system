@@ -150,3 +150,17 @@ exports.markIsUrgent = async (order_id) => {
         throw error;
     }
 }
+
+exports.getUrgentOrders = async (user_id) => {
+    const queryStr = pgp.as.format(`SELECT * FROM "order" WHERE "user_id" = ${user_id} 
+                                    AND "paid_at" IS NULL AND "is_urgent" IS TRUE`);
+
+    try {
+        const res = await db.any(queryStr);
+        console.log(res);
+        return res;
+    } catch (error) {
+        console.log('Error orderModel/getUrgentOrder: ', error);
+        throw error;
+    }
+}

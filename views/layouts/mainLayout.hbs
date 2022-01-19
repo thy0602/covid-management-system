@@ -59,22 +59,54 @@
   <!-- endinject -->
 
 <script>
+  var username;
   async function loadPage() {
     await $.ajax({
       url: `/api/authenticate`,
       type: 'GET',
       success: async function (response, status) {
           const res = await response;
-          const username = res.username;
-          console.log("USERNAME: ", username);
+          username = res.username;
           $("#username").text(username);
       }
     });
   };
   
+  $("#noti").click(async () => {
+    console.log("heeee");
+    let orders;
+    await $.ajax({
+      url: `/account/notification`,
+      type: 'GET',
+      success: async function (response, status) {
+          const res = await response;
+          orders = res.orders;
+      }
+    });
 
-  $().ready(() => {
-      loadPage();
+    $("#ring").empty();
+    for (let order of orders) {
+      $("#ring").append(`<a class="dropdown-item preview-item" href="/order/history">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-success">
+                  <i class="ti-info-alt mx-0"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject font-weight-normal">Order ${order.id} is unpaid</h6>
+              </div>
+            </a>`);
+    }
+  });
+
+  $().ready(async () => {
+      await loadPage();
+      if (username[0] === 'I') {
+        console.log('user');
+      }
+      else {
+        $("#ring").remove();
+      }
   });
 </script>
   
