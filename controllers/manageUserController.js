@@ -13,6 +13,15 @@ const verify = require('../middlewares/verify').verify;
 //         return res.redirect('/');
 // });
 
+router.get('/setlimit', async (req, res) => {
+    res.render('manage/manageUser');
+});
+
+router.post('/setlimit', async (req, res) => {
+    console.log(req.body.minium_limit);
+    res.render('manage/manageUser');
+})
+
 router.get('/', async function (req, res) {
     const orderBy = req.query['order-by'];
     let userList;
