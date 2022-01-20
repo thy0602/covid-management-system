@@ -1,6 +1,10 @@
+require('dotenv').config();
+
 const pgp = require('pg-promise')({
     capSQL: true,
 });
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 const connection = {
     user: 'postgres',
@@ -11,4 +15,4 @@ const connection = {
     max: 30,
 }
 
-exports.db = pgp(connection);
+exports.db = pgp(isProduction ? process.env.DATABASE_URL : connection);
