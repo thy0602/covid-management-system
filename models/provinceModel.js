@@ -20,3 +20,15 @@ exports.getAll = async () => {
         console.log("Error db/load relatedModel", e);
     }
 }
+
+
+exports.getById = async (id) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE "${tableFields.id}" = '${id}'`, table);
+    try {
+        const res = await db.one(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error db/load relatedModel", e);
+    }
+}

@@ -9,33 +9,47 @@
                             <img style="max-width: 100px; margin: auto; display: flex;" src="/img/user.png" />
                         </div>
                         <div>
-                            <h3>Name: {{user.name}}</h4>
-                                <h3>ID: {{user.username}}</h4>
+                            <h4>Name: {{user.name}}</h4>
+                                <h4>ID: {{user.username}}</h4>
                                     <label class="badge badge-danger px-4">{{user.current_status}}</label>
                         </div>
                     </div>
                     <div style="margin-top: 20px;"
                         class="row d-sm-flex justify-content-center justify-content-sm-between">
                         <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Year of birth
-                            </h3>
-                            <h3 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">
-                                {{user.year_of_birth}}</h2>
-                    </div>
-                    <div class="row d-sm-flex justify-content-center justify-content-sm-between">
-                        <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Address</h3>
-                            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.address}}
-                                </h2>
-                    </div>
-                    <div class="row d-sm-flex justify-content-center justify-content-sm-between">
-                        <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Personal ID</h3>
+                            </h4>
                             <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">
-                                {{user.identity_number}}</h2>
+                                {{user.year_of_birth}}</h4>
+                    </div>
+                    <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+                        <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Address</h4>
+                            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.address}}
+                                </h4>
+                    </div>
+                    <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+                        <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Province</h4>
+                        <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{province.name}}
+                        </h4>
+                    </div>
+                    <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+                        <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">District</h4>
+                        <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{district.name}}
+                        </h4>
+                    </div>
+                    <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+                        <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Ward</h4>
+                        <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{ward.name}}</h4>
+                    </div>
+                    <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+                        <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Personal ID</h4>
+                        <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">
+                            {{user.identity_number}}</h4>
                     </div>
                     <div class="row d-sm-flex justify-content-center justify-content-sm-between">
                         <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Quarantine Place
-                            </h3>
-                            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">
-                                {{user.current_location}}</h2>
+                        </h4>
+                        <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{quarantine.name}}
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -61,7 +75,8 @@
                                     <td>{{username}}</td>
                                     <td>{{name}}</td>
                                     <td>
-                                        <label class="badge badge-{{#ifStr current_status "F0"}}danger{{/ifStr}}{{#ifStr current_status "F1"
+                                        <label class="badge badge-{{#ifStr current_status "
+                                            F0"}}danger{{/ifStr}}{{#ifStr current_status "F1"
                                             }}warning{{/ifStr}}{{#ifStr current_status "F2" }}primary{{/ifStr}} px-4
                                             text-white">{{current_status}}
                                         </label>
@@ -106,31 +121,31 @@
                 </div>
             </div>
         </div>
-            <div class="col-md-5 stretch-card grid-margin">
-      <div class="card">
-        <div class="card-body">
-          <p class="card-title">Latest Location Change</p>
-          <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
-            {{#if location}}
-            {{#each location}}
-            <li>
-              <div class="d-flex">
-                <i class="mdi mdi-hospital-building menu-icon m-4" style="user-select: auto;"></i>
-                <div>
-                  <p class="text-info mb-1">Location: {{name}}</p>
-                  <p class="mb-0">Record Time: {{record_time}}</p>
+        <div class="col-md-5 stretch-card grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">Latest Location Change</p>
+                    <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
+                        {{#if location}}
+                        {{#each location}}
+                        <li>
+                            <div class="d-flex">
+                                <i class="mdi mdi-hospital-building menu-icon m-4" style="user-select: auto;"></i>
+                                <div>
+                                    <p class="text-info mb-1">Location: {{name}}</p>
+                                    <p class="mb-0">Record Time: {{record_time}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                        {{else}}
+                        <div class="d-flex">
+                            <p class="text-danger">No latest changes!</p>
+                        </div>
+                        {{/if}}
+                    </ul>
                 </div>
-              </div>
-            </li>
-            {{/each}}
-            {{else}}
-            <div class="d-flex">
-              <p class="text-danger">No latest changes!</p>
             </div>
-            {{/if}}
-          </ul>
         </div>
-      </div>
-    </div>
     </div>
 </div>

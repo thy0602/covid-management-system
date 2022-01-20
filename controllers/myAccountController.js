@@ -7,6 +7,10 @@ const relateModel = require("../models/relateModel");
 const quarantineLocationModel = require("../models/quarantineLocationModel");
 const quarantineLocationRecordModel = require("../models/quarantineLocationRecordModel");
 
+const provinceModel = require("../models/provinceModel");
+const districtModel = require("../models/districtModel");
+const wardModel = require("../models/wardModel")
+
 router.get("/", async function (req, res) {
 
   let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
@@ -41,7 +45,12 @@ router.get("/", async function (req, res) {
       })
     }
 
-    res.render("myAccount", { user, relatedUsers, currentChanges, location });
+    const province = await provinceModel.getById(user.province);
+    const district = await districtModel.getById(user.district);
+    const ward = await wardModel.getById(user.ward);
+    let quarantine = user.current_location ? await quarantineLocationModel.getByLocationId(user.current_location) : "";
+
+    res.render("myAccount", { user, relatedUsers, currentChanges, location, province, district, ward, quarantine});
   } else {
     res.render("myAccount");
   }

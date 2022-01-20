@@ -33,7 +33,6 @@ router.get("/:id/view", async (req, res) => {
     const relateUser = await userModel.getById(relatedUserIds[i].user_id2 == user.id ? relatedUserIds[i].user_id1 : relatedUserIds[i].user_id2);
     relatedUsers.push(relateUser);
   }
-  console.log(relatedUsers);
 
   const locationChanges = await quarantineLocationRecordModel.getByUserId(user.id);
   let location = [];
@@ -45,8 +44,13 @@ router.get("/:id/view", async (req, res) => {
     })
   }
 
+  const province = await provinceModel.getById(user.province);
+  const district = await districtModel.getById(user.district);
+  const ward = await wardModel.getById(user.ward);
+  let quarantine = user.current_location ? await quarantineLocationModel.getByLocationId(user.current_location) : "";
+
   const currentChanges = await covidRecordModel.getById(req.params.id);
-  res.render("users/user_details", { user, relatedUsers, currentChanges,location  });
+  res.render("users/user_details", { user, relatedUsers, currentChanges,location,province,district,ward,quarantine  });
 });
 
 router.get("/:id/edit", async (req, res) => {
@@ -103,7 +107,12 @@ const updateAllRelated = async (updatedUser) => {
 };
 
 router.post('/:id/related', async (req, res) => {
-  logger.log_action({sender_id:require('jsonwebtoken').decode(req.cookies.user, true).username, action: "Add Relate", data: `${req.user.id},${req.body.user_id2}`, date: new Date().toLocaleString()})
+  logger.log_action({
+    sender_id: require("jsonwebtoken").decode(req.cookies.user, true).username,
+    action: "Add Relate",
+    data: `${req.user.id},${req.body.user_id2}`,
+    date: new Date().toLocaleString(),
+  });
   const newRelate = {
     user_id1: req.user.id,
     user_id2: req.body.user_id2,

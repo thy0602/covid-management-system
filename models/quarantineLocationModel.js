@@ -32,8 +32,8 @@ exports.getByLocationId = async (locationId) => {
         const res = await db.one(queryStr);
         return res;
     } catch (error) {
-        console.log("Error quarantineLocationModel/getByLocationId: ", e);
-        throw e;
+        console.log("Error quarantineLocationModel/getByLocationId: ", error);
+        throw error;
     }
 }
 
