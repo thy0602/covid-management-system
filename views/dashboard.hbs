@@ -301,7 +301,7 @@
 <!-- Custom js for this page-->
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript">
-  function fetchStatistic(from, to) {
+  async function fetchStatistic(from, to) {
     var step = ((to - from) / (1000 * 3600 * 24)) / 7;
     console.log(step);
 
@@ -314,24 +314,17 @@
       new Date(from.setDate(from.getDate() + step)).toISOString(),
       to.toISOString(),
     ];
-    let array = [0, 0, 0, 0, 0, 0, 0];
-    var fetches = [];
-    for (let i = 0; i < dates.length; i++) {
-      fetches.push(
-        fetch("/dashboard/statistic?date=" + dates[i])
-          .then((res) => {
-            res.json().then((data) => {
-              array[i] = data.count;
-            });
-          })
-          .catch((err) => {
-            console.log("ERROR:", err);
-          })
-      );
+    let array = [];
+    for (let i = 0; i < dates.length-1; i++) {
+      const resJson = await fetch("/dashboard/statistic?fromDate=" + dates[i] + "&toDate="+dates[i+1]);
+      const data = await resJson.json();
+      array.push(data.length);
     }
-    return Promise.all(fetches).then(function () {
-      return array;
-    });
+    const resJson = await fetch("/dashboard/statistic?fromDate=" + dates[dates.length-1] + "&toDate="+dates[dates.length-1]);
+    const data = await resJson.json();
+    array.push(data.length);
+    console.log(array);
+    return array;
   }
   $(function () {
     const today = new Date(Date.now());
@@ -381,6 +374,7 @@
 
   const dateChange = () => {
     const from = new Date($("#from").val()), to = new Date($("#to").val());
+
     const formmatFrom = new Date(from);
     var step = ((to - from) / (1000 * 3600 * 24)) / 7;
     const dates = [
@@ -393,6 +387,7 @@
       to.toLocaleDateString(),
     ];
     fetchStatistic(from,to).then((res) => {
+      console.log(res[3]);
       var areaData = {
         labels: [
           dates[0],
@@ -418,15 +413,15 @@
         datasets: [
           {
             data: [
-              parseInt(res[0].count),
-              parseInt(res[0].count + res[1].count) / 2,
-              parseInt(res[1].count),
-              parseInt(res[2].count),
-              parseInt(res[2].count + res[3].count) / 2,
-              parseInt(res[3].count),
-              parseInt(res[4].count),
-              parseInt(res[5].count),
-              parseInt(res[6].count),
+              parseInt(res[0]),
+              parseInt(res[0] + res[1]) / 2,
+              parseInt(res[1]),
+              parseInt(res[2]),
+              parseInt(res[2] + res[3]) / 2,
+              parseInt(res[3]),
+              parseInt(res[4]),
+              parseInt(res[5]),
+              parseInt(res[6]),
             ],
             borderColor: ["#4747A1"],
             borderWidth: 2,
@@ -510,7 +505,7 @@
 
   $("#from").change(dateChange);
   $("#to").change(dateChange);
-
+  dateChange();
   })
 
 </script>
