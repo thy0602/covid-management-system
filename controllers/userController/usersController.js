@@ -5,7 +5,7 @@ const accountModel = require('../../models/accountModel');
 const addressModel = require('../../models/addressModel');
 const covidRecordModel = require('../../models/covidRecordModel');
 const location = require('../../models/quarantineLocationModel');
-const location_record = require('../../models/quanrantineLocationRecordModel')
+const location_record = require('../../models/quarantineLocationRecordModel')
 const serverLog = require("../../utils/server_log");
 
 const verify = require('../../middlewares/verify').verify;
