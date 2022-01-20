@@ -134,7 +134,7 @@ router.post('/new', async (req, res) => {
 
     var options = {
         'method': 'POST',
-        'url': 'http://localhost:3000/api/account',
+        'url': 'https://localhost:3000/api/account',
         'data': {
             "username": temp,
             "token": req.cookies.user,
