@@ -2,6 +2,8 @@ const exphbs = require("express-handlebars");
 var express_handlebars_sections = require("express-handlebars-sections");
 let moneyFormatter = require('../utils/moneyFormatter');
 
+const path = require('path');
+
 module.exports = (app) => {
   const hbs = exphbs.create({
     defaultLayout: "mainLayout",
@@ -29,5 +31,5 @@ module.exports = (app) => {
   express_handlebars_sections(hbs);
   app.engine(".hbs", hbs.engine);
   app.set("view engine", ".hbs");
-  app.set("views", "./views");
+  app.set('views', path.join(__dirname, "../views"));
 };
