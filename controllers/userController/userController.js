@@ -31,6 +31,7 @@ router.get("/:id/view", async (req, res) => {
     const relateUser = await userModel.getById(relatedUserIds[i].user_id2 == user.id ? relatedUserIds[i].user_id1 : relatedUserIds[i].user_id2);
     relatedUsers.push(relateUser);
   }
+  console.log(relatedUsers);
 
   const currentChanges = await covidRecordModel.getById(req.params.id);
   res.render("users/user_details", { user, relatedUsers, currentChanges  });
@@ -88,6 +89,38 @@ const updateAllRelated = async (updatedUser) => {
     }
   }
 };
+
+router.post('/:id/related', async (req, res) => {
+  const newRelate = {
+    user_id1: req.user.id,
+    user_id2: req.body.user_id2,
+  }
+  const result = await relateModel.create(newRelate);
+  if (result){
+    res.status(200).send();
+  } else {
+    res.status(401).send();
+  }
+})
+
+router.post('/:id/related/delete', async (req, res) => {
+  await relateModel.delete(req.body);
+  const reCheck = await relateModel.getById_1(req.body.user_id1);
+
+  let exist = false;
+  reCheck.forEach(r => {
+    if (r.user_id2 == req.body.user_id2){
+      exist = true;
+    }
+  })
+  
+  if (!exist) {
+    res.status(200).send();
+  } else {
+    res.status(401).send();
+  }
+})
+
 
 router.post("/:id/edit", async (req, res) => {
   console.log(req.body);

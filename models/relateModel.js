@@ -30,3 +30,27 @@ exports.getById_2 = async (id) => {
         console.log("Error db/load relatedModel", e);
     }
 }
+
+
+exports.create = async (entity) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const qStr = pgp.helpers.insert(entity, null, table) + "RETURNING *";
+    try {
+        const res = await db.one(qStr);
+        return res;
+    } catch (error) {
+        console.log('error db/usercreate:', error);
+    }
+};
+
+exports.delete = async (entity) => {
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const qStr = pgp.as.format(`DELETE FROM $1 WHERE ${tableFields.user_id1} = '${entity.user_id1}' AND ${tableFields.user_id2} = '${entity.user_id2}'`, table);
+    try {
+        const res = await db.any(qStr);
+        return res;
+    } catch (error) {
+        console.log('error db/usercreate:', error);
+    }
+};
+

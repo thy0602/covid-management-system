@@ -9,9 +9,10 @@
               <img style="max-width: 100px; margin: auto; display: flex;" src="/img/user.png" />
             </div>
             <div>
+              <h3 id="userid">{{user.id}}</h3>
               <h3>Name: {{user.name}}</h4>
-                <h3>ID: {{user.username}}</h4>
-                  <label class="badge badge-danger px-4">{{user.current_status}}</label>
+              <h3 id="username">ID: {{user.username}}</h4>
+              <label class="badge badge-danger px-4">{{user.current_status}}</label>
             </div>
           </div>
           <div style="margin-top: 20px;" class="row d-sm-flex justify-content-center justify-content-sm-between">
@@ -53,17 +54,17 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody  style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
                 {{#each relatedUsers}}
                 <tr style="max-height: 50px;">
                   <td>{{username}}</td>
                   <td>{{name}}</td>
-                  <td><label class="badge badge-{{#ifStr current_status " F0"}}danger{{/ifStr}}{{#ifStr
+                  <td><label class="badge badge-{{#ifStr current_status "F0"}}danger{{/ifStr}}{{#ifStr
                       current_status "F1" }}warning{{/ifStr}}{{#ifStr current_status "F2" }}primary{{/ifStr}} px-4
                       text-white">{{current_status}}</label></td>
                   <td>
                     <div>
-                      <button type="button" class="btn btn-danger btn-icon">
+                      <button type="button" class="btn btn-danger btn-icon" onclick="deleteRelated({{id}})">
                         <i class="ti-trash"></i>
                       </button>
                     </div>
@@ -79,9 +80,13 @@
             </div>
             {{/if}}
           </div>
-          <button style="display: flex; margin: auto;" type="button" class="btn btn-primary">
-            Add new
-          </button>
+          <h4 class='my-2'>Add new related people</h4>
+          <div style="display: flex; margin: auto; width: 100%;">
+            <input style="width: 90%;" type="number" min="0" max="1000" class="form-control" id="newRelate" placeholder="Other people ID (Ex: 1)" required/>
+            <button  onclick="addNewRelate()" type="button" class="btn btn-primary py-0 mx-2">
+              Add new
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -114,29 +119,42 @@
   </div>
 </div>
 
-<!-- The Modal -->
-<div id="myModal" style="display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span>&times;</span>
-    <form></form>
-  </div>
-
-</div>
-
 {{#section 'js'}}
 <script type="text/javascript">
   function redirectToEdit(id) {
     $(location).attr('href', `/users/${id}/edit`)
+  }
+  function addNewRelate(){
+    const id = $("#userid").text();
+    var jqxhr = $.post(`/users/${id}/related`, { user_id2: $("#newRelate").val()}, function () {
+
+    })
+      .done(function () {
+        alert("Add related successfully!");
+      })
+      .fail(function (err) {
+        alert("Error: New ID does not match any existing UserID");
+      })
+    // Set another completion function for the request above
+    jqxhr.always(function () {
+      $(location).attr("href", $(location).attr("href"));
+    });
+  }
+  function deleteRelated(id2){
+    const id = $("#userid").text();
+    var jqxhr = $.post(`/users/${id}/related/delete`, { user_id1: id, user_id2: id2}, function () {
+
+    })
+      .done(function () {
+        alert("Delete related successfully!");
+      })
+      .fail(function (err) {
+        alert("Error: Something went wrong!");
+      })
+    // Set another completion function for the request above
+    jqxhr.always(function () {
+      $(location).attr("href", $(location).attr("href"));
+    });
   }
 </script>
 {{/section}}
