@@ -163,7 +163,7 @@
                                             alt="image" /> --}}
                                     </td>
                                     <td id="nameProduct">{{this.name}}</td>
-                                    <td id="price">{{this.price}}</td>
+                                    <td id="price">{{formatMoney this.price}}</td>
                                     <td>{{this.unit}}</td>
                                     <td><input type="number" min="0" max="{{this.quantity_limit}}" value="{{this.quantity_limit}}"
                                             style="text-align: center; max-width: 4rem; margin-left: 0.75rem"
