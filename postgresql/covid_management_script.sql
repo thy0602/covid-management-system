@@ -100,6 +100,8 @@ CREATE TABLE "relate" (
 	FOREIGN KEY (user_id1) REFERENCES "user"("id"),
 	FOREIGN KEY (user_id2) REFERENCES "user"("id")
 );
+ALTER TABLE "relate" 
+ADD CONSTRAINT id1_differ_id2 CHECK (user_id1 <> user_id2);
 
 -- -----------------------------
 -- Table covid_record
