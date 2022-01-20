@@ -7,6 +7,7 @@ const productImageModel = require("../models/productImageModel");
 const stringSimilarity = require("string-similarity");
 const verify = require("../middlewares/verify").verify;
 const searchFilter = require('../utils/searchFilter');
+const serverLog = require("../utils/server_log");
 
 router.use('/', (req, res, next) => {
     if (verify(req, 'admin') || verify(req, 'manager'))
@@ -46,9 +47,15 @@ router.post("/new", async (req, res) => {
         }
         // console.log("post /packs/:packId/edit products: ", products);
 
-        result = await pack_itemsModel.add(products);
+        let results = await pack_itemsModel.add(products);
         // console.log("post /packs/:packId/edit insert pack_items result: ", result);
-        res.json(result);
+        serverLog.log_action({
+            sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
+            action: `Create pack`,
+            data: `PackId: ${result.id}, PackName: ${result.name}`,
+            date: new Date()
+        });
+        res.json(results);
     } catch (error) {
         console.log("Error post /packs/new: ", error);
         res.status(400).send(error);
@@ -112,11 +119,18 @@ router.post("/:packId/edit", async (req, res) => {
     try {
         let result = await packModel.updateByPackId(packId, packDetail);
         console.log("post /packs/:packId/edit update result: ", result);
-        result = await pack_itemsModel.deleteAllByPackId(packId);
+        let results = await pack_itemsModel.deleteAllByPackId(packId);
         // console.log('post /packs/:packId/edit delete result: ', result);
-        result = await pack_itemsModel.add(products);
+        results = await pack_itemsModel.add(products);
         // console.log('post /packs/:packId/edit insert result: ', result);
-        res.json(result);
+
+        serverLog.log_action({
+            sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
+            action: `Edit pack`,
+            data: `PackId: ${result.id}, PackName: ${result.name}`,
+            date: new Date()
+        });
+        res.json(results);
     } catch (error) {
         console.log("Error post /packs/:packId/edit: ", error);
         res.status(400).send(error);
@@ -133,6 +147,13 @@ router.post("/:packId/delete", async (req, res) => {
             is_deleted: true,
         });
         console.log("post /packs/:packId/edit delete result: ", result);
+
+        serverLog.log_action({
+            sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
+            action: `Delete pack`,
+            data: `PackId: ${result.id}, PackName: ${result.name}`,
+            date: new Date()
+        });
         res.json(result);
     } catch (error) {
         console.log("Error post /packs/:packId/delete: ", error);
