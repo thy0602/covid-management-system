@@ -55,11 +55,11 @@ exports.getById = async (id) => {
 exports.getTodayAllCases = async () => {
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const todayStart =
-      new Date().toLocaleDateString().replace("/", "-").replace("/", "-") +
-      " 00:00:00",
+      new Date().toISOString().replace("/", "-").replace("/", "-").slice(0,11) +
+      " 00:00:00.000",
     todayEnd =
-      new Date().toLocaleDateString().replace("/", "-").replace("/", "-") +
-      " 23:59:59";
+      new Date().toISOString().replace("/", "-").replace("/", "-").slice(0,11) +
+      " 23:59:59.000";
   const queryStr = pgp.as.format(
     `SELECT COUNT(*) FROM $1 WHERE "${tableFields.record_time}" BETWEEN '${todayStart}' AND '${todayEnd}'`,
     table
@@ -79,11 +79,11 @@ exports.getTodayAllCases = async () => {
 exports.getTodaySpecificCase = async (type) => {
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const todayStart =
-      new Date().toLocaleDateString().replace("/", "-").replace("/", "-") +
-      " 00:00:00",
+      new Date().toISOString().replace("/", "-").replace("/", "-").slice(0,11) +
+      " 00:00:00.000",
     todayEnd =
-      new Date().toLocaleDateString().replace("/", "-").replace("/", "-") +
-      " 23:59:59";
+      new Date().toISOString().replace("/", "-").replace("/", "-").slice(0,11) +
+      " 23:59:59.000";
   const queryStr = pgp.as.format(
     `SELECT COUNT(*) FROM $1 WHERE "${tableFields.record_time}" BETWEEN '${todayStart}' AND '${todayEnd}', "${tableFields.covid_status} = ${type}`,
     table
@@ -101,8 +101,8 @@ exports.getTodaySpecificCase = async (type) => {
 };
 
 exports.getStatusFromDate = async (startDate,status) => {
-  const formattedStartDate = new Date(startDate).toLocaleDateString().replace("/", "-").replace("/", "-") + " 00:00:00";
-  const todayEnd = new Date().toLocaleDateString().replace("/", "-").replace("/", "-") + " 23:59:59";
+  const formattedStartDate = new Date(startDate).toISOString().replace("/", "-").replace("/", "-").slice(0,11)  + "00:00:00.000";;
+  const todayEnd = new Date().toISOString().replace("/", "-").replace("/", "-").slice(0,11)  + "23:59:59.000";;
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const queryStr = pgp.as.format(
     `SELECT * FROM $1 WHERE "${tableFields.covid_status}" = '${status}' AND "${tableFields.record_time}" BETWEEN '${formattedStartDate}' AND '${todayEnd}'`,
@@ -121,11 +121,8 @@ exports.getStatusFromDate = async (startDate,status) => {
 }
 
 exports.getAllFromDate = async (startDate) => {
-  const formattedStartDate = new Date(startDate).toLocaleDateString().replace("/", "-").replace("/", "-") +
-  " 00:00:00";
-  const todayEnd =
-      new Date().toLocaleDateString().replace("/", "-").replace("/", "-") +
-      " 23:59:59";
+  const formattedStartDate = new Date(startDate).toISOString().replace("/", "-").replace("/", "-").slice(0,11) + "00:00:00.000";
+  const todayEnd = new Date().toISOString().replace("/", "-").replace("/", "-").slice(0,11) + "23:59:59.000";
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const queryStr = pgp.as.format(
     `SELECT * FROM $1 WHERE "${tableFields.record_time}" BETWEEN '${formattedStartDate}' AND '${todayEnd}'`,
@@ -144,11 +141,8 @@ exports.getAllFromDate = async (startDate) => {
 }
 
 exports.getCasesFromDate = async (from,to) => {
-  const formattedStartDate = new Date(from).toLocaleDateString().replace("/", "-").replace("/", "-") +
-  " 00:00:00";
-  const formattedEndDate =
-      new Date(to).toLocaleDateString().replace("/", "-").replace("/", "-") +
-      " 23:59:59";
+  const formattedStartDate = new Date(from).toISOString().replace("/", "-").replace("/", "-").slice(0,11) + "00:00:00.000";
+  const formattedEndDate = new Date(to).toISOString().replace("/", "-").replace("/", "-").slice(0,11) + "23:59:59.000";
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const queryStr = pgp.as.format(
     `SELECT * FROM $1 WHERE "${tableFields.record_time}" BETWEEN '${formattedStartDate}' AND '${formattedEndDate}'`,

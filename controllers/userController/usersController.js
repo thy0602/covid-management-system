@@ -8,6 +8,7 @@ const location = require('../../models/quarantineLocationModel');
 const location_record = require('../../models/quarantineLocationRecordModel')
 const serverLog = require("../../utils/server_log");
 const axios = require("axios");
+const searchFilter = require('../../utils/searchFilter');
 
 const verify = require('../../middlewares/verify').verify;
 
@@ -157,6 +158,26 @@ router.post('/new', async (req, res) => {
     }
     res.send({ error: "Can't create user!" });
 })
+
+// search user by name
+router.post('/search', async (req, res) => {
+    const searchStr = req.body.searchStr;
+    console.log('post /users/search searchStr: ', searchStr);
+
+    try {
+        let allUsers = await userModel.getAll();
+        console.log('post /users/search allUsers: ', allUsers);
+        let filterdUser = searchFilter.filter(allUsers, searchStr, 'name');
+        console.log('post /users/search filterdUser: ', filterdUser);
+        res.render("users/user_list", {
+            userList: filterdUser,
+            isPatient: 1
+        });
+    } catch (error) {
+        console.log('Error post /users/search: ', error);
+    }
+    // res.redirect('/');
+});
 
 router.use('/', require('./userController'))
 

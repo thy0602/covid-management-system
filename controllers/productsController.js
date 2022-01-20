@@ -10,6 +10,7 @@ const fs = require("fs");
 const jwt = require('jsonwebtoken');
 const secretKey = 'ThisIsASecretKey';
 const stringSimilarity = require("string-similarity");
+const searchFilter = require('../utils/searchFilter');
 
 router.use('/', (req, res, next) => {
   if (!verify(req, 'user'))
@@ -76,16 +77,17 @@ router.post('/search', async (req, res) => {
       let productList = await productModel.getAllProductOrderBy("name", true);
       let filterdProducts = [];
       
-      // get proeucts with similarity higher then threshold
-      for (const product of productList) {
-          let similarity = stringSimilarity.compareTwoStrings(searchStr, product.name.toLowerCase());
-          if (similarity > 0.1) {
-              product['similarity'] = similarity;
-              filterdProducts.push(product);
-          }
-      }
+      // // get proeucts with similarity higher then threshold
+      // for (const product of productList) {
+      //     let similarity = stringSimilarity.compareTwoStrings(searchStr, product.name.toLowerCase());
+      //     if (similarity > 0.1) {
+      //         product['similarity'] = similarity;
+      //         filterdProducts.push(product);
+      //     }
+      // }
       
-      filterdProducts.sort((a, b) => (a.similarity < b.similarity) ? 1 : -1)
+      // filterdProducts.sort((a, b) => (a.similarity < b.similarity) ? 1 : -1)
+      filterdProducts = searchFilter.filter(productList, searchStr, 'name', 0.1);
       console.log('get /products/search filterdProducts:', filterdProducts);
       //res.json(filterdPacks.slice(0, 5));
       res.status(200).send(filterdProducts);
