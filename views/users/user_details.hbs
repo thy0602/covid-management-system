@@ -11,8 +11,8 @@
             <div>
               <h3 id="userid">{{user.id}}</h3>
               <h3>Name: {{user.name}}</h4>
-              <h3 id="username">ID: {{user.username}}</h4>
-              <label class="badge badge-danger px-4">{{user.current_status}}</label>
+                <h3 id="username">ID: {{user.username}}</h4>
+                  <label class="badge badge-danger px-4">{{user.current_status}}</label>
             </div>
           </div>
           <div style="margin-top: 20px;" class="row d-sm-flex justify-content-center justify-content-sm-between">
@@ -20,129 +20,142 @@
               <h3 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.year_of_birth}}</h2>
           </div>
           <div class="row d-sm-flex justify-content-center justify-content-sm-between">
-            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Address</h3>
-              <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.address}}</h2>
+            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Address</h4>
+            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.address}}</h4>
           </div>
           <div class="row d-sm-flex justify-content-center justify-content-sm-between">
-            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Personal ID</h3>
-              <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.identity_number}}</h2>
+            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Province</h4>
+              <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{province.name}}</h4>
           </div>
           <div class="row d-sm-flex justify-content-center justify-content-sm-between">
-            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Quarantine Place</h3>
-              <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.current_location}}</h2>
+            <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">District</h4>
+            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{district.name}}</h4>
           </div>
-          <button style="width: 40%; display: flex; margin: auto; text-align: center; padding: 10px;" type="button"
-            class="btn btn-primary" onclick="redirectToEdit({{user.id}})">
-            <h4 style="margin: 0; text-align: center; width: 100%;">Edit</h4>
+          <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+          <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Ward</h4>
+          <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{ward.name}}</h4>
+        </div>
+        <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+          <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Personal ID</h4>
+          <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{user.identity_number}}</h4>
+        </div>
+        <div class="row d-sm-flex justify-content-center justify-content-sm-between">
+          <h4 class="text-center text-muted text-sm-left d-block d-sm-inline-block ml-3">Quarantine Place</h4>
+            <h4 class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center mr-4">{{quarantine.name}}</h4>
+        </div>
+        <button style="width: 40%; display: flex; margin: auto; text-align: center; padding: 10px;" type="button"
+          class="btn btn-primary" onclick="redirectToEdit({{user.id}})">
+          <h4 style="margin: 0; text-align: center; width: 100%;">Edit</h4>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 stretch-card grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Related People</h4>
+        <div class="table-responsive">
+
+          {{#if relatedUsers}}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
+              {{#each relatedUsers}}
+              <tr style="max-height: 50px;">
+                <td>{{username}}</td>
+                <td>{{name}}</td>
+                <td><label class="badge badge-{{#ifStr current_status " F0"}}danger{{/ifStr}}{{#ifStr
+                    current_status "F1" }}warning{{/ifStr}}{{#ifStr current_status "F2" }}primary{{/ifStr}} px-4
+                    text-white">{{current_status}}</label></td>
+                <td>
+                  <div>
+                    <button type="button" class="btn btn-danger btn-icon" onclick="deleteRelated({{id}})">
+                      <i class="ti-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              {{/each}}
+
+            </tbody>
+          </table>
+          {{else}}
+          <div style="display: flex; margin: auto;">
+            <p class="text-danger">No related people!</p>
+          </div>
+          {{/if}}
+        </div>
+        <h4 class='my-2'>Add new related people</h4>
+        <div style="display: flex; margin: auto; width: 100%;">
+          <input style="width: 90%;" type="number" min="0" max="1000" class="form-control" id="newRelate"
+            placeholder="Other people ID (Ex: 1)" required />
+          <button onclick="addNewRelate()" type="button" class="btn btn-primary py-0 mx-2">
+            Add new
           </button>
         </div>
       </div>
     </div>
-    <div class="col-md-6 stretch-card grid-margin">
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Related People</h4>
-          <div class="table-responsive">
-
-            {{#if relatedUsers}}
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody  style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
-                {{#each relatedUsers}}
-                <tr style="max-height: 50px;">
-                  <td>{{username}}</td>
-                  <td>{{name}}</td>
-                  <td><label class="badge badge-{{#ifStr current_status "F0"}}danger{{/ifStr}}{{#ifStr
-                      current_status "F1" }}warning{{/ifStr}}{{#ifStr current_status "F2" }}primary{{/ifStr}} px-4
-                      text-white">{{current_status}}</label></td>
-                  <td>
-                    <div>
-                      <button type="button" class="btn btn-danger btn-icon" onclick="deleteRelated({{id}})">
-                        <i class="ti-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                {{/each}}
-
-              </tbody>
-            </table>
-            {{else}}
-            <div style="display: flex; margin: auto;">
-              <p class="text-danger">No related people!</p>
-            </div>
-            {{/if}}
-          </div>
-          <h4 class='my-2'>Add new related people</h4>
-          <div style="display: flex; margin: auto; width: 100%;">
-            <input style="width: 90%;" type="number" min="0" max="1000" class="form-control" id="newRelate" placeholder="Other people ID (Ex: 1)" required/>
-            <button  onclick="addNewRelate()" type="button" class="btn btn-primary py-0 mx-2">
-              Add new
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-5 stretch-card grid-margin">
-      <div class="card">
-        <div class="card-body">
-          <p class="card-title">Latest Status Change</p>
-          <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
-            {{#if currentChanges}}
-            {{#each currentChanges}}
-            <li>
-              <div class="d-flex">
-                <img style="width: 30px; height: 30px;" src="/img/user.png" />
-                <div>
-                  <p class="text-info mb-1">Status: {{covid_status}}</p>
-                  <p class="mb-0">Record Time: {{record_time}}</p>
-                </div>
-              </div>
-            </li>
-            {{/each}}
-            {{else}}
+  </div>
+  <div class="col-md-5 stretch-card grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <p class="card-title">Latest Status Change</p>
+        <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
+          {{#if currentChanges}}
+          {{#each currentChanges}}
+          <li>
             <div class="d-flex">
-              <p class="text-danger">No latest changes!</p>
-            </div>
-            {{/if}}
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-5 stretch-card grid-margin">
-      <div class="card">
-        <div class="card-body">
-          <p class="card-title">Latest Location Change</p>
-          <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
-            {{#if location}}
-            {{#each location}}
-            <li>
-              <div class="d-flex">
-                <i class="mdi mdi-hospital-building menu-icon m-4" style="user-select: auto;"></i>
-                <div>
-                  <p class="text-info mb-1">Location: {{name}}</p>
-                  <p class="mb-0">Record Time: {{record_time}}</p>
-                </div>
+              <img style="width: 30px; height: 30px;" src="/img/user.png" />
+              <div>
+                <p class="text-info mb-1">Status: {{covid_status}}</p>
+                <p class="mb-0">Record Time: {{record_time}}</p>
               </div>
-            </li>
-            {{/each}}
-            {{else}}
-            <div class="d-flex">
-              <p class="text-danger">No latest changes!</p>
             </div>
-            {{/if}}
-          </ul>
-        </div>
+          </li>
+          {{/each}}
+          {{else}}
+          <div class="d-flex">
+            <p class="text-danger">No latest changes!</p>
+          </div>
+          {{/if}}
+        </ul>
       </div>
     </div>
   </div>
+  <div class="col-md-5 stretch-card grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <p class="card-title">Latest Location Change</p>
+        <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
+          {{#if location}}
+          {{#each location}}
+          <li>
+            <div class="d-flex">
+              <i class="mdi mdi-hospital-building menu-icon m-4" style="user-select: auto;"></i>
+              <div>
+                <p class="text-info mb-1">Location: {{name}}</p>
+                <p class="mb-0">Record Time: {{record_time}}</p>
+              </div>
+            </div>
+          </li>
+          {{/each}}
+          {{else}}
+          <div class="d-flex">
+            <p class="text-danger">No latest changes!</p>
+          </div>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
 {{#section 'js'}}
@@ -150,9 +163,9 @@
   function redirectToEdit(id) {
     $(location).attr('href', `/users/${id}/edit`)
   }
-  function addNewRelate(){
+  function addNewRelate() {
     const id = $("#userid").text();
-    var jqxhr = $.post(`/users/${id}/related`, { user_id2: $("#newRelate").val()}, function () {
+    var jqxhr = $.post(`/users/${id}/related`, { user_id2: $("#newRelate").val() }, function () {
 
     })
       .done(function () {
@@ -166,9 +179,9 @@
       $(location).attr("href", $(location).attr("href"));
     });
   }
-  function deleteRelated(id2){
+  function deleteRelated(id2) {
     const id = $("#userid").text();
-    var jqxhr = $.post(`/users/${id}/related/delete`, { user_id1: id, user_id2: id2}, function () {
+    var jqxhr = $.post(`/users/${id}/related/delete`, { user_id1: id, user_id2: id2 }, function () {
 
     })
       .done(function () {
