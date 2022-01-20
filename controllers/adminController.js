@@ -7,6 +7,7 @@ const covidRecordModel = require('../models/covidRecordModel');
 const location = require('../models/quarantineLocationModel');
 const location_record = require('../models/quarantineLocationRecordModel');
 const serverLog = require("../utils/server_log");
+const searchFilter = require('../utils/searchFilter');
 const axios = require("axios");
 
 
@@ -47,6 +48,23 @@ router.get('/patient', async function (req, res) {
     });
 });
 
+router.post('/patient/search', async (req, res) => {
+    const searchStr = req.body.searchStr;
+    console.log('post /users/search searchStr: ', searchStr);
+
+    try {
+        let userList = await userModel.getAllUserWithLockedOrderBy('name', true);
+        let filteredUserList = searchFilter.filter(userList, searchStr, 'name');
+        res.render("users/user_list_admin", {
+            userList: filteredUserList,
+            isPatient: 1,
+            linkAddNew: '/admin/new?object=patient'
+        });
+    } catch (error) {
+        console.log('Error post /admin/patient/search: ', error);
+    }
+});
+
 router.get('/supervisor', async function (req, res) {
     const orderBy = req.query['order-by'];
     let userList;
@@ -73,6 +91,23 @@ router.get('/supervisor', async function (req, res) {
         isSupervisor: 1,
         linkAddNew: './new?object=supervisor'
     });
+});
+
+router.post('/supervisor/search', async (req, res) => {
+    const searchStr = req.body.searchStr;
+    console.log('post /users/search searchStr: ', searchStr);
+
+    try {
+        let userList = await userModel.getAllManagerWithLockedOrderBy('name', true);
+        let filteredUserList = searchFilter.filter(userList, searchStr, 'name');
+        res.render("users/user_list_admin", {
+            userList: filteredUserList,
+            isSupervisor: 1,
+            linkAddNew: '/admin/new?object=supervisor'
+        });
+    } catch (error) {
+        console.log('Error post /admin/patient/search: ', error);
+    }
 });
 
 router.post('/lock', async (req, res) => {
