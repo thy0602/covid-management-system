@@ -68,6 +68,24 @@
           const res = await response;
           username = res.username;
           $("#username").text(username);
+          if(username[0] == 'I')
+          {
+            $(".admin-sidebar").remove();
+            $(".manager-sidebar").remove();
+            $(".user-sidebar").add();
+          }
+          if(username[0] == 'a')
+          {
+            $(".user-sidebar").remove();
+            $(".manager-sidebar").remove();
+            $(".admin-sidebar").add();
+          }
+          if(username[0] == 'M')
+          {
+            $(".admin-sidebar").remove();
+            $(".user-sidebar").remove();
+            $(".manager-sidebar").add();
+          }
       }
     });
   };
