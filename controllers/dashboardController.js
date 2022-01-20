@@ -17,16 +17,17 @@ router.get("/", async function (req, res) {
   if (!req.cookies.user)
     return res.redirect('/account/login-id');
 
-  let logOnUser = {name: 'Admin'};
-  if (req.cookies.user != 'admin') {
-    if (req.cookies.user[0] == 'M')
-      logOnUser = { name: req.cookies.user };
+  let logOnUser = { name: 'Admin' };
+  const temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+  if (temp != 'admin') {
+    if (temp[0] == 'M')
+      logOnUser = { name: temp };
     else
-      logOnUser = await userModel.getByUsername(req.cookies.user);
+      logOnUser = await userModel.getByUsername(temp);
   }
 
   let fromDate = new Date();
-  switch (from){
+  switch (from) {
     case "lastweek":
       fromDate = new Date(fromDate.setDate(fromDate.getDate() - 7))
       break;
@@ -37,16 +38,16 @@ router.get("/", async function (req, res) {
       fromDate = new Date(fromDate.setDate(fromDate.getDate() - 365))
       break;
   }
-  
+
 
   const totalCases = await userModel.getAll(),
     totalCasesSwitched = await covidRecordModel.getAllFromDate(fromDate),
     F0 = await userModel.getByStatus("F0"),
-    F0_switched = await covidRecordModel.getStatusFromDate(fromDate,"F0"),
+    F0_switched = await covidRecordModel.getStatusFromDate(fromDate, "F0"),
     F1 = await userModel.getByStatus("F1"),
-    F1_switched = await covidRecordModel.getStatusFromDate(fromDate,"F1"),
+    F1_switched = await covidRecordModel.getStatusFromDate(fromDate, "F1"),
     F2 = await userModel.getByStatus("F2"),
-    F2_switched = await covidRecordModel.getStatusFromDate(fromDate,"F2"),
+    F2_switched = await covidRecordModel.getStatusFromDate(fromDate, "F2"),
     cured = await userModel.getByStatus("cured"),
     getAll = await covidRecordModel.getAll(),
     orders = await orderModel.getAll(),
@@ -73,25 +74,25 @@ router.get("/", async function (req, res) {
       }).format(order.total_price),
     };
   });
-  
+
   let totalPackSold = 0;
-  packSold.forEach((pack)=>totalPackSold += Number.parseInt(pack.count));
-  const formattedPackSold = packSold.map(async(pack) => {
+  packSold.forEach((pack) => totalPackSold += Number.parseInt(pack.count));
+  const formattedPackSold = packSold.map(async (pack) => {
     return {
       ...pack,
       total: totalPackSold,
-      percent: 100*Number.parseFloat(pack.count)/Number.parseFloat(totalPackSold),
+      percent: 100 * Number.parseFloat(pack.count) / Number.parseFloat(totalPackSold),
       pack: await packModel.getByPackId(pack.pack_id),
     };
   });
 
   let totalProductSold = 0;
-  productSold.forEach((product)=>totalProductSold += Number.parseInt(product.count));
-  const formattedProductSold = productSold.map(async(product) => {
+  productSold.forEach((product) => totalProductSold += Number.parseInt(product.count));
+  const formattedProductSold = productSold.map(async (product) => {
     return {
       ...product,
       total: totalProductSold,
-      percent: 100*Number.parseFloat(product.count)/Number.parseFloat(totalProductSold),
+      percent: 100 * Number.parseFloat(product.count) / Number.parseFloat(totalProductSold),
       product: await productModel.getById(product.product_id),
     };
   });

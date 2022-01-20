@@ -168,6 +168,7 @@ router.post('/new', async (req, res) => {
 
     let status = true;
     let lstt = true;
+    let ls = true;
 
     if (req.query.object == 'patient') {
         let user_id = await userModel.getByUsername(req.body.username);
@@ -176,10 +177,15 @@ router.post('/new', async (req, res) => {
             record_time: new Date(),
             user_id: user_id.id,
         });
-        const lct = await location.getById(req.body.location);
-        const lstt = await location.update({
+        let temp = await location.getById(req.body.location);
+        lstt = await location.update({
             id: req.body.location,
-            occupancy: lct.occupancy + 1
+            occupancy: temp.occupancy + 1
+        })
+        ls = await location_record.add({
+            user_id: user_id.id,
+            location_id: req.body.location,
+            record_time: new Date()
         })
     }
 
