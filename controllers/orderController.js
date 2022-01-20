@@ -37,8 +37,7 @@ router.get("/history", async (req, res) => {
     if (!req.cookies.user)
         res.redirect('/acount/login-id');
 
-    let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
-    const user = await userModel.getByUsername(temp);
+    const user = await userModel.getByUsername(req.cookies.user);
     const orders = await orderModel.getOrderHistory(user.id);
 
     let processed_orders = [];
@@ -89,11 +88,11 @@ router.put('/paid', async (req, res) => {
     console.log("ids: ", ids);
     try {
         if (typeof ids == 'undefined')
-            return res.status(200).send({ success: false });
+        return res.status(200).send({ success: false });
         const response = await orderModel.markPaid(ids);
         console.log("Mark paid:", response);
         return res.status(200).send({ success: true });
-    } catch (e) {
+    } catch(e) {
         return res.status(200).send({ success: false });
     }
 });
@@ -109,8 +108,7 @@ router.post('/total_price', async (req, res) => {
 });
 
 router.get('/unpaid_prices', async (req, res) => {
-    let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
-    const user = await userModel.getByUsername(temp);
+    const user = await userModel.getByUsername(req.cookies.user);
     const response = await orderModel.getUnpaidTotalPrice(user.id);
     return res.status(200).send({ amount: response });
 });
@@ -168,7 +166,6 @@ router.post('/create', async (req, res) => {
     if (!req.cookies.user)
         res.redirect('/acount/login-id');
 
-    let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
     const user = await userModel.getByUsername(req.cookies.user);
 
     let list = req.body.list;
