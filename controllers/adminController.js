@@ -201,4 +201,29 @@ router.post('/new', async (req, res) => {
     res.send({ error: "Can't create user!" });
 })
 
+router.delete("/:id", async function (req, res, next) {
+    let user = await userModel.getById(req.params.id);
+    let typeUser = 'User';
+    if(user.username[0] == 'M')
+    {
+        typeUser = 'Manager';
+    }
+    try {
+      const response = await accountModel.update(user.username,{username: user.username, is_deleted: true});
+      console.log(response);
+      if (typeof response === "undefined")
+        res.status(500).send("Internal server error");
+  
+      res.status(200).send(response);
+      serverLog.log_action({
+        sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
+        action: `Delete ${typeUser}`,
+        data: user.username,
+        date: new Date()
+    });
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+  });
+
 module.exports = router;
