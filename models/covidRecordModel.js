@@ -120,6 +120,30 @@ exports.getStatusFromDate = async (startDate,status) => {
   }
 }
 
+exports.getStatusFromMonth = async (monthString,status) => {
+  const monthStart = `${monthString}-01T`  + "23:59:59.000";
+  let monthEnd = `${monthString}-30T`  + "23:59:59.000";
+  switch(monthString.slice(5,monthString.length)){
+    case "02":
+      monthEnd = `${monthString}-28T`  + "23:59:59.000";
+  }
+  const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+  const queryStr = pgp.as.format(
+    `SELECT * FROM $1 WHERE "${tableFields.covid_status}" = '${status}' AND "${tableFields.record_time}" BETWEEN '${monthStart}' AND '${monthEnd}'`,
+    table
+  );
+  try {
+    const res = await db.any(queryStr);
+    if (res) {
+      return res;
+    } else {
+      return 0;
+    }
+  } catch (e) {
+    console.log("Error db/getStatusFromDate", e);
+  }
+}
+
 exports.getAllFromDate = async (startDate) => {
   const formattedStartDate = new Date(startDate).toISOString().replace("/", "-").replace("/", "-").slice(0,11) + "00:00:00.000";
   const todayEnd = new Date().toISOString().replace("/", "-").replace("/", "-").slice(0,11) + "23:59:59.000";

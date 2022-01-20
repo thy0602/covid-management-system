@@ -122,9 +122,13 @@ router.get("/", async function (req, res) {
   });
 });
 router.get("/statistic", async function (req, res) {
-  const fromDate = req.query.fromDate,toDate = req.query.toDate;
+  let data;
 
-  const data = await covidRecordModel.getCasesFromDate(fromDate,toDate);
+  if (req.query.status){
+    data = await covidRecordModel.getStatusFromMonth(req.query.monthString,req.query.status);
+  }
+  else
+    data = await covidRecordModel.getCasesFromDate(req.query.fromDate,req.query.toDate);
 
   if (data) {
     res.status(200).json(data);
