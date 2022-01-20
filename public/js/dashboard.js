@@ -34,13 +34,13 @@ function fetchWeeklyStatistic() {
     if ($("#order-chart").length) {
       const today = new Date();
       const dates = [
-        new Date(today.setDate(today.getDate() - 1)).toDateString(),
-        new Date(today.setDate(today.getDate() - 1)).toDateString(),
-        new Date(today.setDate(today.getDate() - 1)).toDateString(),
-        new Date(today.setDate(today.getDate() - 1)).toDateString(),
-        new Date(today.setDate(today.getDate() - 1)).toDateString(),
-        new Date(today.setDate(today.getDate() - 1)).toDateString(),
-        new Date().toDateString(),
+        new Date(today.setDate(today.getDate() - 7)).toLocaleDateString(),
+        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
+        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
+        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
+        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
+        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
+        new Date().toLocaleDateString(),
       ];
 
       fetchWeeklyStatistic()

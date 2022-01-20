@@ -28,8 +28,8 @@
       <div class="card card-dark-blue">
         <div class="card-body">
           <h2 style="margin-top: 20px">Total cases</h2>
-            <h1>{{totalCases}} Cases</h1>
-            <h4 style="margin-top: 20px">(Total cases switched: {{totalCasesSwitched}} Cases)</h4>
+          <h1>{{totalCases}} Cases</h1>
+          <h4 style="margin-top: 20px">(Total cases switched: {{totalCasesSwitched}} Cases)</h4>
         </div>
       </div>
     </div>
@@ -80,26 +80,26 @@
     <div class="col-md-8 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <p class="card-title">Weekly Cases statistic</p>
-          <p class="font-weight-500">The chart showing the cases in HCM City in the last 7 days</p>
-          {{!-- <div class="d-flex flex-wrap mb-5">
-            <div class="mr-5 mt-3">
-              <p class="text-muted">Total F0</p>
-              <h3 class="text-primary fs-30 font-weight-medium">{{today.F0}}</h3>
+          <div class="row mb-4 ml-2">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0 ">
+              <p class="card-title">Weekly Cases statistic</p>
+              <p class="font-weight-500">The chart showing the cases statistic</p>
             </div>
-            <div class="mr-5 mt-3">
-              <p class="text-muted">Total F1</p>
-              <h3 class="text-primary fs-30 font-weight-medium">{{today.F1}}</h3>
+            <div class="col-12 col-xl-4">
+              <div class="justify-content-end d-flex">
+                <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                  <div>
+                    <label style="font-size: 15px;" class="my-0" for="from">From</label>
+                    <input id="from" type="date" placeholder="dd-mm-yyyy" value="" min="2018-01-01" max="2022-12-31">
+                  </div>
+                  <div class="my-1">
+                    <label style="font-size: 15px;" class="my-0 mr-3" for="to">To</label>
+                    <input id="to" type="date" placeholder="dd-mm-yyyy" value="" min="2018-01-01" max="2022-12-31">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="mr-5 mt-3">
-              <p class="text-muted">Total F2</p>
-              <h3 class="text-primary fs-30 font-weight-medium">{{today.F2}}</h3>
-            </div>
-            <div class="mr-5 mt-3">
-              <p class="text-muted">Total Cured</p>
-              <h3 class="text-primary fs-30 font-weight-medium">{{today.cured}}</h3>
-            </div>
-          </div> --}}
+          </div>
           <canvas id="order-chart"></canvas>
         </div>
       </div>
@@ -109,7 +109,7 @@
         <div class="card-body">
           <p class="card-title">User State Update</p>
           <ul class="icon-data-list"
-            style="width: 100%; height: 425px; max-height: 450px; overflow:hidden; overflow-y:scroll;">
+            style="width: 100%; max-height: 450px; overflow:hidden; overflow-y:scroll;">
             {{#each userStateUpdate}}
             <li>
               <div class="d-flex">
@@ -138,7 +138,7 @@
               <div class="ml-xl-4 mt-3">
                 <p class="card-title">Product Statistic</p>
                 <h1 class="text-primary">{{products.total}}</h1>
-                <h3 class="font-weight-500 mb-xl-4 text-primary">Product Sold</h3>
+                <h3 class="font-weight-500 mb-xl-4 text-primary">Products</h3>
                 <p class="mb-2 mb-xl-0">The total number product sold to patient</p>
               </div>
             </div>
@@ -205,7 +205,7 @@
             </div>
             <div class="col-md-2 d-flex flex-column justify-content-start">
               <div class="ml-xl-4 mt-3">
-                <p class="card-title">Package Sold</p>
+                <p class="card-title">Package Statistics</p>
                 <h1 class="text-primary">{{packs.total}}</h1>
                 <h3 class="font-weight-500 mb-xl-4 text-primary">Packages</h3>
                 <p class="mb-2 mb-xl-0">The total number Package sold to patient</p>
@@ -242,12 +242,12 @@
   </div>
   {{!-- Debt / payment --}}
   <div class="row">
-    <div class="col-md-7 grid-margin stretch-card">
+    <div class="col-md-7 grid-margin stretch-card my-0" style="height:100%;">
       <div class="card">
         <div class="card-body">
           <p class="card-title mb-0">Order</p>
           <div class="table-responsive">
-            <table class="table table-striped table-borderless">
+            <table class="table table-striped table-borderless" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -277,7 +277,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-5 grid-margin grid-margin-lg-0 stretch-card">
+    <div class="col-md-5 grid-margin grid-margin-lg-0 stretch-card">
       <div class="card">
         <div class="card-body">
           <div class="chartjs-size-monitor">
@@ -289,7 +289,7 @@
             </div>
           </div>
           <h4 class="card-title">Pie chart</h4>
-          <canvas id="pieChart" width="296" height="148" style="display: block; width: 296px; height: 148px;"
+          <canvas id="pieChart" style="display: block;"
             class="chartjs-render-monitor"></canvas>
         </div>
       </div>
@@ -301,7 +301,44 @@
 <!-- Custom js for this page-->
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript">
+  function fetchStatistic(from, to) {
+    var step = ((to - from) / (1000 * 3600 * 24)) / 7;
+    console.log(step);
+
+    const dates = [
+      from.toISOString(),
+      new Date(from.setDate(from.getDate() + step)).toISOString(),
+      new Date(from.setDate(from.getDate() + step)).toISOString(),
+      new Date(from.setDate(from.getDate() + step)).toISOString(),
+      new Date(from.setDate(from.getDate() + step)).toISOString(),
+      new Date(from.setDate(from.getDate() + step)).toISOString(),
+      to.toISOString(),
+    ];
+    let array = [0, 0, 0, 0, 0, 0, 0];
+    var fetches = [];
+    for (let i = 0; i < dates.length; i++) {
+      fetches.push(
+        fetch("/dashboard/statistic?date=" + dates[i])
+          .then((res) => {
+            res.json().then((data) => {
+              array[i] = data.count;
+            });
+          })
+          .catch((err) => {
+            console.log("ERROR:", err);
+          })
+      );
+    }
+    return Promise.all(fetches).then(function () {
+      return array;
+    });
+  }
   $(function () {
+    const today = new Date(Date.now());
+    $("#to").val(today.toISOString().split('T')[0]);
+    $("#from").val(new Date(today.setDate(today.getDate() - 7)).toISOString().split('T')[0])
+
+
     var orders = {{{ convert orders }}}
     var pending = 0, paid = 0;
   for (var i = 0; i < orders.length; i++) {
@@ -341,6 +378,139 @@
     data: doughnutPieData,
     options: doughnutPieOptions
   });
+
+  const dateChange = () => {
+    const from = new Date($("#from").val()), to = new Date($("#to").val());
+    const formmatFrom = new Date(from);
+    var step = ((to - from) / (1000 * 3600 * 24)) / 7;
+    const dates = [
+      formmatFrom.toLocaleDateString(),
+      new Date(formmatFrom.setDate(formmatFrom.getDate() + step)).toLocaleDateString(),
+      new Date(formmatFrom.setDate(formmatFrom.getDate() + step)).toLocaleDateString(),
+      new Date(formmatFrom.setDate(formmatFrom.getDate() + step)).toLocaleDateString(),
+      new Date(formmatFrom.setDate(formmatFrom.getDate() + step)).toLocaleDateString(),
+      new Date(formmatFrom.setDate(formmatFrom.getDate() + step)).toLocaleDateString(),
+      to.toLocaleDateString(),
+    ];
+    fetchStatistic(from,to).then((res) => {
+      var areaData = {
+        labels: [
+          dates[0],
+          "",
+          "",
+          dates[1],
+          "",
+          "",
+          dates[2],
+          "",
+          "",
+          dates[3],
+          "",
+          "",
+          dates[4],
+          "",
+          "",
+          dates[5],
+          "",
+          "",
+          dates[6],
+        ],
+        datasets: [
+          {
+            data: [
+              parseInt(res[0].count),
+              parseInt(res[0].count + res[1].count) / 2,
+              parseInt(res[1].count),
+              parseInt(res[2].count),
+              parseInt(res[2].count + res[3].count) / 2,
+              parseInt(res[3].count),
+              parseInt(res[4].count),
+              parseInt(res[5].count),
+              parseInt(res[6].count),
+            ],
+            borderColor: ["#4747A1"],
+            borderWidth: 2,
+            fill: false,
+            label: "Orders",
+          },
+        ],
+      };
+      var areaOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          filler: {
+            propagate: false,
+          },
+        },
+        scales: {
+          xAxes: [
+            {
+              display: true,
+              ticks: {
+                display: true,
+                padding: 10,
+                fontColor: "#6C7383",
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false,
+                color: "transparent",
+                zeroLineColor: "#eeeeee",
+              },
+            },
+          ],
+          yAxes: [
+            {
+              display: true,
+              ticks: {
+                display: true,
+                autoSkip: false,
+                maxRotation: 0,
+                stepSize: 12,
+                min: 0,
+                max: 100,
+                padding: 18,
+                fontColor: "#6C7383",
+              },
+              gridLines: {
+                display: true,
+                color: "#f2f2f2",
+                drawBorder: false,
+              },
+            },
+          ],
+        },
+        legend: {
+          display: false,
+        },
+        tooltips: {
+          enabled: true,
+        },
+        elements: {
+          line: {
+            tension: 0.35,
+          },
+          point: {
+            radius: 0,
+          },
+        },
+      };
+      var revenueChartCanvas = $("#order-chart").get(0).getContext("2d");
+      var revenueChart = new Chart(revenueChartCanvas, {
+        type: "line",
+        data: areaData,
+        options: areaOptions,
+      });
+    })
+      .catch((err) => {
+        console.log("ERR: ", err);
+      });
+  }
+
+  $("#from").change(dateChange);
+  $("#to").change(dateChange);
+
   })
 
 </script>
