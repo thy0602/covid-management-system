@@ -51,12 +51,13 @@ app.get("/", (req, res) => {
 var privateKey  = fs.readFileSync('./secret-key/CA/localhost/localhost.decrypted.key');
 var certificate = fs.readFileSync('./secret-key/CA/localhost/localhost.crt');
 
-var options = process.env.NODE_ENV !== "production" ? {
+var options = {
   key: privateKey,
   cert: certificate
-} : {};
+};
 const port = process.env.PORT || 3001;
-var server = https.createServer(options, app);
+var server = process.env.NODE_ENV !== "production" ? https.createServer(options, app) : https.createServer(app);
 server.listen(port, function () {
+  console.log("Deploy on " + process.env.NODE_ENV);
   console.log('HTTPS Express server is up on port ' + port);
 });
