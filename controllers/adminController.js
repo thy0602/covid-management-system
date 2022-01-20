@@ -7,6 +7,7 @@ const covidRecordModel = require('../models/covidRecordModel');
 const location = require('../models/quarantineLocationModel');
 const location_record = require('../models/quarantineLocationRecordModel');
 const serverLog = require("../utils/server_log");
+const axios = require("axios");
 
 
 const verify = require('../middlewares/verify').verify;
@@ -188,6 +189,21 @@ router.post('/new', async (req, res) => {
             record_time: new Date()
         })
     }
+
+    const temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+
+    var options = {
+        'method': 'POST',
+        'url': 'http://localhost:3000/api/account',
+        'data': {
+            "username": temp,
+            "token": req.cookies.user,
+            "new_user": req.body.username
+        }
+    };
+    
+    const result = await axios(options);
+    console.log("result post api/account adminController:", result.data);
 
     if (user && acc && status && lstt && ls) {
         serverLog.log_action({
