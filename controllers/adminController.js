@@ -149,7 +149,7 @@ router.get('/new', async (req, res) => {
     }
     let province_list = await addressModel.getAll('province');
     if (req.query.object == 'patient') {
-        let location_list = await addressModel.getAll('quarantine_location');
+        let location_list = await location.getAll();
 
         return res.render("users/user_form_admin", {
             province: province_list,

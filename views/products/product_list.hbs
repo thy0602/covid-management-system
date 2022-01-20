@@ -81,8 +81,8 @@
         {{#each productList}}
         <div class="col-md-3 mb-4">
             <div class="card hover-cursor pack-card" style="width: 100%;">
-                <img src="{{this.url}}" class="card-img-top" style="width: 100%; height: 200px" onclick="location.href='/products/{{this.id}}/view';">
-                <hr/>
+                <img src="{{this.url}}" class="card-img-top" style="width: 100%; height: 200px; border-radius: 20px 20px 0 0;" onclick="location.href='/products/{{this.id}}/view';">
+                <!--<hr/>-->
                 <div class="card-body">
                     <h5 class="card-title" onclick="location.href='/products/{{this.id}}/view';">{{this.name}}</h5>
                     <p class="card-text" onclick="location.href='/products/{{this.id}}/view';">{{formatMoney this.price}}</p>
@@ -182,17 +182,23 @@
         });
     }
 
+    function moneyFormatter(x) {
+        var moneyFormatter  = new Intl.NumberFormat();
+        // return moneyFormatter.format(x).replace(',', '.');
+        return moneyFormatter.format(x);
+    }
+
     function renderProduct(list) {
         $("#page-body").empty();
         for (let product of list) {
             $("#page-body").append(`
         <div class="col-md-3 mb-4">
             <div class="card hover-cursor pack-card" style="width: 100%;">
-                <img src="${product.url}" class="card-img-top" style="width: 100%; height: 200px" onclick="location.href='/products/${product.id}/view';">
-                <hr/>
+                <img src="${product.url}" class="card-img-top" style="width: 100%; height: 200px; border-radius: 20px 20px 0 0;" onclick="location.href='/products/${product.id}/view';">
+                <!--<hr/>-->
                 <div class="card-body">
                     <h5 class="card-title" onclick="location.href='/products/${product.id}/view';">${product.name}</h5>
-                    <p class="card-text" onclick="location.href='/products/${product.id}/view';">${product.price}</p>
+                    <p class="card-text" onclick="location.href='/products/${product.id}/view';">${moneyFormatter(product.price)}</p>
                     <a class="btn btn-sm btn-primary mt-3" href="/products/${product.id}/edit">
                         <i class="mdi mdi-pencil mx-2"></i></a>
                     <button type="button" class="btn btn-sm btn-danger mt-3 ml-1 icon-del-pack" id="${product.id}" onclick="showModalDel(this.id)">

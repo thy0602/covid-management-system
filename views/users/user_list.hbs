@@ -102,14 +102,14 @@
                                     <td class="py-1">
                                         <img src="/img/user.png" alt="image" />
                                     </td>
-                                    <td class="hover-cursor" onclick="location.href='/user/{{this.id}}/view';">{{name}}
+                                    <td class="hover-cursor" onclick="location.href='/users/{{this.id}}/view';">{{name}}
                                     </td>
-                                    <td class="hover-cursor" onclick="location.href='/user/{{this.id}}/view';">
+                                    <td class="hover-cursor" onclick="location.href='/users/{{this.id}}/view';">
                                         {{address}}</td>
-                                    <td class="hover-cursor" onclick="location.href='/user/{{this.id}}/view';">
+                                    <td class="hover-cursor" onclick="location.href='/users/{{this.id}}/view';">
                                         {{current_location}}</td>
                                     <td class="font-weight-medium">
-                                        <div class="badge badge-{{#ifStr current_status " F0"}}danger{{else}}{{#ifStr
+                                        <div class="badge badge-{{#ifStr current_status "F0"}}danger{{else}}{{#ifStr
                                             current_status "F1" }}warning{{else}}primary{{/ifStr}}{{/ifStr}}"
                                             style="width: 100%;">{{current_status}}</div>
                                     </td>

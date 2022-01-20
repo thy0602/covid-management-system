@@ -129,11 +129,11 @@
                                     <td class="py-1">
                                         <img src="/img/user.png" alt="image" />
                                     </td>
-                                    <td>{{name}}</td>
-                                    <td>{{address}}</td>
-                                    <td>{{current_location}}</td>
-                                    <td class="font-weight-medium">
-                                        <div class="badge badge-{{#ifStr current_status " F0"}}danger{{else}}{{#ifStr
+                                    <td onclick="location.href='/users/{{this.id}}/view';" class="hover-cursor">{{name}}</td>
+                                    <td onclick="location.href='/users/{{this.id}}/view';" class="hover-cursor">{{address}}</td>
+                                    <td onclick="location.href='/users/{{this.id}}/view';" class="hover-cursor">{{current_location}}</td>
+                                    <td onclick="location.href='/users/{{this.id}}/view';" class="font-weight-medium hover-cursor">
+                                        <div class="badge badge-{{#ifStr current_status "F0"}}danger{{else}}{{#ifStr
                                             current_status "F1" }}warning{{else}}primary{{/ifStr}}{{/ifStr}}"
                                             style="width: 100%;">{{current_status}}</div>
                                     </td>

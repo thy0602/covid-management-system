@@ -8,7 +8,7 @@
             <div class="col-md-4 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Minimum Limit</h4>
+                        <h4 class="card-title">Minimum Payment</h4>
                         <form class="form-inline" action='/manage/setlimit' method='post'>
                             <label class="sr-only" for="inlineFormInputName2">Name</label>
                             <div class="input-group" style="margin: 20px 20px; width: calc(100% - 40px)">
@@ -95,6 +95,12 @@
             String(time.getSeconds()).padStart(2, '0');
     }
 
+    function moneyFormatter(x) {
+        var moneyFormatter  = new Intl.NumberFormat();
+        // return moneyFormatter.format(x).replace(',', '.');
+        return moneyFormatter.format(x);
+    }
+
     async function renderTable() {
         await $.ajax({
             url: `/api/manage/unpaid-orders`,
@@ -118,7 +124,7 @@
                 <td class="font-weight-bold">${order.name}</td>
                 <td class="font-weight-bold text-danger">${order.id}</td>
                 <td class="font-weight-bold">${getFullDatetime(new Date(order.ordered_at))}</td>
-                <td class="font-weight-bold text-danger">${order.total_price}</td>
+                <td class="font-weight-bold text-danger">${moneyFormatter(order.total_price)}</td>
                 <td>
                     ${icon}
                 </td>
