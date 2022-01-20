@@ -37,7 +37,8 @@ router.get("/history", async (req, res) => {
     if (!req.cookies.user)
         res.redirect('/acount/login-id');
 
-    const user = await userModel.getByUsername(req.cookies.user);
+    let temp = require('jsonwebtoken').decode(req.cookies.jwt, true).username;
+    const user = await userModel.getByUsername(temp);
     const orders = await orderModel.getOrderHistory(user.id);
 
     let processed_orders = [];
