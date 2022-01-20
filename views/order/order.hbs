@@ -31,7 +31,7 @@
                                     <td class="pl-0"><span class="font-weight-bold">{{this.id}}</span></td>
                                     <td>
                                         <p class="ml-4 mb-0"><span class="font-weight-bold"></span><a
-                                                href="/order/{{this.id}}" class="font-weight-bold"
+                                                href="/orders/{{this.id}}" class="font-weight-bold"
                                                 style="text-decoration: none; color: #000;">
                                                 {{this.name}}
                                             </a></span></p>
@@ -191,7 +191,7 @@
         });
 
         $('#checkOut').on('click', function () {
-            checkOut();
+            CheckOut();
         });
     })
 
@@ -265,14 +265,14 @@
         var list = JSON.parse(localStorage.getItem("cartList"));
 
         $.ajax({
-            url: `/order/create`,
+            url: `/orders/create`,
             type: 'POST',
             data: {
                 list
             },
             success: async function (data, textStatus, jqXHR) {
                 console.log('success: ', data);
-                window.location.href = `/order/history`;
+                window.location.href = `/order-history`;
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('error: ', errorThrown);

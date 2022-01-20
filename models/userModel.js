@@ -99,7 +99,7 @@ exports.getAllPatientOrderBy = async (orderBy, ascending = true) => {
 exports.getAllUserWithLockedOrderBy = async (orderBy, ascending = true) => {
     const sortOption = ascending ? 'ASC' : 'DESC';
     const queryStr = pgp.as.format(`SELECT * FROM "user" p, "account" a
-    WHERE a.username = p.username AND p.username LIKE 'ID%' ORDER BY ${orderBy} ${sortOption};`)
+    WHERE a.username = p.username AND p.username LIKE 'ID%' AND a.is_deleted = 'false' ORDER BY ${orderBy} ${sortOption};`)
     try {
         const res = await db.any(queryStr);
         return res;
@@ -112,7 +112,7 @@ exports.getAllUserWithLockedOrderBy = async (orderBy, ascending = true) => {
 exports.getAllManagerWithLockedOrderBy = async (orderBy, ascending = true) => {
     const sortOption = ascending ? 'ASC' : 'DESC';
     const queryStr = pgp.as.format(`SELECT * FROM "user" p, "account" a
-    WHERE a.username = p.username AND p.username LIKE 'M%' ORDER BY ${orderBy} ${sortOption};`)
+    WHERE a.username = p.username AND p.username LIKE 'M%' AND a.is_deleted = 'false' ORDER BY ${orderBy} ${sortOption};`)
     try {
         const res = await db.any(queryStr);
         return res;

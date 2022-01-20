@@ -7,6 +7,7 @@ const covidRecordModel = require('../../models/covidRecordModel');
 const location = require('../../models/quarantineLocationModel');
 const location_record = require('../../models/quarantineLocationRecordModel')
 const serverLog = require("../../utils/server_log");
+const axios = require("axios");
 const searchFilter = require('../../utils/searchFilter');
 
 const verify = require('../../middlewares/verify').verify;
@@ -91,6 +92,8 @@ router.get('/getRegion', async (req, res) => {
 
 router.post('/new', async (req, res) => {
 
+    console.lo
+
     const acc = await accountModel.create({
         username: req.body.username,
         role: 'user',
@@ -128,6 +131,21 @@ router.post('/new', async (req, res) => {
         record_time: new Date()
     })
 
+    const temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+
+    var options = {
+        'method': 'POST',
+        'url': 'https://localhost:3000/api/account',
+        'data': {
+            "username": temp,
+            "token": req.cookies.user,
+            "new_user": req.body.username
+        }
+    };
+    
+    const result = await axios(options);
+    console.log("result post api/account usersController:", result.data);
+
     if (user && acc && status && lstt && ls) {
         serverLog.log_action({
             sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
@@ -140,6 +158,26 @@ router.post('/new', async (req, res) => {
     }
     res.send({ error: "Can't create user!" });
 })
+
+router.delete("/:id", async function (req, res, next) {
+    let user = await userModel.getById(req.params.id);
+    try {
+      const response = await accountModel.update(user.username,{username: user.username, is_deleted: true});
+      console.log(response);
+      if (typeof response === "undefined")
+        res.status(500).send("Internal server error");
+  
+      res.status(200).send(response);
+      serverLog.log_action({
+        sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
+        action: `Delete user`,
+        data: user.username,
+        date: new Date()
+    });
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
 
 // search user by name
 router.post('/search', async (req, res) => {

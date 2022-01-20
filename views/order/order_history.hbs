@@ -86,7 +86,7 @@
             </table>
         </div>
         <div class="row align-self-end mt-auto">
-            <button type="button" class="font-weight-bold mt-3 btn btn-warning my-4" onclick="location.href='http://localhost:3000/home';">
+            <button type="button" class="font-weight-bold mt-3 btn btn-warning my-4" onclick="location.href='https://localhost:3000/home';">
                 TOP UP
             </button>
             <button type="button" class="font-weight-bold mt-3 btn btn-success my-4 mx-2" onclick="showModalPay(this.id)">
@@ -295,7 +295,7 @@
         });
         console.log("int_order_ids:",int_order_ids);
         await $.ajax({
-            url: "http://localhost:3000/api/transaction",
+            url: "https://localhost:3000/api/transaction",
             type: 'POST',
             data: {
                 username: username,
