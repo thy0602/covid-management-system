@@ -7,6 +7,7 @@ const relateModel = require("../../models/relateModel");
 
 const provinceModel = require("../../models/provinceModel")
 const districtModel = require("../../models/districtModel")
+const quarantineLocationRecordModel = require("../../models/quarantineLocationRecordModel")
 const wardModel = require("../../models/wardModel")
 const quarantineLocationModel = require("../../models/quarantineLocationModel")
 
@@ -89,11 +90,22 @@ const updateAllRelated = async (updatedUser) => {
 };
 
 router.post("/:id/edit", async (req, res) => {
-  const result = await userModel.update(req.body);
+  console.log(req.body);
+  const updateInfor = {
+    ...req.body,
+    username: req.user.username
+  }
+  const result = await userModel.update(updateInfor);
+  console.log(result);
 
   if (req.user.current_location != req.body.current_location) {
     //location changes, update location
-    
+    const record = await quarantineLocationRecordModel.add({
+      user_id: req.user.id,
+      location_id: req.body.current_location,
+    })
+    console.log(record);
+
     let oldLocation = await quarantineLocationModel.getById(Number.parseInt(req.user.current_location));
     oldLocation = {
       ...oldLocation,
@@ -115,8 +127,6 @@ router.post("/:id/edit", async (req, res) => {
       record_time: new Date(),
       user_id: req.user.id,
     });
-
-
 
     //update related
     if (req.user.current_status == "F1") {
