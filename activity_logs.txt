@@ -1,3 +1,14 @@
+1/21/2022, 4:14:30 AM|admin|Edit User|ID_001
+1/21/2022, 4:13:55 AM|admin|Add Relate|1,3
+1/21/2022, 4:13:35 AM|admin|Add Relate|1,
+1/21/2022, 4:10:36 AM|admin|Edit User|ID_001
+1/21/2022, 4:05:15 AM|admin|Add Relate|108,2
+1/21/2022, 4:05:09 AM|admin|Add Relate|108,
+Fri Jan 21 2022 03:55:43 GMT+0700 (Indochina Time)|admin|Create new supervisor|M_021
+Fri Jan 21 2022 03:54:30 GMT+0700 (Indochina Time)|admin|Create new patient|ID_103
+Fri Jan 21 2022 03:50:33 GMT+0700 (Indochina Time)|M_001|Create new patient|ID_102
+Fri Jan 21 2022 03:45:29 GMT+0700 (Indochina Time)|ID_001|Make payment|Order 3
+Fri Jan 21 2022 03:34:58 GMT+0700 (Indochina Time)|ID_001|Make payment|Order 3
 Thu Jan 20 2022 22:36:19 GMT+0700 (Indochina Time)|M_001|Create new patient|ID_024
 Thu Jan 20 2022 22:01:22 GMT+0700 (Indochina Time)|ID_001|Make payment|Order 6
 Thu Jan 20 2022 21:53:05 GMT+0700 (Indochina Time)|ID_001|Make payment|Order 5
@@ -5,6 +16,4 @@ Thu Jan 20 2022 21:53:05 GMT+0700 (Indochina Time)|ID_001|Make payment|Order 5
 Thu Jan 20 2022 18:03:34 GMT+0700 (Indochina Time)|ID_001|Make payment|Order 3
 Thu Jan 20 2022 14:04:16 GMT+0700 (Indochina Time)|admin|Create new supervisor|M_006
 Thu Jan 20 2022 11:24:34 GMT+0700 (Indochina Time)|admin|Create new supervisor|M_005
-1/20/2022, 11:19:46 AM|admin|Create new patient|[object Object]
-Thu Jan 20 2022 11:17:23 GMT+0700 (Indochina Time)|1|1|Thu Jan 20 2022 11:17:23 GMT+0700 (Indochina Time)
 Sat Jan 15 2022 17:35:30 GMT+0700 (Indochina Time)|ID1|Login| 
