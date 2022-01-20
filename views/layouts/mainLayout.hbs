@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
 
-    <link rel="shortcut icon" href="img/logo-mini.svg">
+    <link rel="shortcut icon" href="/img/logo-mini.svg">
 
     <link rel="stylesheet" href="/css/style.css">
 
@@ -62,38 +62,13 @@
 
 <script>
   var username;
-  async function loadPage() {
-    await $.ajax({
-      url: `/api/authenticate`,
-      type: 'GET',
-      success: async function (response, status) {
-          const res = await response;
-          username = res.username;
-          $("#username").text(username);
-          if(username[0] == 'I')
-          {
-            $(".admin-sidebar").remove();
-            $(".manager-sidebar").remove();
-            $(".user-sidebar").add();
-          }
-          if(username[0] == 'a')
-          {
-            $(".user-sidebar").remove();
-            $(".manager-sidebar").remove();
-            $(".admin-sidebar").add();
-          }
-          if(username[0] == 'M')
-          {
-            $(".admin-sidebar").remove();
-            $(".user-sidebar").remove();
-            $(".manager-sidebar").add();
-          }
-      }
-    });
-  };
+  var orders = [];
   
   $("#noti").click(async () => {
-    let orders;
+    if (username[0] != 'I') {
+      return;
+    }
+
     await $.ajax({
       url: `/account/notification`,
       type: 'GET',
@@ -118,11 +93,157 @@
     }
   });
 
+  function renderAdminSidebar() {
+    $("#sidebar").empty();
+    $("#sidebar").append(`
+      <div class="admin-sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/manage">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Management</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/patient">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">User List</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/packs">
+              <i class="mdi mdi-package-variant-closed menu-icon"></i>
+              <span class="menu-title">Pack List</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/products">
+              <i class="mdi mdi-wallet-giftcard menu-icon"></i>
+              <span class="menu-title">Product List</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/quarantine-locations">
+              <i class="mdi mdi-hospital-building menu-icon"></i>
+              <span class="menu-title">Location List</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/server-log">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Server Log</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
+  };
+
+  function renderManagerSidebar() {
+    $("#sidebar").empty();
+    $("#sidebar").append(`
+      <div class="manager-sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/manage">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Management</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/users">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">User List</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/packs">
+              <i class="mdi mdi-package-variant-closed menu-icon"></i>
+              <span class="menu-title">Pack List</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/products">
+              <i class="mdi mdi-wallet-giftcard menu-icon"></i>
+              <span class="menu-title">Product List</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
+  };
+
+  function renderUserSidebar() {
+    $("#sidebar").empty();
+    $("#sidebar").append(`
+      <div class="user-sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/orders">
+              <i class="mdi mdi-cart menu-icon"></i>
+              <span class="menu-title">Order</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/order-history">
+              <i class="mdi mdi-history menu-icon"></i>
+              <span class="menu-title">Order History</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
+  }
+
   $().ready(async () => {
-      await loadPage();
-      if (username[0] !== 'I') {
-        $("#noti").remove();
+      await $.ajax({
+      url: `/api/authenticate`,
+      type: 'GET',
+      success: async function (response, status) {
+          const res = await response;
+          username = res.username;
+          $("#username").text(username);
+          if(username[0] == 'I')
+          {
+            /*$(".admin-sidebar").remove();
+            $(".manager-sidebar").remove();
+            $(".user-sidebar").add();*/
+            renderUserSidebar();
+          }
+          if(username[0] == 'a')
+          {
+            /*$(".user-sidebar").remove();
+            $(".manager-sidebar").remove();
+            $(".admin-sidebar").add();*/
+            renderAdminSidebar();
+          }
+          if(username[0] == 'M')
+          {
+            /*$(".admin-sidebar").remove();
+            $(".user-sidebar").remove();
+            $(".manager-sidebar").add();*/
+            renderManagerSidebar();
+          }
       }
+    });
   });
 </script>
   
