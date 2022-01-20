@@ -20,7 +20,7 @@
                         Patient</h2>
                 </div>
                 <div class="col-12 col-xl-4">
-                    <div class="justify-content-end d-flex">
+                    {{!-- <div class="justify-content-end d-flex">
                         <div class="input-group">
                             <input type="text" class="form-control" id="content-search-input" placeholder="Search"
                                 aria-label="search" aria-describedby="search">
@@ -30,7 +30,18 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+                    <form action="/users/search" method="POST" class="justify-content-end d-flex mb-1" id="search-form">
+                        <div class="input-group">
+                            <input type="text" name="searchStr" class="form-control" id="user-search-input" placeholder="Search"
+                            aria-label="search" aria-describedby="search">
+                            <div type='submit' class="input-group-prepend hover-cursor" id="user-search-icon">
+                                <span class="input-group-text" id="userlist-search">
+                                    <i class="icon-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

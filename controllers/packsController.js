@@ -6,6 +6,7 @@ const pack_itemsModel = require("../models/pack_itemsModel");
 const productImageModel = require("../models/productImageModel");
 const stringSimilarity = require("string-similarity");
 const verify = require("../middlewares/verify").verify;
+const searchFilter = require('../utils/searchFilter');
 
 router.use('/', (req, res, next) => {
     if (verify(req, 'admin') || verify(req, 'manager'))
@@ -205,19 +206,7 @@ router.post('/api/search', async (req, res) => {
 
     try {
         let allPacks = await packModel.getAll();
-        let filterdPacks = [];
-        
-        // get packs with similarity higher then threshold
-        for (const pack of allPacks) {
-            let similarity = stringSimilarity.compareTwoStrings(searchStr.toLowerCase(), pack.name.toLowerCase());
-            //console.log(`get /packs/api/search ${pack.name} - ${similarity} `);
-            if (similarity > 0.5) {
-                pack['similarity'] = similarity;
-                filterdPacks.push(pack);
-            }
-        }
-        
-        filterdPacks.sort((a, b) => (a.similarity < b.similarity) ? 1 : -1)
+        let filterdPacks = searchFilter.filterBySimilarity(allPacks, searchStr, 'name', 0.1);
         console.log('get /packs/api/search filterdPacks:', filterdPacks);
         res.json(filterdPacks.slice(0, 5));
     } catch (error) {
