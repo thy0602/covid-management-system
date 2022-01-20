@@ -4,6 +4,8 @@ const router = express.Router();
 const userModel = require("../models/userModel");
 const covidRecordModel = require("../models/covidRecordModel");
 const relateModel = require("../models/relateModel");
+const quarantineLocationModel = require("../models/quarantineLocationModel");
+const quarantineLocationRecordModel = require("../models/quarantineLocationRecordModel");
 
 router.get("/", async function (req, res) {
 
@@ -28,7 +30,18 @@ router.get("/", async function (req, res) {
 
     const currentChanges = await covidRecordModel.getById(user.id);
 
-    res.render("myAccount", { user, relatedUsers, currentChanges });
+    
+    const locationChanges = await quarantineLocationRecordModel.getByUserId(user.id);
+    let location = [];
+    for (let i = 0; i < locationChanges.length; i++){
+      const getLocation = await quarantineLocationModel.getByLocationId(locationChanges[i].location_id);
+      location.push({
+        ...locationChanges[i],
+        name: getLocation.name
+      })
+    }
+
+    res.render("myAccount", { user, relatedUsers, currentChanges, location });
   } else {
     res.render("myAccount");
   }

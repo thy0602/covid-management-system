@@ -11,6 +11,8 @@ const quarantineLocationRecordModel = require("../../models/quarantineLocationRe
 const wardModel = require("../../models/wardModel")
 const quarantineLocationModel = require("../../models/quarantineLocationModel")
 
+const logger = require("../../utils/server_log")
+
 router.use("/:id", async function (req, res, next) {
   const user = await userModel.getById(req.params.id);
   if (user) {
@@ -33,8 +35,18 @@ router.get("/:id/view", async (req, res) => {
   }
   console.log(relatedUsers);
 
+  const locationChanges = await quarantineLocationRecordModel.getByUserId(user.id);
+  let location = [];
+  for (let i = 0; i < locationChanges.length; i++){
+    const getLocation = await quarantineLocationModel.getByLocationId(locationChanges[i].location_id);
+    location.push({
+      ...locationChanges[i],
+      name: getLocation.name
+    })
+  }
+
   const currentChanges = await covidRecordModel.getById(req.params.id);
-  res.render("users/user_details", { user, relatedUsers, currentChanges  });
+  res.render("users/user_details", { user, relatedUsers, currentChanges,location  });
 });
 
 router.get("/:id/edit", async (req, res) => {
@@ -91,6 +103,7 @@ const updateAllRelated = async (updatedUser) => {
 };
 
 router.post('/:id/related', async (req, res) => {
+  logger.log_action({sender_id:require('jsonwebtoken').decode(req.cookies.user, true).username, action: "Add Relate", data: `${req.user.id},${req.body.user_id2}`, date: new Date().toLocaleString()})
   const newRelate = {
     user_id1: req.user.id,
     user_id2: req.body.user_id2,
@@ -104,6 +117,7 @@ router.post('/:id/related', async (req, res) => {
 })
 
 router.post('/:id/related/delete', async (req, res) => {
+  logger.log_action({sender_id:require('jsonwebtoken').decode(req.cookies.user, true).username, action: "Delete Relate", data: `${req.user.id},${req.body.user_id2}`, date: new Date().toLocaleString()})
   await relateModel.delete(req.body);
   const reCheck = await relateModel.getById_1(req.body.user_id1);
 
@@ -123,6 +137,7 @@ router.post('/:id/related/delete', async (req, res) => {
 
 
 router.post("/:id/edit", async (req, res) => {
+  logger.log_action({sender_id:require('jsonwebtoken').decode(req.cookies.user, true).username, action: "Edit User", data: `${req.user.username}`, date: new Date().toLocaleString()})
   console.log(req.body);
   const updateInfor = {
     ...req.body,

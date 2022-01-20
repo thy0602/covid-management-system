@@ -93,7 +93,7 @@
     <div class="col-md-5 stretch-card grid-margin">
       <div class="card">
         <div class="card-body">
-          <p class="card-title">Latest Changes</p>
+          <p class="card-title">Latest Status Change</p>
           <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
             {{#if currentChanges}}
             {{#each currentChanges}}
@@ -102,6 +102,32 @@
                 <img style="width: 30px; height: 30px;" src="/img/user.png" />
                 <div>
                   <p class="text-info mb-1">Status: {{covid_status}}</p>
+                  <p class="mb-0">Record Time: {{record_time}}</p>
+                </div>
+              </div>
+            </li>
+            {{/each}}
+            {{else}}
+            <div class="d-flex">
+              <p class="text-danger">No latest changes!</p>
+            </div>
+            {{/if}}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5 stretch-card grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-title">Latest Location Change</p>
+          <ul class="icon-data-list" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
+            {{#if location}}
+            {{#each location}}
+            <li>
+              <div class="d-flex">
+                <i class="mdi mdi-hospital-building menu-icon m-4" style="user-select: auto;"></i>
+                <div>
+                  <p class="text-info mb-1">Location: {{name}}</p>
                   <p class="mb-0">Record Time: {{record_time}}</p>
                 </div>
               </div>
