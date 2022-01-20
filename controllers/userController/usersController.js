@@ -5,6 +5,8 @@ const accountModel = require('../../models/accountModel');
 const addressModel = require('../../models/addressModel');
 const covidRecordModel = require('../../models/covidRecordModel');
 const location = require('../../models/quarantineLocationModel');
+const location_record = require('../../models/quanrantineLocationRecordModel')
+const serverLog = require("../../utils/server_log");
 
 const verify = require('../../middlewares/verify').verify;
 
@@ -119,7 +121,20 @@ router.post('/new', async (req, res) => {
         occupancy: lct.occupancy + 1
     })
 
-    if (user && acc && status && lstt) {
+    const ls = await location_record.add({
+        user_id: user_id.id,
+        location_id: req.body.location,
+        record_time: new Date()
+    })
+
+    if (user && acc && status && lstt && ls) {
+        serverLog.log_action({
+            sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
+            action: 'Create new patient',
+            data: req.body.username,
+            date: new Date()
+        });
+
         return res.redirect('./');
     }
     res.send({ error: "Can't create user!" });

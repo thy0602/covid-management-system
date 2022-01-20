@@ -166,7 +166,9 @@ router.post('/create', async (req, res) => {
     if (!req.cookies.user)
         res.redirect('/acount/login-id');
 
-    const user = await userModel.getByUsername(req.cookies.user);
+    let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+    const user = await userModel.getByUsername(temp);
+
 
     let list = req.body.list;
     let totalPrice = 0;

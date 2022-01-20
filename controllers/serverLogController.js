@@ -6,10 +6,10 @@ const verify = require("../middlewares/verify").verify;
 const serverLog = require("../utils/server_log");
 
 router.use('/', (req, res, next) => {
-    if (verify(req, 'admin'))
-        next();
-    else
-        res.redirect('/');
+  if (verify(req, 'admin'))
+    next();
+  else
+    res.redirect('/');
 });
 
 router.get("/", async (req, res) => {
