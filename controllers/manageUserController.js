@@ -8,7 +8,7 @@ const paymentLimitModel = require('../models/paymentLimitModel');
 const verify = require('../middlewares/verify').verify;
 
 router.use('/', (req, res, next) => {
-    if (verify(req, 'admin'))
+    if (verify(req, 'admin') || verify(req, 'manager'))
         next();
     else
         return res.redirect('/');
