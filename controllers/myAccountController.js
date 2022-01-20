@@ -6,8 +6,10 @@ const covidRecordModel = require("../models/covidRecordModel");
 const relateModel = require("../models/relateModel");
 
 router.get("/", async function (req, res) {
-  if (req.cookies.user != "admin") {
-    const userID = req.cookies.user;
+  let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+  // console.log(temp);
+  if (temp != "admin") {
+    const userID = temp;
 
     const user = await userModel.getByUsername(userID);
 
