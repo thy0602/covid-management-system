@@ -135,7 +135,7 @@
                                     <td id="nameProduct">{{this.name}}</td>
                                     <td id="price">{{this.price}}</td>
                                     <td>{{this.unit}}</td>
-                                    <td><input type="number" value="{{this.quantity_limit}}"
+                                    <td><input type="number" min="0" value="{{this.quantity_limit}}"
                                             style="text-align: center; max-width: 4rem; margin-left: 0.75rem"
                                             id="quantityProduct" /></td>
                                 </tr>
@@ -170,12 +170,14 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/js/locales/LANG.js"></script>
 
 <script type="text/javascript">
-    var cartList = JSON.parse(localStorage.getItem("cartList"));
+    var cartList = []
+    if (localStorage.getItem("cartList"))
+        cartList = JSON.parse(localStorage.getItem("cartList"));
 
     $(document).ready(function () {
         window.pulse_continue_loop = true;
         window.pulse_image = $('.pulse_image');
-        var cartlist = [];
+        //cartlist = [];
         localStorage.setItem("cartList", JSON.stringify(cartList));
         showCart();
 
@@ -220,11 +222,14 @@
         const packID = $("#packNameCart").data('pack-id');
         var list = JSON.parse(localStorage.getItem("cartList"));
         let exist = 0;
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].name == packName) {
-                exist = 1;
+        if (list !== null) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].name == packName) {
+                    exist = 1;
+                }
             }
         }
+        
         console.log(exist);
         if (exist) {
             alert("You cannot buy the same product package in the same order");
@@ -274,8 +279,7 @@
             }
         });
 
-        list = [];
-        localStorage.setItem("cartList", JSON.stringify(list));
+        localStorage.removeItem("cartList");
     }
 
     $('#checkOut').click(onclickCheckOut);
