@@ -5,6 +5,7 @@ var path = require('path');
 //handle https
 const fs = require("fs");
 var https = require('https');
+var http = require('http');
 require("dotenv").config();
 
 const app = express();
@@ -56,7 +57,7 @@ var options = {
   cert: certificate
 };
 const port = process.env.PORT || 3001;
-var server = process.env.NODE_ENV !== "production" ? https.createServer(options, app) : https.createServer(app);
+var server = process.env.NODE_ENV !== "production" ? https.createServer(options, app) : http.createServer(app);
 server.listen(port, function () {
   console.log("Deploy on " + process.env.NODE_ENV);
   console.log('HTTPS Express server is up on port ' + port);
