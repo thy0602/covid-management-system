@@ -6,7 +6,7 @@ var path = require('path');
 const fs = require("fs");
 var https = require('https');
 
-const port = 3001;
+
 const app = express();
 
 app.use(cookieParser());
@@ -55,7 +55,7 @@ var options = {
   key: privateKey,
   cert: certificate
 };
-
+const port = process.env.PORT || 3001;
 var server = https.createServer(options, app);
 server.listen(port, function () {
   console.log('HTTPS Express server is up on port ' + port);
