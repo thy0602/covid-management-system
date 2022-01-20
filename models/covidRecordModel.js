@@ -143,10 +143,15 @@ exports.getAllFromDate = async (startDate) => {
   }
 }
 
-exports.getCasesFromDate = async (date) => {
+exports.getCasesFromDate = async (from,to) => {
+  const formattedStartDate = new Date(from).toLocaleDateString().replace("/", "-").replace("/", "-") +
+  " 00:00:00";
+  const formattedEndDate =
+      new Date(to).toLocaleDateString().replace("/", "-").replace("/", "-") +
+      " 23:59:59";
   const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
   const queryStr = pgp.as.format(
-    `SELECT COUNT(*) FROM $1 WHERE "${tableFields.record_time}" = '${date}'`,
+    `SELECT * FROM $1 WHERE "${tableFields.record_time}" BETWEEN '${formattedStartDate}' AND '${formattedEndDate}'`,
     table
   );
   try {

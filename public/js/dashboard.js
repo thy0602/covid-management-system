@@ -1,19 +1,19 @@
 function fetchWeeklyStatistic() {
   const today = new Date();
   const dates = [
-    new Date(today.setDate(today.getDate() - 1)).toISOString(),
-    new Date(today.setDate(today.getDate() - 1)).toISOString(),
-    new Date(today.setDate(today.getDate() - 1)).toISOString(),
-    new Date(today.setDate(today.getDate() - 1)).toISOString(),
-    new Date(today.setDate(today.getDate() - 1)).toISOString(),
-    new Date(today.setDate(today.getDate() - 1)).toISOString(),
+    new Date(today.setDate(today.getDate() - 7)).toISOString(),
+    new Date(today.setDate(today.getDate() + 1)).toISOString(),
+    new Date(today.setDate(today.getDate() + 1)).toISOString(),
+    new Date(today.setDate(today.getDate() + 1)).toISOString(),
+    new Date(today.setDate(today.getDate() + 1)).toISOString(),
+    new Date(today.setDate(today.getDate() + 1)).toISOString(),
     new Date().toISOString(),
   ];
   let array = [0,0,0,0,0,0,0];
   var fetches = [];
-  for (let i = 0; i < dates.length; i++) {
+  for (let i = 0; i < dates.length-1; i++) {
     fetches.push(
-      fetch("/dashboard/statistic?date=" + dates[i])
+      fetch("/dashboard/statistic?fromDate=" + dates[i] + "&toDate="+dates[i+1])
         .then((res) => {
           res.json().then((data) => {
             array[i] = data.count;
@@ -24,6 +24,17 @@ function fetchWeeklyStatistic() {
         })
     );
   }
+  fetches.push(
+    fetch("/dashboard/statistic?fromDate=" + dates[dates.length-1] + "&toDate="+dates[dates.length-1])
+      .then((res) => {
+        res.json().then((data) => {
+          array[i] = data.count;
+        });
+      })
+      .catch((err) => {
+        console.log("ERROR:", err);
+      })
+  );
   return Promise.all(fetches).then(function () {
     return array;
   });
@@ -31,134 +42,6 @@ function fetchWeeklyStatistic() {
 (function ($) {
   "use strict";
   $(function () {
-    if ($("#order-chart").length) {
-      const today = new Date();
-      const dates = [
-        new Date(today.setDate(today.getDate() - 7)).toLocaleDateString(),
-        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
-        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
-        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
-        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
-        new Date(today.setDate(today.getDate() + 1)).toLocaleDateString(),
-        new Date().toLocaleDateString(),
-      ];
-
-      fetchWeeklyStatistic()
-        .then((res) => {
-          var areaData = {
-            labels: [
-              dates[0],
-              "",
-              "",
-              dates[1],
-              "",
-              "",
-              dates[2],
-              "",
-              "",
-              dates[3],
-              "",
-              "",
-              dates[4],
-              "",
-              "",
-              dates[5],
-              "",
-              "",
-              dates[6],
-            ],
-            datasets: [
-              {
-                data: [
-                  parseInt(res[0].count),
-                  parseInt(res[0].count + res[1].count)/2,
-                  parseInt(res[1].count),
-                  parseInt(res[2].count),
-                  parseInt(res[2].count + res[3].count)/2,
-                  parseInt(res[3].count),
-                  parseInt(res[4].count),
-                  parseInt(res[5].count),
-                  parseInt(res[6].count),
-                ],
-                borderColor: ["#4747A1"],
-                borderWidth: 2,
-                fill: false,
-                label: "Orders",
-              },
-            ],
-          };
-          var areaOptions = {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-              filler: {
-                propagate: false,
-              },
-            },
-            scales: {
-              xAxes: [
-                {
-                  display: true,
-                  ticks: {
-                    display: true,
-                    padding: 10,
-                    fontColor: "#6C7383",
-                  },
-                  gridLines: {
-                    display: false,
-                    drawBorder: false,
-                    color: "transparent",
-                    zeroLineColor: "#eeeeee",
-                  },
-                },
-              ],
-              yAxes: [
-                {
-                  display: true,
-                  ticks: {
-                    display: true,
-                    autoSkip: false,
-                    maxRotation: 0,
-                    stepSize: 12,
-                    min: 0,
-                    max: 100,
-                    padding: 18,
-                    fontColor: "#6C7383",
-                  },
-                  gridLines: {
-                    display: true,
-                    color: "#f2f2f2",
-                    drawBorder: false,
-                  },
-                },
-              ],
-            },
-            legend: {
-              display: false,
-            },
-            tooltips: {
-              enabled: true,
-            },
-            elements: {
-              line: {
-                tension: 0.35,
-              },
-              point: {
-                radius: 0,
-              },
-            },
-          };
-          var revenueChartCanvas = $("#order-chart").get(0).getContext("2d");
-          var revenueChart = new Chart(revenueChartCanvas, {
-            type: "line",
-            data: areaData,
-            options: areaOptions,
-          });
-        })
-        .catch((err) => {
-          console.log("ERR: ", err);
-        });
-    }
 
     if ($("#sales-chart").length) {
       var SalesChartCanvas = $("#sales-chart").get(0).getContext("2d");
