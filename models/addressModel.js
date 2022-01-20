@@ -28,3 +28,15 @@ exports.getChild = async (tableNameChild, tableNameParent, name) => {
         console.log("Error db/getChild", e);
     }
 };
+
+exports.getAllCase = async (tableName) => {
+    console.log(tableName);
+    const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
+    const queryStr = pgp.as.format(`SELECT * FROM $1 p WHERE occupancy < capacity`, table);
+    try {
+        const res = await db.any(queryStr);
+        return res;
+    } catch (e) {
+        console.log("Error db/getAllCase", e);
+    }
+};

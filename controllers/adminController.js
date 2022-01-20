@@ -5,6 +5,7 @@ const accountModel = require('../models/accountModel');
 const addressModel = require('../models/addressModel');
 const covidRecordModel = require('../models/covidRecordModel');
 const location = require('../models/quarantineLocationModel');
+const location_record = require('../models/quanrantineLocationRecordModel');
 
 const verify = require('../middlewares/verify').verify;
 
@@ -110,7 +111,7 @@ router.get('/new', async (req, res) => {
     }
     let province_list = await addressModel.getAll('province');
     if (req.query.object == 'patient') {
-        let location_list = await addressModel.getAll('quarantine_location');
+        let location_list = await addressModel.getAllCase('quarantine_location');
 
         return res.render("users/user_form_admin", {
             province: province_list,
@@ -165,6 +166,7 @@ router.post('/new', async (req, res) => {
 
     let status = true;
     let lstt = true;
+    let ls = true;
 
     if (req.query.object == 'patient') {
         let user_id = await userModel.getByUsername(req.body.username);
@@ -173,14 +175,19 @@ router.post('/new', async (req, res) => {
             record_time: new Date(),
             user_id: user_id.id,
         });
-        const lct = await location.getById(req.body.location);
-        const lstt = await location.update({
-            id: req.body.location,
-            occupancy: lct.occupancy + 1
+        let tmp = await location.getById(req.body.location);
+        lstt = await location.updateByLocationId(req.body.location, {
+            occupancy: tmp.occupancy + 1
+        })
+
+        ls = await location_record.add({
+            user_id: user_id.id,
+            location_id: req.body.location,
+            record_time: new Date()
         })
     }
 
-    if (user && acc && status && lstt) {
+    if (user && acc && status && lstt && ls) {
         return res.redirect(`./${req.query.object}`);
     }
     res.send({ error: "Can't create user!" });

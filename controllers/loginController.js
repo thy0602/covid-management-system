@@ -22,7 +22,7 @@ const setAuthToken = (res, user) => {
         algorithm: "HS256",
     });
     console.log(token);
-    res.cookie('user', user.username);
+    res.cookie('user', token);
 
     res.cookie("jwt", token, {
         expires: new Date(cookieExpiration),

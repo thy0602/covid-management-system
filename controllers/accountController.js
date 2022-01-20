@@ -89,16 +89,17 @@ router.get('/notification', async (req, res) => {
     if (!req.cookies.user)
         return res.redirect('/dashboard');
 
-    if (req.cookies.user[0] == 'M' || req.cookies.user == 'admin')
+    let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+    if (temp[0] == 'M' || temp == 'admin')
         return res.redirect('/dashboard');
-    
+
     try {
-        const user = await userModel.getByUsername(req.cookies.user);
+        const user = await userModel.getByUsername(temp);
         console.log("USER: ", user);
         const orders = await orderModel.getUrgentOrders(user.id);
-        res.status(200).send({ orders: orders});
-    } catch(e) {
-        res.status(200).send({ error: e});
+        res.status(200).send({ orders: orders });
+    } catch (e) {
+        res.status(200).send({ error: e });
     }
 })
 
