@@ -10,12 +10,119 @@ const datetimeFormatter = require('../utils/datetimeFormatter');
 const { moneyFormatter } = require('../utils/moneyFormatter');
 const verify = require('../middlewares/verify').verify;
 const serverLog = require("../utils/server_log");
+const searchFilter = require('../utils/searchFilter');
 
 router.use('/', (req, res, next) => {
     if (verify(req, 'user'))
         next();
     else
         return res.redirect('/');
+});
+
+router.get("/sort", async (req, res) => {
+    let packId = req.query['show-detail'];
+    const orderBy = req.query["order-by"];
+    let allPacks;
+
+    try {
+        switch (orderBy) {
+            case "name-ascending":
+                allPacks = await packModel.getAllOrderBy('name', true)
+                break;
+
+            case "name-descending":
+                allPacks = await packModel.getAllOrderBy('name', false);
+                break;
+
+            default:
+                allPacks = await packModel.getAll();
+                break;
+        }
+
+        let firstPack = allPacks[0];
+        let productsInPack = await pack_itemsModel.getAllProductByPackId(firstPack.id);
+
+        for (const product of productsInPack) {
+            let productImages = await productImageModel.getImagesByProductId(product.id);
+            // console.log('get /packlist productImages:', productImages);
+            product['images'] = productImages.reduce((allUrls, productImage) => {
+                allUrls.push(productImage.url);
+                return allUrls;
+            }, []);
+        }
+        // console.log('get /packlist productsInPack:', productsInPack);
+
+        res.render("order/order", {
+            isPackage: 1,
+            packs: allPacks,
+            packDetail: firstPack,
+            productsInPack,
+            isNoData: 0
+        });
+    } catch (error) {
+        console.log("Error get /packs: ", error);
+        res.status(404).send(error);
+    }
+});
+
+// Search pack by name (json)
+router.get('/search', async (req, res) => {
+    const searchStr = req.query.searchStr;
+
+    try {
+        let allPacks = await packModel.getAll();
+        let filterdPacks = searchFilter.filterBySimilarity(allPacks, searchStr, 'name', 0.1);
+
+        console.log('get /packs/api/search filterdPacks:', filterdPacks);
+
+        if (filterdPacks.length == 0) {
+            let firstPack = allPacks[0];
+            let productsInPack = await pack_itemsModel.getAllProductByPackId(firstPack.id);
+
+            for (const product of productsInPack) {
+                let productImages = await productImageModel.getImagesByProductId(product.id);
+                // console.log('get /packlist productImages:', productImages);
+                product['images'] = productImages.reduce((allUrls, productImage) => {
+                    allUrls.push(productImage.url);
+                    return allUrls;
+                }, []);
+            }
+
+            return res.render("order/order", {
+                isPackage: 1,
+                packs: allPacks,
+                packDetail: [],
+                productsInPack,
+                isNoData: 1
+            });
+        }
+
+        let firstPack = filterdPacks[0];
+        let productsInPack = await pack_itemsModel.getAllProductByPackId(firstPack.id);
+
+        for (const product of productsInPack) {
+            let productImages = await productImageModel.getImagesByProductId(product.id);
+            // console.log('get /packlist productImages:', productImages);
+            product['images'] = productImages.reduce((allUrls, productImage) => {
+                allUrls.push(productImage.url);
+                return allUrls;
+            }, []);
+        }
+        // console.log('get /packlist productsInPack:', productsInPack);
+
+        res.render("order/order", {
+            isPackage: 1,
+            packs: filterdPacks,
+            packDetail: firstPack,
+            productsInPack,
+            isNoData: 0
+        });
+
+        
+    } catch (error) {
+        console.log("Error post /packs/api/search: ", error);
+        res.status(400).send(error);
+    }
 });
 
 router.put('/paid', async (req, res) => {
@@ -82,7 +189,8 @@ router.get('/:packId', async (req, res) => {
         isPackage: 1,
         packs: allPack,
         packDetail,
-        productsInPack
+        productsInPack,
+        isNoData: 0
     });
 })
 
@@ -106,7 +214,8 @@ router.get('/', async (req, res) => {
         isPackage: 1,
         packs: allPack,
         packDetail: firstPack,
-        productsInPack
+        productsInPack,
+        isNoData: 0
     });
 });
 

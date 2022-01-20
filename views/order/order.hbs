@@ -11,6 +11,50 @@
             </div>
         </div>
     </div>
+    <div class="row mb-5">
+        <div class="col-md-12 ">
+            <div class="row">
+                <div class="col-12 col-xl-4 mb-4 mb-xl-0">
+                    {{!-- <div class="justify-content-end d-flex"> --}}
+                        <form action="/packs/search" method="POST" class="justify-content-end d-flex mb-1" id="search-form">
+                            <div class="input-group">
+                                <input type="text" name="searchStr" class="form-control" id="search-input" placeholder="Search"
+                                aria-label="search" aria-describedby="search">
+                                <div type='submit' class="input-group-prepend hover-cursor" id="search-icon">
+                                    <span class="input-group-text" id="userlist-search">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+
+                <div class="col-12 col-xl-8">
+                        <div class="justify-content-end d-flex">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary">Sort</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                    id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                                    {{!-- <h6 class="dropdown-header">Header</h6> --}}
+                                    <a class="dropdown-item" href="/orders/sort/?order-by=name-ascending">A-Z</a>
+                                    <a class="dropdown-item"
+                                        href="/orders/sort/?order-by=name-descending">Z-A</a>
+                                    {{!-- <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-ascending">Price
+                                        ascending</a>
+                                    <a class="dropdown-item" href="/packs/{{packDetail.id}}?order-by=price-descending">Price
+                                        descending</a> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-3 stretch-card grid-margin">
             <div class="card">
@@ -36,22 +80,8 @@
                                                 {{this.name}}
                                             </a></span></p>
                                     </td>
-                                    {{!-- <td class="font-weight-medium">
-                                        <div class="row">
-                                            <div class="badge badge-primary"><i class="mdi mdi-pencil mx-2"></i>
-                                            </div>
-                                            <div class="badge badge-danger"><i class="icon-trash mx-2"></i></div>
-                                        </div>
-                                    </td> --}}
                                 </tr>
                                 {{/each}}
-                                {{!-- <tr>
-                                    <td class="pl-0"><span class="font-weight-bold">#1</span></td>
-                                    <td>
-                                        <p class="ml-4 mb-0"><span class="font-weight-bold">Gói vệ sinh</span></p>
-                                    </td>
-                                </tr> --}}
-
                             </tbody>
                         </table>
                     </div>
@@ -174,6 +204,11 @@
     if (localStorage.getItem("cartList"))
         cartList = JSON.parse(localStorage.getItem("cartList"));
 
+    let isNoData = {{isNoData}};
+    if (isNoData == 1) {
+        alert("No result matches");
+    }
+
     $(document).ready(function () {
         window.pulse_continue_loop = true;
         window.pulse_image = $('.pulse_image');
@@ -283,6 +318,12 @@
     }
 
     $('#checkOut').click(onclickCheckOut);
+
+    $("#search-icon").click(() => {
+        console.log("helluuuu");
+        let searchStr = $("#search-input").val();
+        window.location.href=`/orders/search?searchStr=${searchStr}`;
+    });
 
 </script>
 
