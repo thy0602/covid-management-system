@@ -20,7 +20,7 @@ router.post('/setlimit', async (req, res) => {
     res.redirect('/manage?status=true');
 })
 
-router.get('/view', async function (req, res) {
+router.get('/', async function (req, res) {
     const orderBy = req.query['order-by'];
     let userList;
     switch (orderBy) {

@@ -65,11 +65,52 @@
           </div>
         </div>
         <div class="col-md-6 stretch-card transparent">
-          <div class="card card-light-danger">
+          <div class="card card-inverse-success">
             <div class="card-body">
               <p class="mb-4">Total Cured</p>
               <p class="fs-30 mb-2">{{cured}} Cases</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{!-- chart on each status --}}
+  <div class="row">
+    <div class="col-md-8 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand">
+              <div class=""></div>
+            </div>
+            <div class="chartjs-size-monitor-shrink">
+              <div class=""></div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <p class="card-title">Status Chart On Selected Month</p>
+          </div>
+          <p class="font-weight-500">The chart show the cases of selected Month</p>
+          <canvas  id="sales-chart" style="display: block;"
+            class="chartjs-render-monitor"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4>Selected Month</h4>
+          <input type="month" name="" id="month"
+            style="padding: 15px; width: 100%; border: 1px solid #4747A1; border-radius: 5px; color: #4747A1;">
+          <div class="chartjs-legend mt-4 mb-2">
+            <h4>Label</h4>
+            <ul class="1-legend">
+              <li><span style="background-color: #F3797E;"></span>Number of F0</li>
+              <li><span style="background-color: #4747A1"></span>Number of F1</li>
+              <li><span style="background-color: #7978E9"></span>Number of F2</li>
+              <li><span style="background-color: #428A42"></span>Number of cured</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -89,11 +130,11 @@
               <div class="justify-content-end d-flex">
                 <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
                   <div>
-                    <label style="font-size: 15px;" class="my-0" for="from">From</label>
+                    <label style="font-size: 15px; width: 50px;" class="my-0" for="from">From</label>
                     <input id="from" type="date" placeholder="dd-mm-yyyy" value="" min="2018-01-01" max="2022-12-31">
                   </div>
                   <div class="my-1">
-                    <label style="font-size: 15px;" class="my-0 mr-3" for="to">To</label>
+                    <label style="font-size: 15px;  width: 50px;" class="my-0" for="to">To</label>
                     <input id="to" type="date" placeholder="dd-mm-yyyy" value="" min="2018-01-01" max="2022-12-31">
                   </div>
                 </div>
@@ -108,8 +149,7 @@
       <div class="card">
         <div class="card-body">
           <p class="card-title">User State Update</p>
-          <ul class="icon-data-list"
-            style="width: 100%; max-height: 450px; overflow:hidden; overflow-y:scroll;">
+          <ul class="icon-data-list" style="width: 100%; max-height: 450px; overflow:hidden; overflow-y:scroll;">
             {{#each userStateUpdate}}
             <li>
               <div class="d-flex">
@@ -247,7 +287,8 @@
         <div class="card-body">
           <p class="card-title mb-0">Order</p>
           <div class="table-responsive">
-            <table class="table table-striped table-borderless" style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
+            <table class="table table-striped table-borderless"
+              style="width: 100%; height: 250px; overflow:hidden; overflow-y:scroll;">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -288,9 +329,8 @@
               <div class=""></div>
             </div>
           </div>
-          <h4 class="card-title">Pie chart</h4>
-          <canvas id="pieChart" style="display: block;"
-            class="chartjs-render-monitor"></canvas>
+          <h4 class="card-title">Pie chart of orders's status</h4>
+          <canvas id="pieChart" style="display: block;" class="chartjs-render-monitor"></canvas>
         </div>
       </div>
     </div>
@@ -315,12 +355,12 @@
       to.toISOString(),
     ];
     let array = [];
-    for (let i = 0; i < dates.length-1; i++) {
-      const resJson = await fetch("/dashboard/statistic?fromDate=" + dates[i] + "&toDate="+dates[i+1]);
+    for (let i = 0; i < dates.length - 1; i++) {
+      const resJson = await fetch("/dashboard/statistic?fromDate=" + dates[i] + "&toDate=" + dates[i + 1]);
       const data = await resJson.json();
       array.push(data.length);
     }
-    const resJson = await fetch("/dashboard/statistic?fromDate=" + dates[dates.length-1] + "&toDate="+dates[dates.length-1]);
+    const resJson = await fetch("/dashboard/statistic?fromDate=" + dates[dates.length - 1] + "&toDate=" + dates[dates.length - 1]);
     const data = await resJson.json();
     array.push(data.length);
     console.log(array);
@@ -332,8 +372,8 @@
     $("#from").val(new Date(today.setDate(today.getDate() - 7)).toISOString().split('T')[0])
 
 
-    var orders = {{{ convert orders }}}
-    var pending = 0, paid = 0;
+    var orders = {{{ convert orders }}};
+  var pending = 0, paid = 0;
   for (var i = 0; i < orders.length; i++) {
     if (orders[i].paid_at) {
       paid++;
@@ -386,7 +426,7 @@
       new Date(formmatFrom.setDate(formmatFrom.getDate() + step)).toLocaleDateString(),
       to.toLocaleDateString(),
     ];
-    fetchStatistic(from,to).then((res) => {
+    fetchStatistic(from, to).then((res) => {
       console.log(res[3]);
       var areaData = {
         labels: [
@@ -506,6 +546,113 @@
   $("#from").change(dateChange);
   $("#to").change(dateChange);
   dateChange();
+
+  const fetchWithStatus = async () => {
+    const status = ["F0", "F1", "F2", "cured"];
+    let array = [];
+    for (var i = 0; i < status.length; i++) {
+      const resJson = await fetch("/dashboard/statistic?monthString=" + $("#month").val() + "&status=" + status[i]);
+      const data = await resJson.json();
+      array.push(data.length);
+    }
+    return array;
+  }
+  const monthChange = async () => {
+    const data = await fetchWithStatus();
+    var SalesChartCanvas = $("#sales-chart").get(0).getContext("2d");
+    var SalesChart = new Chart(SalesChartCanvas, {
+      type: "bar",
+      data: {
+        labels: ["Case"],
+        datasets: [
+          {
+            label: "Total F0",
+            data: [data[0]],
+            backgroundColor: "#F3797E",
+          },
+          {
+            label: "Total F1",
+            data: [data[1]],
+            backgroundColor: "#4747A1",
+          },
+          {
+            label: "Total F2",
+            data: [data[2]],
+            backgroundColor: "#7978E9",
+          },
+          {
+            label: "Total Cured",
+            data: [data[3]],
+            backgroundColor: "#428A42",
+          }
+        ],
+      },
+      options: {
+        cornerRadius: 5,
+        responsive: true,
+        maintainAspectRatio: true,
+        layout: {
+          padding: {
+            left: 0,
+            right: 0,
+            top: 20,
+            bottom: 0,
+          },
+        },
+        scales: {
+          yAxes: [
+            {
+              display: true,
+              gridLines: {
+                display: true,
+                drawBorder: false,
+                color: "#F2F2F2",
+              },
+              ticks: {
+                display: true,
+                min: 0,
+                max: 100,
+                callback: function (value, index, values) {
+                  return value;
+                },
+                autoSkip: true,
+                maxTicksLimit: 10,
+                fontColor: "#6C7383",
+              },
+            },
+          ],
+          xAxes: [
+            {
+              stacked: false,
+              ticks: {
+                beginAtZero: true,
+                fontColor: "#6C7383",
+              },
+              gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+                display: false,
+              },
+              barPercentage: 1,
+            },
+          ],
+        },
+        legend: {
+          display: false,
+        },
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
+      },
+    });
+  }
+
+  const thisMonth = new Date();
+  $("#month").val(`${thisMonth.getFullYear()}-01`);
+  $("#month").change(monthChange);
+  monthChange();
+
   })
 
 </script>
