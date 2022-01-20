@@ -70,7 +70,7 @@ router.get('/new', async (req, res) => {
             user = 'ID_001';
     }
     let province_list = await addressModel.getAll('province');
-    let location_list = await addressModel.getAllCase('quarantine_location');
+    let location_list = await addressModel.getAll('quarantine_location');
 
     return res.render("users/user_form", {
         province: province_list,
@@ -115,9 +115,10 @@ router.post('/new', async (req, res) => {
         record_time: new Date(),
         user_id: user_id.id,
     });
-    let tmp = await location.getById(req.body.location);
-    const lstt = await location.updateByLocationId(req.body.location, {
-        occupancy: tmp.occupancy + 1
+    const lct = await location.getById(req.body.location);
+    const lstt = await location.update({
+        id: req.body.location,
+        occupancy: lct.occupancy + 1
     })
 
     const ls = await location_record.add({
@@ -133,6 +134,7 @@ router.post('/new', async (req, res) => {
             data: req.body.username,
             date: new Date()
         });
+
         return res.redirect('./');
     }
     res.send({ error: "Can't create user!" });

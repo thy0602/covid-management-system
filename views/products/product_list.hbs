@@ -85,7 +85,7 @@
                 <hr/>
                 <div class="card-body">
                     <h5 class="card-title" onclick="location.href='/products/{{this.id}}/view';">{{this.name}}</h5>
-                    <p class="card-text" onclick="location.href='/products/{{this.id}}/view';">{{this.price}}</p>
+                    <p class="card-text" onclick="location.href='/products/{{this.id}}/view';">{{formatMoney this.price}}</p>
                     <a class="btn btn-sm btn-primary mt-3" href="/products/{{this.id}}/edit">
                         <i class="mdi mdi-pencil mx-2"></i></a>
                     <button type="button" class="btn btn-sm btn-danger mt-3 ml-1 icon-del-pack" id="{{this.id}}" onclick="showModalDel(this.id)">

@@ -322,7 +322,7 @@ VALUES
 	(DEFAULT, 'Thịt heo', 'kg', 120000),
 	(DEFAULT, 'Thịt bò', 'kg', 150000),
 	(DEFAULT, 'Thịt gà', 'kg', 100000),
-	(DEFAULT, 'Trứng gà', 'qủa', 6000),
+	(DEFAULT, 'Trứng gà', 'quả', 6000),
 	(DEFAULT, 'Cá', 'kg', 90000),
 	(DEFAULT, 'Tôm', 'kg', 80000),
 	(DEFAULT, 'Cơm cháy', 'gói', 30000),

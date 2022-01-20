@@ -17,8 +17,9 @@ router.use('/', (req, res, next) => {
 // Render UI for creating new pack
 router.get("/new", async (req, res) => {
     try {
-        let allProducts = await productModel.getProductList();
-        // console.log('get /packs/new allProduct: ', allProducts);
+        // let allProducts = await productModel.getProductList();
+        let allProducts = await productModel.getAllProductOrderBy("name", true);
+        console.log('get /packs/new allProduct: ', allProducts);
         res.render("packs/pack_create", {
             allProducts,
         });
@@ -208,7 +209,7 @@ router.post('/api/search', async (req, res) => {
         
         // get packs with similarity higher then threshold
         for (const pack of allPacks) {
-            let similarity = stringSimilarity.compareTwoStrings(searchStr, pack.name.toLowerCase());
+            let similarity = stringSimilarity.compareTwoStrings(searchStr.toLowerCase(), pack.name.toLowerCase());
             //console.log(`get /packs/api/search ${pack.name} - ${similarity} `);
             if (similarity > 0.5) {
                 pack['similarity'] = similarity;
