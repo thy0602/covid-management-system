@@ -9,6 +9,7 @@ const userModel = require('../models/userModel');
 const datetimeFormatter = require('../utils/datetimeFormatter');
 const { moneyFormatter } = require('../utils/moneyFormatter');
 const verify = require('../middlewares/verify').verify;
+const serverLog = require("../utils/server_log");
 
 router.use('/', (req, res, next) => {
     if (verify(req, 'user'))
@@ -22,9 +23,16 @@ router.put('/paid', async (req, res) => {
     console.log("ids: ", ids);
 
     ids = ids.map((id) => {
+        serverLog.log_action({
+            sender_id: require('jsonwebtoken').decode(req.cookies.user, true).username,
+            action: `Make payment`,
+            data: `Order ${id}`,
+            date: new Date()
+        });
         return parseInt(id);
     });
     console.log("ids: ", ids);
+
     try {
         if (typeof ids == 'undefined')
             return res.status(200).send({ success: false });

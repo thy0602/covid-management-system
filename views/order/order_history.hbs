@@ -208,7 +208,7 @@
         }
 
         await $.ajax({
-            url: "/order/unpaid_prices",
+            url: "/orders/unpaid_prices",
             type: 'GET',
             success: async function (response, status) {
                 const res = await response;
@@ -218,7 +218,7 @@
         });
 
         await $.ajax({
-            url: "/order/total_price",
+            url: "/orders/total_price",
             type: 'POST',
             data: {
                 ids: order_ids
@@ -305,7 +305,7 @@
             success: async function (response, status) {
                 const res = await response;
                 await $.ajax({
-                    url: "/order/paid",
+                    url: "/orders/paid",
                     type: 'PUT',
                     data: {
                         ids: int_order_ids
