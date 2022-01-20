@@ -5,7 +5,7 @@ var path = require('path');
 //handle https
 const fs = require("fs");
 var https = require('https');
-
+require("dotenv").config();
 
 const app = express();
 
@@ -51,10 +51,10 @@ app.get("/", (req, res) => {
 var privateKey  = fs.readFileSync('./secret-key/CA/localhost/localhost.decrypted.key');
 var certificate = fs.readFileSync('./secret-key/CA/localhost/localhost.crt');
 
-var options = {
+var options = process.env.NODE_ENV !== "production" ? {
   key: privateKey,
   cert: certificate
-};
+} : {};
 const port = process.env.PORT || 3001;
 var server = https.createServer(options, app);
 server.listen(port, function () {
