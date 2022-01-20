@@ -147,8 +147,8 @@ router.post('/crpassword', async (req, res) => {
 });
 
 router.post('/rspassword', async (req, res) => {
-
-    const userdb = await accountModel.getByUsername(req.cookies.user);
+    let temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+    const userdb = await accountModel.getByUsername(temp);
     console.log(userdb);
     let checkpw = await bcrypt.compare(req.body.current_password, userdb.password);
     if (!checkpw) {
@@ -163,7 +163,7 @@ router.post('/rspassword', async (req, res) => {
     const user = {
         password: pwhashed
     }
-    const rs = await accountModel.update(req.cookies.user, user);
+    const rs = await accountModel.update(temp, user);
     res.redirect('/dashboard');
     return;
 });
