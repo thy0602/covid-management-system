@@ -47,16 +47,28 @@ exports.getById = async (id) => {
 }
 
 exports.getOrderHistory = async (user_id) => {
-    const queryStr = pgp.as.format(`
+    const queryStr1 = pgp.as.format(`
         SELECT DISTINCT od."order_id", o."ordered_at", o."paid_at",
             o."total_price", o."user_id", od."pack_id", p."name"
-        FROM (SELECT * FROM "order" WHERE "user_id" = ${user_id}) o
+        FROM (SELECT * FROM "order" WHERE "user_id" = ${user_id} AND "paid_at" IS NULL) o
         JOIN "order_detail" od ON o."id" = od."order_id"
         JOIN "pack" p ON p."id" = od."pack_id"
-        ORDER BY od."order_id";
+        ORDER BY o."ordered_at" DESC;
     `)
+
+    const queryStr2 = pgp.as.format(`
+        SELECT DISTINCT od."order_id", o."ordered_at", o."paid_at",
+            o."total_price", o."user_id", od."pack_id", p."name"
+        FROM (SELECT * FROM "order" WHERE "user_id" = ${user_id} AND "paid_at" IS NOT NULL) o
+        JOIN "order_detail" od ON o."id" = od."order_id"
+        JOIN "pack" p ON p."id" = od."pack_id"
+        ORDER BY o."ordered_at" DESC;
+    `)
+
     try {
-        const res = await db.any(queryStr);
+        const arr1 = await db.any(queryStr1);
+        const arr2 = await db.any(queryStr2);
+        const res = arr1.concat(arr2); 
         return res;
     } catch (e) {
         console.log("Error getUnpaidOrder", e);
@@ -128,7 +140,7 @@ exports.getUnpaidOrders = async () => {
     const queryStr = pgp.as.format(`SELECT u."name", o."id", o."user_id", o."ordered_at", o."total_price", o."is_urgent"
                                     FROM "order" o
                                     JOIN "user" u on o.user_id = u.id 
-                                    WHERE "paid_at" is NULL`);
+                                    WHERE "paid_at" is NULL ORDER BY "ordered_at" DESC`);
 
     try {
         const res = await db.any(queryStr);

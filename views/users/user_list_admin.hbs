@@ -111,7 +111,7 @@
                     <p class="card-title mb-0">Supervisor List</p>
                     {{else}}
                     {{/if}}
-                    <div class="table-responsive table-hover" id="cartTable">
+                    <div class="table-responsive table-hover" id="cartTable" style="height: 700px; overflow: auto;">
                         <table class="table table-borderless">
                             <thead style="border-bottom: 2px solid black">
                                 <tr>
@@ -130,7 +130,7 @@
                                         <img src="/img/user.png" alt="image" />
                                     </td>
                                     <td onclick="location.href='/users/{{this.id}}/view';" class="hover-cursor">{{name}}</td>
-                                    <td onclick="location.href='/users/{{this.id}}/view';" class="hover-cursor">{{address}}</td>
+                                    <td onclick="location.href='/users/{{this.id}}/view';" class="hover-cursor">{{address}} ...</td>
                                     <td onclick="location.href='/users/{{this.id}}/view';" class="hover-cursor">{{current_location}}</td>
                                     <td onclick="location.href='/users/{{this.id}}/view';" class="font-weight-medium hover-cursor">
                                         <div class="badge badge-{{#ifStr current_status "F0"}}danger{{else}}{{#ifStr
