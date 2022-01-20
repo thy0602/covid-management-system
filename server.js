@@ -48,8 +48,8 @@ app.get("/", (req, res) => {
     res.redirect("/account/login-id");
 });
 
-var privateKey  = fs.readFileSync(__dirname+'/secret-key/CA/localhost/localhost.decrypted.key');
-var certificate = fs.readFileSync(__dirname+'/secret-key/CA/localhost/localhost.crt');
+var privateKey  = fs.readFileSync('./secret-key/CA/localhost/localhost.decrypted.key');
+var certificate = fs.readFileSync('./secret-key/CA/localhost/localhost.crt');
 
 var options = {
   key: privateKey,
