@@ -9,6 +9,9 @@ const location_record = require('../models/quarantineLocationRecordModel');
 const serverLog = require("../utils/server_log");
 const searchFilter = require('../utils/searchFilter');
 const axios = require("axios");
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
 
 
 const verify = require('../middlewares/verify').verify;
@@ -227,17 +230,28 @@ router.post('/new', async (req, res) => {
 
     const temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
 
+    const cert_file = fs.readFileSync(path.join(__dirname, '..', 'secret-key/CA/localhost/localhost.crt'));
+    const key_file = fs.readFileSync(path.join(__dirname, '..', 'secret-key/CA/localhost/localhost.decrypted.key'));
+
+    const httpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+        cert: cert_file,
+        key: key_file,
+        passphrase: "123456"
+    })
+
     var options = {
-        'method': 'POST',
-        'url': 'https://localhost:3000/api/account',
-        'data': {
-            "username": temp,
-            "token": req.cookies.user,
-            "new_user": req.body.username
+        method: 'POST',
+        url: 'https://localhost:3000/api/account',
+        httpsAgent : httpsAgent,
+        data: {
+            username: temp,
+            token: req.cookies.user,
+            new_user: req.body.username
         }
     };
-    
     const result = await axios(options);
+
     console.log("result post api/account adminController:", result.data);
 
     if (user && acc && status && lstt && ls) {
