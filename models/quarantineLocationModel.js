@@ -15,7 +15,7 @@ const tableFields = {
 
 exports.getAll = async () => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const queryStr = pgp.as.format(`SELECT * FROM $1`, table);
+    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE "is_deleted" IS FALSE`, table);
     try {
         const res = await db.any(queryStr);
         return res;
@@ -25,17 +25,17 @@ exports.getAll = async () => {
     }
 }
 
-exports.getById = async (id) => {
+exports.getByLocationId = async (locationId) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });
-    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE "${tableFields.id}" = '${id}'`, table);
+    const queryStr = pgp.as.format(`SELECT * FROM $1 WHERE "${tableFields.id}"='${locationId}';`, table);
     try {
         const res = await db.one(queryStr);
         return res;
-    } catch (e) {
-        console.log("Error db/load relatedModel", e);
+    } catch (error) {
+        console.log("Error quarantineLocationModel/getByLocationId: ", error);
+        throw error;
     }
 }
-
 
 exports.updateByLocationId = async (locationId, entity) => {
     const table = new pgp.helpers.TableName({ table: tableName, schema: schema });

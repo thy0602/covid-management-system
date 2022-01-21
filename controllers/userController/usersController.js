@@ -3,15 +3,15 @@ const router = express.Router();
 const userModel = require('../../models/userModel');
 const accountModel = require('../../models/accountModel');
 const addressModel = require('../../models/addressModel');
-const provinceModel = require('../../models/provinceModel');
-const districtModel = require('../../models/districtModel');
-const wardModel = require('../../models/wardModel');
 const covidRecordModel = require('../../models/covidRecordModel');
 const location = require('../../models/quarantineLocationModel');
-const quarantineLocation = require('../../models/quarantineLocationModel');
 const location_record = require('../../models/quarantineLocationRecordModel')
 const serverLog = require("../../utils/server_log");
+const axios = require("axios");
 const searchFilter = require('../../utils/searchFilter');
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
 
 const verify = require('../../middlewares/verify').verify;
 
@@ -27,36 +27,21 @@ router.get('/', async function (req, res) {
     let userList;
     switch (orderBy) {
         case 'name-ascending':
-            userList = await userModel.getAllUserOrderBy('name', true);
+            userList = await userModel.getAllUserWithLockedOrderBy('name', true);
             break;
 
         case 'name-descending':
-            userList = await userModel.getAllUserOrderBy('name', false);
+            userList = await userModel.getAllUserWithLockedOrderBy('name', false);
             break;
 
         case 'serious-status':
-            userList = await userModel.getAllUserOrderBy('current_status', true);
+            userList = await userModel.getAllUserWithLockedOrderBy('current_status', true);
             break;
 
         default:
-            userList = await userModel.getAll();
+            userList = await userModel.getAllUserWithLockedOrderBy('name', true);
             break;
     }
-    
-    for (let index = 0; index < userList.length; index++) {
-        let province = await provinceModel.getByProvinceId(userList[index].province);
-        let district = await districtModel.getByDistrictId(userList[index].district);
-        let ward = await wardModel.getByWardId(userList[index].ward);
-        userList[index].address += ", " + ward[0].name + ", " + district[0].name + ", " + province[0].name;
-    }
-    for (let index = 0; index < userList.length; index++) {
-        if(userList[index].current_location != null)
-        {
-            let locationName = await quarantineLocation.getById(userList[index].current_location);
-            userList[index].current_location = locationName.name;
-        }
-    }
-    
 
     res.render("users/user_list", {
         userList: userList,
@@ -90,7 +75,7 @@ router.get('/new', async (req, res) => {
             user = 'ID_001';
     }
     let province_list = await addressModel.getAll('province');
-    let location_list = await addressModel.getAll('quarantine_location');
+    let location_list = await location.getAll();
 
     return res.render("users/user_form", {
         province: province_list,
@@ -109,6 +94,8 @@ router.get('/getRegion', async (req, res) => {
 });
 
 router.post('/new', async (req, res) => {
+
+    console.lo
 
     const acc = await accountModel.create({
         username: req.body.username,
@@ -146,6 +133,32 @@ router.post('/new', async (req, res) => {
         location_id: req.body.location,
         record_time: new Date()
     })
+
+    const temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
+
+    const cert_file = fs.readFileSync(path.join(__dirname, '..', '..', 'secret-key/CA/localhost/localhost.crt'));
+    const key_file = fs.readFileSync(path.join(__dirname, '..', '..', 'secret-key/CA/localhost/localhost.decrypted.key'));
+
+    const httpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+        cert: cert_file,
+        key: key_file,
+        passphrase: "123456"
+    })
+
+    var options = {
+        method: 'POST',
+        url: 'https://localhost:3000/api/account',
+        httpsAgent : httpsAgent,
+        data: {
+            username: temp,
+            token: req.cookies.user,
+            new_user: req.body.username
+        }
+    };
+    const result = await axios(options);
+
+    console.log("result post api/account usersController:", result.data);
 
     if (user && acc && status && lstt && ls) {
         serverLog.log_action({
