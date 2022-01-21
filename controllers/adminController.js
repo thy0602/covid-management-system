@@ -7,11 +7,10 @@ const covidRecordModel = require('../models/covidRecordModel');
 const location = require('../models/quarantineLocationModel');
 const location_record = require('../models/quarantineLocationRecordModel');
 const serverLog = require("../utils/server_log");
-const searchFilter = require('../utils/searchFilter');
-const axios = require("axios");
-const https = require("https");
-const fs = require("fs");
-const path = require("path");
+const provinceModel = require('../models/provinceModel');
+const districtModel = require('../models/districtModel');
+const wardModel = require('../models/wardModel');
+const quarantineLocation = require('../models/quarantineLocationModel');
 
 
 const verify = require('../middlewares/verify').verify;
@@ -44,28 +43,25 @@ router.get('/patient', async function (req, res) {
             break;
     }
 
+    for (let index = 0; index < userList.length; index++) {
+        let province = await provinceModel.getByProvinceId(userList[index].province);
+        let district = await districtModel.getByDistrictId(userList[index].district);
+        let ward = await wardModel.getByWardId(userList[index].ward);
+        userList[index].address += ", " + ward[0].name + ", " + district[0].name + ", " + province[0].name;
+    }
+    for (let index = 0; index < userList.length; index++) {
+        if(userList[index].current_location != null)
+        {
+            let locationName = await quarantineLocation.getById(userList[index].current_location);
+            userList[index].current_location = locationName.name;
+        }
+    }
+
     res.render("users/user_list_admin", {
         userList: userList,
         isPatient: 1,
         linkAddNew: './new?object=patient'
     });
-});
-
-router.post('/patient/search', async (req, res) => {
-    const searchStr = req.body.searchStr;
-    console.log('post /users/search searchStr: ', searchStr);
-
-    try {
-        let userList = await userModel.getAllUserWithLockedOrderBy('name', true);
-        let filteredUserList = searchFilter.filter(userList, searchStr, 'name');
-        res.render("users/user_list_admin", {
-            userList: filteredUserList,
-            isPatient: 1,
-            linkAddNew: '/admin/new?object=patient'
-        });
-    } catch (error) {
-        console.log('Error post /admin/patient/search: ', error);
-    }
 });
 
 router.get('/supervisor', async function (req, res) {
@@ -89,28 +85,25 @@ router.get('/supervisor', async function (req, res) {
             break;
     }
 
+    for (let index = 0; index < userList.length; index++) {
+        let province = await provinceModel.getByProvinceId(userList[index].province);
+        let district = await districtModel.getByDistrictId(userList[index].district);
+        let ward = await wardModel.getByWardId(userList[index].ward);
+        userList[index].address += ", " + ward[0].name + ", " + district[0].name + ", " + province[0].name;
+    }
+    for (let index = 0; index < userList.length; index++) {
+        if(userList[index].current_location != null)
+        {
+            let locationName = await quarantineLocation.getById(userList[index].current_location);
+            userList[index].current_location = locationName.name;
+        }
+    }
+
     res.render("users/user_list_admin", {
         userList: userList,
         isSupervisor: 1,
         linkAddNew: './new?object=supervisor'
     });
-});
-
-router.post('/supervisor/search', async (req, res) => {
-    const searchStr = req.body.searchStr;
-    console.log('post /users/search searchStr: ', searchStr);
-
-    try {
-        let userList = await userModel.getAllManagerWithLockedOrderBy('name', true);
-        let filteredUserList = searchFilter.filter(userList, searchStr, 'name');
-        res.render("users/user_list_admin", {
-            userList: filteredUserList,
-            isSupervisor: 1,
-            linkAddNew: '/admin/new?object=supervisor'
-        });
-    } catch (error) {
-        console.log('Error post /admin/patient/search: ', error);
-    }
 });
 
 router.post('/lock', async (req, res) => {
@@ -152,7 +145,7 @@ router.get('/new', async (req, res) => {
     }
     let province_list = await addressModel.getAll('province');
     if (req.query.object == 'patient') {
-        let location_list = await location.getAll();
+        let location_list = await addressModel.getAll('quarantine_location');
 
         return res.render("users/user_form_admin", {
             province: province_list,
@@ -227,32 +220,6 @@ router.post('/new', async (req, res) => {
             record_time: new Date()
         })
     }
-
-    const temp = require('jsonwebtoken').decode(req.cookies.user, true).username;
-
-    const cert_file = fs.readFileSync(path.join(__dirname, '..', 'secret-key/CA/localhost/localhost.crt'));
-    const key_file = fs.readFileSync(path.join(__dirname, '..', 'secret-key/CA/localhost/localhost.decrypted.key'));
-
-    const httpsAgent = new https.Agent({
-        rejectUnauthorized: false,
-        cert: cert_file,
-        key: key_file,
-        passphrase: "123456"
-    })
-
-    var options = {
-        method: 'POST',
-        url: 'https://localhost:3000/api/account',
-        httpsAgent : httpsAgent,
-        data: {
-            username: temp,
-            token: req.cookies.user,
-            new_user: req.body.username
-        }
-    };
-    const result = await axios(options);
-
-    console.log("result post api/account adminController:", result.data);
 
     if (user && acc && status && lstt && ls) {
         serverLog.log_action({
