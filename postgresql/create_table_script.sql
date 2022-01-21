@@ -7,9 +7,9 @@
 -- ======================================
 DROP TABLE IF EXISTS "user" CASCADE;
 DROP TABLE IF EXISTS "account" CASCADE;
-DROP TABLE IF EXISTS "province" CASCADE;
-DROP TABLE IF EXISTS "district" CASCADE;
-DROP TABLE IF EXISTS "ward" CASCADE;
+-- DROP TABLE IF EXISTS "province" CASCADE;
+-- DROP TABLE IF EXISTS "district" CASCADE;
+-- DROP TABLE IF EXISTS "ward" CASCADE;
 DROP TABLE IF EXISTS "relate" CASCADE;
 DROP TABLE IF EXISTS "covid_record" CASCADE;
 DROP TABLE IF EXISTS "quarantine_location" CASCADE;
@@ -42,32 +42,32 @@ CREATE TABLE "account" (
 -- -----------------------------
 -- Table province
 -- -----------------------------
-create table "province" (
-	"id" int PRIMARY KEY,
-	"name" varchar(50) NOT NULL
-);
+-- create table "province" (
+-- 	"id" int PRIMARY KEY,
+-- 	"name" varchar(50) NOT NULL
+-- );
 
 -- -----------------------------
 -- Table district
 -- -----------------------------
-create table "district" (
-	"id" int PRIMARY KEY,
-	"name" varchar(50) NOT NULL,
-	"province_id" int NOT NULL,
+-- create table "district" (
+-- 	"id" int PRIMARY KEY,
+-- 	"name" varchar(50) NOT NULL,
+-- 	"province_id" int NOT NULL,
 	
-	FOREIGN KEY (province_id) REFERENCES "province"("id")
-);
+-- 	FOREIGN KEY (province_id) REFERENCES "province"("id")
+-- );
 
 -- -----------------------------
 -- Table ward
 -- -----------------------------
-create table "ward" (
-	"id" int PRIMARY KEY,
-	"name" varchar(50) NOT NULL,
-	"district_id" int NOT NULL,
+-- create table "ward" (
+-- 	"id" int PRIMARY KEY,
+-- 	"name" varchar(50) NOT NULL,
+-- 	"district_id" int NOT NULL,
 	
-	FOREIGN KEY (district_id) REFERENCES "district"("id")
-);
+-- 	FOREIGN KEY (district_id) REFERENCES "district"("id")
+-- );
 
 -- -----------------------------
 -- Table quarantine_location
